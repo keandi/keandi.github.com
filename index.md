@@ -12,6 +12,7 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 Syntax highlighted code block
 
 링크 테스트 [네이버](https://news.nate.com).
+For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 <a href="https://news.nate.com">테스트 입니다. !!!!</a>
 
 # Header 1
