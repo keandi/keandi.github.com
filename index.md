@@ -14,6 +14,8 @@ Syntax highlighted code block
 링크 테스트 [네이버](https://news.nate.com).
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 <a href="https://news.nate.com">테스트 입니다. !!!!</a>
+You can use the [editor on GitHub](https://github.com/keandi/keandi.github.com/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+
 
 # Header 1
 ## Header 2
