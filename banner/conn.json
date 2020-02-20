@@ -1,6 +1,7 @@
 {
   "current": "test",
   "test": {
+    "url": "https://keandi.github.io/banner/test/index.html",
     "width": 100,
     "height": 200
   }
