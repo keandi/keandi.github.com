@@ -5,6 +5,7 @@ var _tracks = null;
 var _runners = null;
 var _timer = null;
 var _dayOfWeekInfo = null;
+var _dayRankTable = null;
 
 // run 실행
 function OnRun(menuArray)
@@ -50,6 +51,7 @@ function OnRun(menuArray)
 
         //
         _dayOfWeekInfo = new DayOfWeekInfo();
+        _dayRankTable = new DayRankTable();
 
         //
         _timer = new RunnerTimer();
@@ -460,7 +462,7 @@ var Track = function(no, menu)
 
         }
     };
-}
+};
 
 // 요일 반환 클래스
 var DayOfWeekInfo = function()
@@ -496,4 +498,54 @@ var DayOfWeekInfo = function()
 
         return "제외";
     }
-}
+};
+
+// 요일 테이블 클래스
+var DayRankTable = function()
+{
+    this.Ctor = function()
+    {
+        try
+        {
+            var mainObj = GetMainObj();
+
+            // title
+            var htmlTitle = "<div style='background: #FF2222; width: 120px'><p style='text-align: center;'>결과</p></div>";
+
+            //
+            var htmlDivs = "";
+            var dayOfWeek = "";
+            for (var i = 0; i < 5; i++)
+            {
+                if (i == 0) { dayOfWeek = "월요일"; }
+                else if (i == 1) { dayOfWeek = "화요일"; }
+                else if (i == 2) { dayOfWeek = "수요일"; }
+                else if (i == 3) { dayOfWeek = "목요일"; }
+                else if (i == 4) { dayOfWeek = "금요일"; }
+
+                htmlDivs += "<div><div>" + dayOfWeek + ":</div><div id='dayRank" + i + "'></div></div>";
+            }
+
+            mainObj.innerHTML += "<div style='position: absolute; top: 101px; left: 888px;'>" + htmlTitle + htmlDivs + "</div>";
+        }
+        catch (e)
+        {
+            console.log("DayRandTable.Ctor error: " + e);
+        }
+    };
+    this.Ctor();
+
+    this._currentIdx = 0;
+    this.SetMenu = function(menu)
+    {
+        try
+        {
+            var dayRankObj = document.getElementById("dayRank" + this._currentIdx);
+            dayRankObj.innerHTML = menu;
+        }
+        catch (e)
+        {
+            console.log("DayRandTable.Ctor error: " + e);
+        }
+    };
+};
