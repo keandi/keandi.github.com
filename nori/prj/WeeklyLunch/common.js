@@ -44,3 +44,39 @@ function GetMainObj()
 {
     return document.getElementById("idMain");
 }
+
+// 쿠키 저장 //출처: https://thereclub.tistory.com/59 [강남부자]
+var setCookie = function(name, value, exp) {
+    var date = new Date();
+    date.setTime(date.getTime() + exp*24*60*60*1000);
+    document.cookie = name + '=' + escape(value) + ';expires=' + date.toUTCString() + ';path=/' + ';domain=example.com';
+};
+
+// 쿠키 가져오기 //출처: https://thereclub.tistory.com/59 [강남부자]
+var getCookie = function(name) {
+    var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    alert("getCookie: " + name + ", " + value);
+    return value? value[2] : null;
+};
+
+// 공통 180일 기준 쿠키 저장
+function SetCookie(name, value)
+{
+    setCookie(name, value, 5);
+    alert("setcookie: " + name + ", " + value);
+}
+ 
+// 메뉴 로컬에 저장
+function SaveMenu(idx, value)
+{
+    //SetCookie("menu" + idx, value);
+    localStorage["menu" + idx] = value;
+}
+
+// 로컬에서 메뉴 읽기
+function ReadMenu(idx)
+{
+    //var menu = getCookie("menu" + idx);
+    var menu = localStorage["menu" + idx];
+    return (menu == null) ? "" : menu;
+}
