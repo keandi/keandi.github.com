@@ -1,6 +1,7 @@
 ///////////////////
 /// [전역 변수 선언]
-var _menuArray = null;
+//var _menuArray = null;
+let _menuMap = null;
 var _run01 = null;
 var _tracks = null;
 var _timer = null;
@@ -61,7 +62,7 @@ function OnRun(menuArray)
     catch (e)
     {
         alert("OnRun error: " + e);
-        _menuArray = null;
+        _menuMap = null;
         _tracks = null;
         _timer = null;
     }
@@ -72,27 +73,27 @@ function OnRun(menuArray)
 }
 
 // run01 start
-function OnRun01(menuArray)
+function OnRun01(menuMap)
 {
     try
     {
         //
-        if (menuArray.length < 5)
+        if (menuMap.size < 5)
         {
             alert ("메뉴는 5개 이상 입력되어야 합니다.");
             return;
         }
 
         //
-        var ls = new LocalStorageSave(menuArray);
+        var ls = new LocalStorageSave(menuMap);
 
         //
-        _run01 = new Run01(menuArray);
+        _run01 = new Run01(menuMap);
     }
     catch (e)
     {
         alert("OnRun01 error: " + e);
-        _menuArray = null;
+        _menuMap = null;
     }
     finally
     {
@@ -101,7 +102,7 @@ function OnRun01(menuArray)
 }
 
 // 기본 트랙 Div 만들기
-function CreateBaseTrack(menuArray)
+function CreateBaseTrack(menuMap)
 {
     try
     {
@@ -109,13 +110,14 @@ function CreateBaseTrack(menuArray)
         var html = "";
         
         _tracks = new Array();
-        for (var i = 1; i <= menuArray.length; i++)
+        for (var i = 0; i < menuMap.size; i++)
         {
             //html += "<div id='track" + i + "' style='background: #FF00FF; width: 200px; height: 100px; position: absolute; left: 10; top: 10'></div>";
-            var track = new Track(i, menuArray[i - 1]);
+            var kv = menuMap.get(i);
+            var track = new Track(i + 1, kv._key);
             html += track.Div();
 
-            _tracks[i - 1] = track;
+            _tracks[i] = track;
         }
         mainObj.innerHTML = html;
 
@@ -135,32 +137,9 @@ function CreateBaseTrack(menuArray)
     }
 }
 
-// runner 생성
-function CreateRunners()
+var Run01 = function(menuMap)
 {
-    try
-    {
-        _runners = new Array();
-        for (var i = 0; i < _tracks.length; i++)
-        {
-            _runners[i] = new Runner(_tracks[i]);
-            _runners[i].MakeRunner();
-        }
-    }
-    catch (e)
-    {
-        alert("CreateRunners error: " + e);
-        _runners = null;
-    }
-    finally
-    {
-
-    }
-}
-
-var Run01 = function(menuArray)
-{
-    this._menuArray = menuArray;
+    this._menuMap = menuMap;
     this._runners = null;
     this._dayRankTable = null;
     this.Ctor = function()
@@ -168,12 +147,15 @@ var Run01 = function(menuArray)
         try
         {
             SetTitle("Run01 - 달립니다.");
-            CreateBaseTrack(this._menuArray);
+            CreateBaseTrack(this._menuMap);
             this.CreateRunners();
 
             //
             _dayOfWeekInfo = new DayOfWeekInfo();
             _dayRankTable = new DayRankTable();
+            CreateReservedDayOfWeeks(this._menuMap);
+
+            _dayRankTable.DisplayReservedDOW(this._menuMap);
 
             //
             _timer = new RunnerTimer();
@@ -182,7 +164,7 @@ var Run01 = function(menuArray)
         catch (e)
         {
             alert("Run01.Ctor error: " + e);
-            this._menuArray = null;
+            this._menuMap = null;
             _tracks = null;
             _timer = null;
         }
@@ -197,6 +179,16 @@ var Run01 = function(menuArray)
             {
                 this._runners[i] = new Runner(_tracks[i]);
                 this._runners[i].MakeRunner();
+                
+                if (this._menuMap.has(i) == true)
+                {
+                    var kv = this._menuMap.get(i);
+                    if (kv._value.length > 0)
+                    {
+                        //alert(kv._value.length + " , ??");
+                        this._runners[i].SetReservedDOW(kv._value);
+                    }
+                }
             }
         }
         catch (e)
@@ -239,10 +231,10 @@ var RunnerTimer = function()
     {
         try
         {
-            console.log("1");
+            //console.log("1");
             if (this._timer != null)
             {
-                console.log("2");
+               // console.log("2");
                clearInterval(this._timer);
             }
         }
@@ -490,6 +482,29 @@ var Runner = function(track)
 
         return false;
     };
+    this.SetReservedDOW = function(dow)
+    {
+        try
+        {
+            this._left = this._moveLimit + 1;
+
+            //
+            var dowObj = document.getElementById(this._dayOfWeekId);
+            dowObj.innerHTML = dow;
+
+            //
+            this.SetImgSrc(0);
+            this._isFinished = true;
+
+            //
+            if (this._runnerObj == null) { this.GetRunnerObj(); }
+            this._runnerObj.style.left = this._left + "px";
+        }
+        catch (e)
+        {
+            console.log("this.SetReservedDOW error: " + e);
+        }
+    };
 }
 
 // 트랙 클래스
@@ -557,33 +572,41 @@ var DayOfWeekInfo = function()
     this._idx = 0;
     this.GetDayOfWeek = function()
     {
+        let dow = "";
         switch (this._idx)
         {
             case 0:
                 this._idx++;
-                return "월요일";
+                dow = "월요일";
+                break;
 
             case 1:
                 this._idx++;
-                return "화요일";
+                dow = "화요일";
+                break;
 
             case 2:
                 this._idx++;
-                return "수요일";
+                dow = "수요일";
+                break;
             
             case 3:
                 this._idx++;
-                return "목요일";
+                dow = "목요일";
+                break;
 
             case 4:
                 this._idx++;
-                return "금요일";
+                dow = "금요일";
+                break;
 
             default:
-                break;
+                return "제외";
         }
 
-        return "제외";
+        if (_reservedDayOfWeeks.IsReserved(dow) == true) { dow = this.GetDayOfWeek(); }
+
+        return dow;
     }
 };
 
@@ -653,8 +676,11 @@ var DayRankTable = function()
     {
         try
         {
-            var dayRankObj = document.getElementById("dayRank" + this._currentIdx);
-            dayRankObj.innerHTML = this.GetDayOfWeek(this._currentIdx) + ": " + menu;
+            this.GetEnableCurrnetIdx();
+
+            if (this._currentIdx > 4) {return;}
+
+            this.SetRankMenu(this._currentIdx, menu);
             this._currentIdx++;
         }
         catch (e)
@@ -662,12 +688,78 @@ var DayRankTable = function()
             console.log("DayRandTable.Ctor error: " + e);
         }
     };
+    this.SetRankMenu = function(idx, menu)
+    {
+        var dayRankObj = document.getElementById("dayRank" + idx);
+        dayRankObj.innerHTML = this.GetDayOfWeek(idx) + ": " + menu;
+    }
+    this.GetEnableCurrnetIdx = function()
+    {
+        try
+        {
+            let dow = this.GetDayOfWeek(this._currentIdx);
+            console.log(dow + ", " + this._currentIdx);
+            if (_reservedDayOfWeeks.IsReserved(dow) == true)
+            {
+                console.log("retry");
+                this._currentIdx++;
+                this.GetEnableCurrnetIdx();
+            }
+        }
+        catch (e)
+        {
+            console.log("this.GetEnableCurrnetIdx error: " + e);
+        }
+    };
+    this.DisplayReservedDOW = function(menuMap)
+    {
+        try
+        {
+            for (var i = 0; i < menuMap.size; i++)
+            {
+                var kv = menuMap.get(i);
+                if (kv._value.length <= 0) { continue; }
+
+                var idx = -1;
+                switch (kv._value)
+                {
+                    case "월요일":
+                        idx = 0;
+                        break;
+
+                    case "화요일":
+                        idx = 1;
+                        break;
+
+                    case "수요일":
+                        idx = 2;
+                        break;
+
+                    case "목요일":
+                        idx = 3;
+                        break;
+
+                    case "금요일":
+                        idx = 4;
+                        break;
+                }
+                if (idx >= 0)
+                {
+                    this.SetRankMenu(idx, kv._key);
+                }
+            }
+        }
+        catch (e)
+        {
+            alert("this.DisplayReservedDOW error: " + e);
+        } 
+    };
 };
 
 // local storage 저장
-var LocalStorageSave = function(menuArray)
+var LocalStorageSave = function(menuMap)
 {
-    this._menuArray = menuArray;
+    this._menuMap = menuMap;
     this.Ctor = function()
     {
         // local storage clear
@@ -677,10 +769,70 @@ var LocalStorageSave = function(menuArray)
         }
 
         // save
-        for (var idx = 0; idx < this._menuArray.length; idx++)
+        for (var idx = 0; idx < this._menuMap.size; idx++)
         {
-            SaveMenu(idx + 1, this._menuArray[idx]);
+            var kv = this._menuMap.get(idx);
+            SaveMenu(idx + 1, kv._key);
         }
     };
     this.Ctor();
+}
+
+// 예약 된 요일
+let _reservedDayOfWeeks = null;
+let ReservedDayOfWeeks = function(menuMap)
+{
+    this._dows = null;
+    this.Ctor = function(menuMap)
+    {
+        try
+        {
+            this._dows = new Map();
+            for (var i = 0; i < menuMap.size; i++)
+            {
+                var kv = menuMap.get(i);
+                if (kv._value.length > 0)
+                {
+                    this._dows.set(kv._value, kv._value);
+                }
+            }
+        }
+        catch (e)
+        {
+            alert("ReservedDayOfWeeks.Ctor error: " + e);
+            this._dows = null;
+        }
+    };
+    this.IsReserved = function(dayOfWeeks)
+    {
+        try
+        {
+            //console.log("IsReserved: " + dayOfWeeks + ", res: " + this._dows.has(dayOfWeeks));
+            return this._dows.has(dayOfWeeks);
+        }
+        catch (e)
+        {
+            alert("this.IsReserved error: " + e);
+        } 
+
+        return false;
+    };
+
+
+    //
+    this.Ctor(menuMap);
+}
+function CreateReservedDayOfWeeks(menuMap)
+{
+    try
+    {
+        _reservedDayOfWeeks = null;
+
+        _reservedDayOfWeeks = new ReservedDayOfWeeks(menuMap);
+    }
+    catch (e)
+    {
+        alert("CreateReservedDayOfWeeks error: " + e);
+        _reservedDayOfWeeks = null;
+    }
 }

@@ -61,7 +61,13 @@ function AppendInputForm(idx)
 
         // menu html 생성
         var zeroFlag = (idx >= 10) ? "" : "0";
-        var html = "<div>menu_" + zeroFlag + idx + ": <input type='text' id='menu" + idx + "' value='" + menuValue + "' maxlength='3'></input></div>";   
+
+        var htmlInputMenu = "menu_" + zeroFlag + idx + ": <input type='text' id='menu" + idx + "' value='" + menuValue + "' maxlength='3'></input> ";
+
+        var htmlSelectDayOfWeek = MakeSelectControl("menuDow_" + idx, "", "월요일", "화요일", "수요일", "목요일", "금요일");
+        //var html = "<div>menu_" + zeroFlag + idx + ": <input type='text' id='menu" + idx + "' value='" + menuValue + "' maxlength='3'></input></div>";   
+
+        let html = "<div>" + htmlInputMenu + htmlSelectDayOfWeek + "</div>"
         
         // html 생성
         inputObj.innerHTML = html;
@@ -98,7 +104,10 @@ function CreateInputForm()
 
 
         // 추가 / 진행 버튼 추가
-        html += "<div><input type='button' value='+' style='width: 50px' onclick='AddNewInputForm();'> <input type='button' value='Go' style='width: 50px' onclick='GoNextPage();'></div>"
+        let htmlAddButton = "<input type='button' value='+' style='width: 50px' onclick='AddNewInputForm();'> ";
+        let htmlRun01Button = "<input type='button' value='주간 메뉴' style='width: 100px' onclick='GoWeeklyMenu();'> ";
+        let htmlRun02Button = "<input type='button' value='오늘의 메뉴' style='width: 100px' onclick='GoTodayMenu();'> ";
+        html += "<div>" + htmlAddButton + htmlRun01Button + htmlRun02Button + "</div>"
 
         // html 생성
         mainObj.innerHTML = html;
@@ -159,11 +168,55 @@ function GetMenuText(idx)
     }
 }
 
-// 다음 페이지로 이동
-function GoNextPage()
+// menu dayOfWeek Object 가져오기
+function GetMenuDayOfWeekObj(idx)
+{
+    return document.getElementById("menuDow_" + idx);
+}
+
+// menu dayOfWeek 가져오기
+function GetMenuDayOfWeekText(idx)
 {
     try
     {
+        var menuDowObj = GetMenuDayOfWeekObj(idx);
+
+        return menuDowObj.value;
+    }
+    catch (e)
+    {
+        alert("GetMenuDayOfWeek error: " + e);
+    }
+    
+    return "";
+}
+
+// 다음 페이지로 이동
+function GoWeeklyMenu()
+{
+    try
+    {
+        let menus = new Map();
+
+        for (var i = 1; i <= _menuCount; i++)
+        {
+            var menu = GetMenuText(i).trim();
+            if (menu.length <= 0) { continue; }
+
+            var menuDow = GetMenuDayOfWeekText(i);
+
+            menus.set(menus.size, CreateKeyValue(menu, menuDow));
+        }
+
+        /* for (var i = 0; i < menus.size; i++)
+        {
+            var kv = menus.get(i);
+            console.log("key: " + i + ", value: [" + kv._key + ", " + kv._value + "]");
+        } */
+
+        OnRun01(menus);
+        return;
+
         //
         var menuArray = new Array();
         for (var i = 1; i <= _menuCount; i++)

@@ -80,3 +80,46 @@ function ReadMenu(idx)
     var menu = localStorage["menu" + idx];
     return (menu == null) ? "" : menu;
 }
+
+// select 만들기
+function MakeSelectControl(id, ...names)
+{
+    try
+    {
+        let options = "";
+        let option = "";
+
+        //if (names.length == values.names)
+        {
+            for (let i = 0; i < names.length; i++)
+            {
+                option = "<option value='" + names[i] + "'>" + names[i] + "</option>";
+                options += option;
+            }
+        }
+
+        return "<select id='" + id + "'>" + options + "</select>";
+    }
+    catch (e)
+    {
+        alert("MakeSelectControl failed: " + e);
+    }
+    finally
+    {
+
+    }
+
+    return "";
+}
+
+///
+var KeyValue = function(key, value)
+{
+    this._key = key;
+    this._value = value
+}
+
+function CreateKeyValue(key, value)
+{
+    return new KeyValue(key, value);
+}
