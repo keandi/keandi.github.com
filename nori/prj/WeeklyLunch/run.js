@@ -1,8 +1,8 @@
 ///////////////////
 /// [전역 변수 선언]
 var _menuArray = null;
+var _run01 = null;
 var _tracks = null;
-var _runners = null;
 var _timer = null;
 var _dayOfWeekInfo = null;
 var _dayRankTable = null;
@@ -12,6 +12,7 @@ function OnRun(menuArray)
 {
     try
     {
+        
         /*var msg = "";
         for (var idx = 0; idx < menuArray.length; idx++)
         {
@@ -70,8 +71,37 @@ function OnRun(menuArray)
     }
 }
 
+// run01 start
+function OnRun01(menuArray)
+{
+    try
+    {
+        //
+        if (menuArray.length < 5)
+        {
+            alert ("메뉴는 5개 이상 입력되어야 합니다.");
+            return;
+        }
+
+        //
+        var ls = new LocalStorageSave(menuArray);
+
+        //
+        _run01 = new Run01(menuArray);
+    }
+    catch (e)
+    {
+        alert("OnRun01 error: " + e);
+        _menuArray = null;
+    }
+    finally
+    {
+
+    }
+}
+
 // 기본 트랙 Div 만들기
-function CreateBaseTrack()
+function CreateBaseTrack(menuArray)
 {
     try
     {
@@ -79,10 +109,10 @@ function CreateBaseTrack()
         var html = "";
         
         _tracks = new Array();
-        for (var i = 1; i <= _menuArray.length; i++)
+        for (var i = 1; i <= menuArray.length; i++)
         {
             //html += "<div id='track" + i + "' style='background: #FF00FF; width: 200px; height: 100px; position: absolute; left: 10; top: 10'></div>";
-            var track = new Track(i, _menuArray[i - 1]);
+            var track = new Track(i, menuArray[i - 1]);
             html += track.Div();
 
             _tracks[i - 1] = track;
@@ -126,6 +156,62 @@ function CreateRunners()
     {
 
     }
+}
+
+var Run01 = function(menuArray)
+{
+    this._menuArray = menuArray;
+    this._runners = null;
+    this._dayRankTable = null;
+    this.Ctor = function()
+    {
+        try
+        {
+            SetTitle("Run01 - 달립니다.");
+            CreateBaseTrack(this._menuArray);
+            this.CreateRunners();
+
+            //
+            _dayOfWeekInfo = new DayOfWeekInfo();
+            _dayRankTable = new DayRankTable();
+
+            //
+            _timer = new RunnerTimer();
+            _timer.Run();
+        }
+        catch (e)
+        {
+            alert("Run01.Ctor error: " + e);
+            this._menuArray = null;
+            _tracks = null;
+            _timer = null;
+        }
+    };
+
+    this.CreateRunners = function()
+    {
+        try
+        {
+            this._runners = new Array();
+            for (var i = 0; i < _tracks.length; i++)
+            {
+                this._runners[i] = new Runner(_tracks[i]);
+                this._runners[i].MakeRunner();
+            }
+        }
+        catch (e)
+        {
+            alert("CreateRunners error: " + e);
+            this._runners = null;
+        }
+        finally
+        {
+
+        }
+    };
+
+    //
+    this.Ctor();
 }
 
 // timer
@@ -174,9 +260,9 @@ var RunnerTimer = function()
         try
         {
             var moveCount = 0;
-            for (var i = 0; i < _runners.length; i++)
+            for (var i = 0; i < _run01._runners.length; i++)
             {
-                if (_runners[i].Move() == true)
+                if (_run01._runners[i].Move() == true)
                 {
                     moveCount++;
                 }
@@ -577,3 +663,24 @@ var DayRankTable = function()
         }
     };
 };
+
+// local storage 저장
+var LocalStorageSave = function(menuArray)
+{
+    this._menuArray = menuArray;
+    this.Ctor = function()
+    {
+        // local storage clear
+        for (var idx = 0; idx < 20; idx++)
+        {
+            SaveMenu(idx + 1, "");
+        }
+
+        // save
+        for (var idx = 0; idx < this._menuArray.length; idx++)
+        {
+            SaveMenu(idx + 1, this._menuArray[idx]);
+        }
+    };
+    this.Ctor();
+}

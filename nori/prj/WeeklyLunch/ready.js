@@ -190,7 +190,7 @@ function GoNextPage()
             return;
         }
 
-        OnRun(menuArray);
+        OnRun01(menuArray);
     }
     catch (e)
     {
