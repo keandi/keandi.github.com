@@ -378,6 +378,7 @@ var Runner = function(track)
                 this.SetDayOfWeek();
                 this.SetImgSrc(0);
                 this._isFinished = true;
+                _dayRankTable.SetMenu(this._menu);
                 return false;
             }
 
@@ -523,7 +524,7 @@ var DayRankTable = function()
                 else if (i == 3) { dayOfWeek = "목요일"; }
                 else if (i == 4) { dayOfWeek = "금요일"; }
 
-                htmlDivs += "<div><div>" + dayOfWeek + ":</div><div id='dayRank" + i + "'></div></div>";
+                htmlDivs += "<div id='dayRank" + i + "'>" + dayOfWeek + ":  ??</div>";
             }
 
             mainObj.innerHTML += "<div style='position: absolute; top: 101px; left: 888px;'>" + htmlTitle + htmlDivs + "</div>";
@@ -535,13 +536,40 @@ var DayRankTable = function()
     };
     this.Ctor();
 
+    this.GetDayOfWeek = function(idx)
+    {
+        switch (idx)
+        {
+            case 0:
+                return "월요일";
+
+            case 1:
+                return "화요일";
+
+            case 2:
+                return "수요일";
+            
+            case 3:
+                return "목요일";
+
+            case 4:
+                return "금요일";
+
+            default:
+                break;
+        }
+
+        return "";
+    };
+
     this._currentIdx = 0;
     this.SetMenu = function(menu)
     {
         try
         {
             var dayRankObj = document.getElementById("dayRank" + this._currentIdx);
-            dayRankObj.innerHTML = menu;
+            dayRankObj.innerHTML = this.GetDayOfWeek(this._currentIdx) + ": " + menu;
+            this._currentIdx++;
         }
         catch (e)
         {
