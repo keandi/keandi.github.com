@@ -1,12 +1,22 @@
+// enum
+let RunType = {
+    Unknown: 0,
+    WeeklyMenu: 1,
+    TodayMenu: 2
+};
+Object.freeze(RunType);
+
 ///////////////////
 /// [전역 변수 선언]
 //var _menuArray = null;
-let _menuMap = null;
+//let _menuMap = null;
 var _run01 = null;
+var _run02 = null;
 var _tracks = null;
 var _timer = null;
 var _dayOfWeekInfo = null;
 var _dayRankTable = null;
+let _currentRunType = RunType.Unknown;
 
 // run 실행
 function OnRun(menuArray)
@@ -62,7 +72,6 @@ function OnRun(menuArray)
     catch (e)
     {
         alert("OnRun error: " + e);
-        _menuMap = null;
         _tracks = null;
         _timer = null;
     }
@@ -93,7 +102,43 @@ function OnRun01(menuMap)
     catch (e)
     {
         alert("OnRun01 error: " + e);
-        _menuMap = null;
+        _currentRunType = RunType.Unknown;
+    }
+    finally
+    {
+
+    }
+}
+
+// run02 start
+function OnRun02(menuArray)
+{
+    try
+    {
+        //
+        if (menuArray.length < 2)
+        {
+            alert ("메뉴는 2개 이상 입력되어야 합니다.");
+            return;
+        }
+
+        //
+        let menuMap = new Map();
+        for (var i = 0; i < menuArray.length; i++)
+        {
+            menuMap.set(i, new KeyValue(menuArray[i], ""));
+        }
+
+        //
+        var ls = new LocalStorageSave(menuMap);
+
+        //
+        _run02 = new Run02(menuMap);
+    }
+    catch (e)
+    {
+        alert("OnRun02 error: " + e);
+        _currentRunType = RunType.Unknown;
     }
     finally
     {
@@ -158,6 +203,7 @@ var Run01 = function(menuMap)
             _dayRankTable.DisplayReservedDOW(this._menuMap);
 
             //
+            _currentRunType = RunType.WeeklyMenu;
             _timer = new RunnerTimer();
             _timer.Run();
         }
@@ -189,6 +235,63 @@ var Run01 = function(menuMap)
                         this._runners[i].SetReservedDOW(kv._value);
                     }
                 }
+            }
+        }
+        catch (e)
+        {
+            alert("CreateRunners error: " + e);
+            this._runners = null;
+        }
+        finally
+        {
+
+        }
+    };
+
+    //
+    this.Ctor();
+}
+
+// 오늘의 메뉴
+var Run02 = function(menuMap)
+{
+    this._menuMap = menuMap;
+    this._runners = null;
+    this._dayRankTable = null;
+    this.Ctor = function()
+    {
+        try
+        {
+            //
+            SetTitle("Run02 - 달립니다.");
+            CreateBaseTrack(this._menuMap);
+            this.CreateRunners();
+
+            //
+
+            //
+            _currentRunType = RunType.TodayMenu;
+            _timer = new RunnerTimer();
+            _timer.Run();
+        }
+        catch (e)
+        {
+            alert("Run01.Ctor error: " + e);
+            this._menuMap = null;
+            _tracks = null;
+            _timer = null;
+        }
+    };
+
+    this.CreateRunners = function()
+    {
+        try
+        {
+            this._runners = new Array();
+            for (var i = 0; i < _tracks.length; i++)
+            {
+                this._runners[i] = new Runner(_tracks[i]);
+                this._runners[i].MakeRunner();
             }
         }
         catch (e)
@@ -251,27 +354,56 @@ var RunnerTimer = function()
     {
         try
         {
-            var moveCount = 0;
-            for (var i = 0; i < _run01._runners.length; i++)
-            {
-                if (_run01._runners[i].Move() == true)
-                {
-                    moveCount++;
-                }
-                //console.log(runnerObj._left);
-                //console.log(runnerObj.style.left);
-            }
-
             //
-            if (moveCount == 0)
+            if (_currentRunType == RunType.WeeklyMenu)
             {
-                _timer.Stop();
-                SetTitle("주간 메뉴 결정이 끝났습니다.");
-                //alert("주간 메뉴 결정이 끝났습니다.");
+                var moveCount = 0;
+                for (var i = 0; i < _run01._runners.length; i++)
+                {
+                    if (_run01._runners[i].Move() == true)
+                    {
+                        moveCount++;
+                    }
+                    //console.log(runnerObj._left);
+                    //console.log(runnerObj.style.left);
+                }
+    
+                //
+                if (moveCount == 0)
+                {
+                    _timer.Stop();
+                    SetTitle("주간 메뉴 결정이 끝났습니다.");
+                    //alert("주간 메뉴 결정이 끝났습니다.");
+                }
             }
+            else if (_currentRunType == RunType.TodayMenu)
+            {
+                let isFinished = false;
+                for (var i = 0; i < _run02._runners.length; i++)
+                {
+                    if (_run02._runners[i].Move() == false)
+                    {
+                        isFinished = true;
+                        break;
+                    }
+                    //console.log(runnerObj._left);
+                    //console.log(runnerObj.style.left);
+                }
+    
+                //
+                if (isFinished == true)
+                {
+                    _timer.Stop();
+                    SetTitle("오늘의 메뉴가 결정되었습니다.");
+                }
+            }
+            else
+            { throw "Invalid run type"; }
+            
         }
         catch (e)
         {
+            _timer.Stop();
             console.log("this.OnTimer error: " + e);
         }
         finally
@@ -444,6 +576,22 @@ var Runner = function(track)
 
         }
     };
+    this.SetToday = function()
+    {
+        try
+        {
+           var dowObj = document.getElementById(this._dayOfWeekId);
+           dowObj.innerHTML = "오늘의 선택 메뉴";
+        }
+        catch (e)
+        {
+            alert("this.SetToday error: " + e);
+        }
+        finally
+        {
+
+        }
+    };
     this._moveLimit = 800;
     this._isFinished = false;
     this.Move = function()
@@ -453,10 +601,18 @@ var Runner = function(track)
             if (this._isFinished == true) { return false; }
             if (this._left > this._moveLimit)
             {
-                this.SetDayOfWeek();
                 this.SetImgSrc(0);
                 this._isFinished = true;
-                _dayRankTable.SetMenu(this._menu);
+
+                if (_currentRunType == RunType.WeeklyMenu)
+                {
+                    this.SetDayOfWeek();
+                    _dayRankTable.SetMenu(this._menu);
+                }
+                else if (_currentRunType == RunType.TodayMenu)
+                {
+                    this.SetToday();
+                }
                 return false;
             }
 
@@ -698,10 +854,10 @@ var DayRankTable = function()
         try
         {
             let dow = this.GetDayOfWeek(this._currentIdx);
-            console.log(dow + ", " + this._currentIdx);
+            //console.log(dow + ", " + this._currentIdx);
             if (_reservedDayOfWeeks.IsReserved(dow) == true)
             {
-                console.log("retry");
+                //console.log("retry");
                 this._currentIdx++;
                 this.GetEnableCurrnetIdx();
             }

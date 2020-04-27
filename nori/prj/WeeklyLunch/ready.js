@@ -254,3 +254,46 @@ function GoWeeklyMenu()
 
     }
 }
+
+// 다음 페이지로 이동
+function GoTodayMenu()
+{
+    try
+    {
+        //
+        var menuArray = new Array();
+        for (var i = 1; i <= _menuCount; i++)
+        {
+            var menu = GetMenuText(i).trim();
+            if (menu.length <= 0) { continue; }
+
+            menuArray[menuArray.length] = menu;
+        }
+        
+        //
+        /*
+        var msg = "";
+        for (var idx = 0; idx < menuArray.length; idx++)
+        {
+            msg += "" + idx + ". " + menuArray[idx] + "\r\n";
+        }
+        alert(msg);
+        */
+
+        if (menuArray.length < 2)
+        {
+            alert("메뉴는 2개 이상 추가해야 합니다.")
+            return;
+        }
+
+        OnRun02(menuArray);
+    }
+    catch (e)
+    {
+        alert("GoNextPage error: " + e);
+    }
+    finally
+    {
+
+    }
+}
