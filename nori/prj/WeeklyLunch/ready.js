@@ -5,7 +5,8 @@ window.onload = function() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// [전역 변수 지정]
-var _menuCount = 0;
+let _menuCount = 0;
+let _inputForms = null;
 
 // html 이 사용할 준비가 되었다.
 function OnReady()
@@ -54,6 +55,20 @@ function AppendInputForm(idx)
             return false;
         }
 
+        if (_inputForms == null)
+        {
+            _inputForms = new Map();
+        }
+
+        let inputForm = new InputForm(idx);
+        //console.log(idx + " / " + inputForm._isCreated + " / " + inputForm._idx);
+        if (inputForm._isCreated == false) { return false; }
+
+        //
+        _inputForms.set(idx, inputForm);
+        return true;
+
+        /*
         var inputObj = GetInputDiv(idx);
 
         // 기존 메뉴값 읽어오기
@@ -72,6 +87,7 @@ function AppendInputForm(idx)
         // html 생성
         inputObj.innerHTML = html;
         return true;
+        */
     }
     catch (e)
     {
@@ -196,9 +212,19 @@ function GoWeeklyMenu()
 {
     try
     {
+        for (var i = 1; i <= _menuCount; i++)
+        {
+            var inputForm = _inputForms.get(i);
+            if (inputForm.IsValidDOW() == false)
+            {
+                alert("제외 메뉴는 요일 선택이 반드시 필요합니다.");
+                return;
+            }
+        }
+
         let menus = new Map();
 
-        for (var i = 1; i <= _menuCount; i++)
+        /*for (var i = 1; i <= _menuCount; i++)
         {
             var menu = GetMenuText(i).trim();
             if (menu.length <= 0) { continue; }
@@ -206,13 +232,18 @@ function GoWeeklyMenu()
             var menuDow = GetMenuDayOfWeekText(i);
 
             menus.set(menus.size, CreateKeyValue(menu, menuDow));
-        }
+        }*/
 
-        /* for (var i = 0; i < menus.size; i++)
+        for (var i = 1; i <= _menuCount; i++)
         {
-            var kv = menus.get(i);
-            console.log("key: " + i + ", value: [" + kv._key + ", " + kv._value + "]");
-        } */
+            var inputForm = _inputForms.get(i);
+            
+            var menu = inputForm.GetMenuName();
+            if (menu.length <= 0) { continue; }
+
+            var menuDow = inputForm.GetDOW();
+            menus.set(menus.size, CreateKeyValue(menu, menuDow));
+        }
 
         OnRun01(menus);
         return;
@@ -297,3 +328,227 @@ function GoTodayMenu()
 
     }
 }
+
+// 예외 처리
+function OnExceptCall(idx)
+{
+    try
+    {
+        let inputForm = _inputForms.get(idx);
+        inputForm.SwitchExceptState();
+    }
+    catch (e)
+    {
+        console.log("OnExceptCall error catched: " + e);
+    }
+}
+
+// input form class
+var InputForm = function(idx)
+{
+    this._objectName = "InputForm";
+    this._idx = idx;
+    this._isCreated = false;
+    this._isExcepted = false;
+    this._backupMenuName = "";
+
+    this.DebugPrint = function(methodName, e)
+    {
+        DbgPrint(this._objectName, methodName, e);
+    };
+
+    // Get except button id
+    this.GetExceptButtonId = function()
+    {
+        return "exbt_" + this._idx;
+    };
+
+    // Get except button html
+    this.GetExceptButtonHTML = function()
+    {
+        let buttonId = this.GetExceptButtonId();
+        return "<input type='button' id='" + buttonId + "' value='X' onclick='OnExceptCall(" + this._idx + ");'></input>";
+    };
+
+    // Get except button object
+    this.GetExceptButtonObjct = function()
+    {
+        try
+        {
+            let btnObj = document.getElementById(this.GetExceptButtonId());
+            return btnObj;
+        }
+        catch (e)
+        {
+            this.DebugPrint("GetExceptButtonObjct", e);
+        }   
+
+        return null;
+    };
+
+    // Get menu input text Id
+    this.GetMenuInputTextId = function()
+    {
+        return "menu" + this._idx;
+    };
+
+    // Get menu input text html
+    this.GetMenuInputTextHTML = function()
+    {
+        try
+        {
+            let inputObj = GetInputDiv(this._idx);
+
+            // 기존 메뉴값 읽어오기
+            let menuValue = ReadMenu(this._idx);
+
+            let zeroFlag = (idx >= 10) ? "" : "0";
+
+            return "menu_" + zeroFlag + idx + ": <input type='text' id='" + this.GetMenuInputTextId() + "' value='" + menuValue + "' maxlength='3'></input> ";
+        }
+        catch (e)
+        {
+            this.DebugPrint("GetMenuInputTextHTML", e);
+        }        
+
+        return "";
+    };
+
+    // Get menu input text object
+    this.GetMenuInputTextObject = function()
+    {
+        return document.getElementById(this.GetMenuInputTextId());
+    };
+
+    // switch except state
+    this.SwitchExceptState = function()
+    {
+        try
+        {
+            let exceptButton = this.GetExceptButtonObjct();
+            let menuText = this.GetMenuInputTextObject();
+            
+            if (this._isExcepted == true)
+            {
+                exceptButton.value = "X";
+                menuText.disabled = false;
+                menuText.value = this._backupMenuName;
+                this._isExcepted = false;
+            }
+            else
+            {
+                exceptButton.value = "O";
+                menuText.disabled = true;
+                this._backupMenuName = menuText.value;
+                menuText.value = "아무거나";
+                this._isExcepted = true;
+            }
+        }
+        catch (e)
+        {
+            this.DebugPrint("SwitchExceptState", e);
+        }
+    };
+
+    // Get DOW select id
+    this.GetDOWSelectId = function()
+    {
+        return "menuDow_" + this._idx;
+    };
+
+    // Get DOW select object
+    this.GetDOWSelectObject = function()
+    {
+        return document.getElementById(this.GetDOWSelectId());
+    };
+
+    // check day of week
+    this.IsValidDOW = function()
+    {
+        try
+        {
+            if (this._isExcepted == false) { return true; }
+
+            let dowSelectObj = this.GetDOWSelectObject();
+            return (dowSelectObj.value.length > 0) ? true : false;
+        }
+        catch (e)
+        {
+            this.DebugPrint("IsValidDOW", e);
+        }
+
+        return false;
+    }
+
+    // Get menu name
+    this.GetMenuName = function()
+    {
+        try
+        {
+            if (this._isExcepted == true) { return "아무거나"; }
+
+            let menuText = this.GetMenuInputTextObject();
+            return menuText.value.trim()
+        }
+        catch (e)
+        {
+            this.DebugPrint("GetMenuName", e);
+        }
+
+        return "";
+    };
+
+    // Get day of week
+    this.GetDOW = function()
+    {
+        try
+        {
+            let dowSelectObj = this.GetDOWSelectObject();
+            return dowSelectObj.value.trim()
+        }
+        catch (e)
+        {
+            this.DebugPrint("GetMenuName", e);
+        }
+
+        return "";
+    };
+
+    ////
+    this.Ctor = function()
+    {
+        try
+        {
+            let inputObj = GetInputDiv(this._idx);
+
+            // 기존 메뉴값 읽어오기
+            let menuValue = ReadMenu(this._idx);
+
+            // menu html 생성
+            let zeroFlag = (this._idx >= 10) ? "" : "0";
+
+            let htmlInputMenu = this.GetMenuInputTextHTML() + " ";
+
+            let htmlSelectDayOfWeek = MakeSelectControl(this.GetDOWSelectId(), "", "월요일", "화요일", "수요일", "목요일", "금요일");
+
+            // 제외 처리
+            let htmlExceptButton = " " + this.GetExceptButtonHTML();
+
+            let html = "<div>" + htmlInputMenu + htmlSelectDayOfWeek + htmlExceptButton + "</div>"
+            
+            // html 생성
+            inputObj.innerHTML = html;
+
+            //
+            this._isCreated = true;
+            return;
+        }
+        catch (e)
+        {
+            this.DebugPrint("Ctor", e);
+        }
+
+        this._isCreated = false;
+    };
+    this.Ctor();
+};

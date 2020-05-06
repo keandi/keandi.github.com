@@ -925,10 +925,12 @@ var LocalStorageSave = function(menuMap)
         }
 
         // save
+        let saveIndex = 1;
         for (var idx = 0; idx < this._menuMap.size; idx++)
         {
             var kv = this._menuMap.get(idx);
-            SaveMenu(idx + 1, kv._key);
+            if (kv._key == "아무거나") { continue; }
+            SaveMenu(saveIndex++, kv._key);
         }
     };
     this.Ctor();

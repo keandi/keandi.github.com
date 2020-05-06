@@ -123,3 +123,9 @@ function CreateKeyValue(key, value)
 {
     return new KeyValue(key, value);
 }
+
+// debug print msg
+function DbgPrint(objectName, currentName, content)
+{
+    console.log("[" + objectName + "." + currentName + "] " + content);
+}
