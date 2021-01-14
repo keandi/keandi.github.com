@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>점심 - NumberGame</title>
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="../../../js/phaser.min.js"></script>
+        <!-- <script type="text/javascript" src="./js/loadJs.js"></script> -->
+        <script type="text/javascript" src="./js/common.js"></script>
+        <script type="text/javascript" src="./js/define.js"></script>
+        <script type="text/javascript" src="./js/clsobject.js"></script>
+        <script type="text/javascript" src="./js/colortable.js"></script>
+        <script type="text/javascript" src="./js/menupoint.js"></script>
+        <script type="text/javascript" src="./js/pointsettle.js"></script>
+        <script type="text/javascript" src="./js/globaldata.js"></script>
+        <script type="text/javascript" src="./js/cell.js"></script>
+        <script type="text/javascript" src="./js/cellmanager.js"></script>
+        <script type="text/javascript" src="./js/main.js"></script>
+    </head>
+
+    <style>
+        .backBorder {
+            background-color: black;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; height: 600px;
+            margin-left: -400px;
+            margin-top: -300px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .textBorder {
+            background-color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 700px; height: 500px;
+            margin-left: -350px;
+            margin-top: -250px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: top;
+            align-items: left;
+        }
+        .inputBorder {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            width: 400px;
+            height: 350px;
+            margin-left: -200px;
+
+            overflow: scroll;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: top;
+            align-items: left;
+        }
+        .controlBorder {
+            position: absolute;
+            top: 430px;
+            left: 50%;
+            width: 400px;
+            height: 100px;
+            margin-left: -200px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .buttonStyle {
+            width: 80px; height: 25px;
+            border-width: 0;
+            padding: 0 0 0 0;
+            background-color: '#AFAFAF';
+        }
+    </style>
+
+<body>
+
+<div id="scene" class="backBorder" style="display: none;">
+
+</div>
+
+<div id="intro" class="backBorder" style="display: block; background-color: teal;">
+    <div class="textBorder">
+        <h1 id="idTitle" style="text-align: center;">[Input menus]</h1>
+        <div id="inputBox" class="inputBorder">
+            <div id="menuItems">
+            </div>
+        </div>
+        <div class="controlBorder">
+            <input type="button" value="RUN" class="buttonStyle" onclick="javascript:runGame();" />
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
