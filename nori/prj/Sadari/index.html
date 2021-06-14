@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sadari</title>
+        <meta charset="UTF-8">
+        <!-- game dev library -->
+        <script type="text/javascript" src="../../../js/phaser.min.3.55.2.js"></script>
+
+        <!-- global define -->
+        <script type="text/javascript" src="./js/define.js"></script>
+        <script type="text/javascript" src="./js/gamestep.js"></script>
+        <script type="text/javascript" src="./js/common.js"></script>
+        <script type="text/javascript" src="./js/clsobject.js"></script>
+        <script type="text/javascript" src="./js/rect.js"></script>
+        <script type="text/javascript" src="./js/unitText.js"></script>
+
+        <!-- game js -->
+        <script type="text/javascript" src="./js/gamehost.js"></script>
+        <script type="text/javascript" src="./js/SadariGame.js"></script>
+        <script type="text/javascript" src="./js/gamemain.js"></script>
+
+        <!-- input js -->
+        <script type="text/javascript" src="./js/inputUnit.js"></script>
+        <script type="text/javascript" src="./js/ready.js"></script>
+    </head>
+
+    <style>
+        .backBorder {
+            background-color: black;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; height: 600px;
+            margin-left: -400px;
+            margin-top: -300px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: white;
+        }
+        .menuBorder {
+            background-color: black;
+            position: absolute;
+            width: 800px; height: 32px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: right;
+            align-items: right;
+
+            color: white;
+        }
+        .menuDiv {
+            background-color: black;
+            position: absolute;
+            width: 30px; height: 30px;
+        }
+        .readyInputBorder {
+            background-color: black;
+            position: absolute;
+            width: 800px; height: 568px;
+            margin-top: 33px;
+        }
+        .textBorder {
+            background-color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 700px; height: 500px;
+            margin-left: -350px;
+            margin-top: -250px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: top;
+            align-items: left;
+        }
+        .inputUnitBorder {
+            background-color: rgb(31, 29, 41);
+            position: absolute;
+        }
+        .inputBorder {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            width: 400px;
+            height: 350px;
+            margin-left: -200px;
+
+            overflow: scroll;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: top;
+            align-items: left;
+        }
+        .controlBorder {
+            position: absolute;
+            top: 430px;
+            left: 50%;
+            width: 400px;
+            height: 100px;
+            margin-left: -200px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .buttonStyle {
+            border-width: 0;
+            padding: 0 0 0 0;
+            background-color: #5793a1;
+
+            width: 100%;
+            height: 100%;
+        }
+        .tmpStye {
+            background-color: rgb(35, 105, 185);
+        }
+    </style>
+
+<body>
+
+<div id="scene" class="backBorder" style="display: none;">
+
+</div>
+
+<div id="intro" class="backBorder" style="display: block;">
+    <!-- menu -->
+    <div id="menuPan"  class="menuBorder">
+        <div class="menuDiv" style="margin-left: 679px; margin-top: 1px;">
+            <input type="button" value="+" onclick="javascript:onAdd();" class="buttonStyle" />
+        </div>
+        <div class="menuDiv" style="margin-left: 711px; margin-top: 1px;">
+            <input type="button" value="-" onclick="javascript:onRemove();" class="buttonStyle" />
+        </div>
+
+        <div class="menuDiv" style="margin-left: 743px; margin-top: 1px; width: 55px;">
+            <input type="button" value="Run" onclick="javascript:onRun();" class="buttonStyle" />
+        </div>
+
+        <div class="readyInputBorder" id="readyInputBorder"></div>
+    </div>
+
+    <!-- ready -->
+</div>
+
+</body>
+</html>
