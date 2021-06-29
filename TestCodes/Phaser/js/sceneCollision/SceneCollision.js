@@ -55,7 +55,18 @@ SceneCollision.prototype.registerMenus = function() {
 
 SceneCollision.prototype.onStop = function() {
     try {
-        //alert("onStop " + this.getKey());
+        console.log("onStop " + this.getKey());
+
+        //this.add.displayList.removeAll();
+        //this.physics.remove(this._sk0);
+
+        this._sk0.destroy();
+        this._nk0.destroy();
+        this._nk1.destroy();
+
+        console.log("onStop " + this.getKey() + " - remove collider");
+        this._nk0Collider.destroy();
+        this._nk1Collider.destroy();
         
     } catch(e) {
         var errMsg = this.getKey() + ".onStop.catched: " + e;
@@ -65,10 +76,17 @@ SceneCollision.prototype.onStop = function() {
 }
 
 SceneCollision.prototype.onLoadAssets = function() {
-    try {
-        this.load.image("northKorea", "assets/image/North-Korea-Flag-icon.png");
-        this.load.image("southKorea", "assets/image/South-Korea-Flag-icon.png");
-        this.load.start();
+    try {   
+        if (this._assetLoadCompleted == true)
+        {
+            this.addImages();
+        }
+        else
+        {
+            this._imgNorthKorea = this.load.image("northKorea", "assets/image/North-Korea-Flag-icon.png");
+            this._imgSouthKorea = this.load.image("southKorea", "assets/image/South-Korea-Flag-icon.png");
+            this.load.start();
+        }
     } catch(e) {
         var errMsg = this.getKey() + ".onLoadAssets.catched: " + e;
         console.log(errMsg);
@@ -90,6 +108,17 @@ SceneCollision.prototype.onLoadAssetsComplete = function() {
     try {
         console.log(this.getKey() + " asset load completed !!!");
 
+        this.addImages();
+
+    } catch(e) {
+        var errMsg = this.getKey() + ".onLoadAssetsComplete.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+SceneCollision.prototype.addImages = function() {
+    try {
         const screenWidth = this._gameHost._config.scale.width;
         const screenHeight = this._gameHost._config.scale.height;
 
@@ -121,17 +150,16 @@ SceneCollision.prototype.onLoadAssetsComplete = function() {
             moveToTarget: this._nk1
         };
 
-        this.physics.add.collider(this._sk0, this._nk0, function(sk, nk){
+        this._nk0Collider = this.physics.add.collider(this._sk0, this._nk0, function(sk, nk){
             //alert("nk0");
             selfIt._moveInfo.moveToTarget = selfIt._nk1;
         });
-        this.physics.add.collider(this._sk0, this._nk1, function(sk, nk){
+        this._nk1Collider =this.physics.add.collider(this._sk0, this._nk1, function(sk, nk){
             //alert("nk1");
             selfIt._moveInfo.moveToTarget = selfIt._nk0;
         });
-
     } catch(e) {
-        var errMsg = this.getKey() + ".onLoadAssetsComplete.catched: " + e;
+        var errMsg = this.getKey() + ".addImages.catched: " + e;
         console.log(errMsg);
         alert(errMsg);
     }

@@ -84,6 +84,12 @@ SceneMain.prototype.registerMenus = function() {
         // move scene
         makeMenu("Move", SCENE_KEY_MOVE);
 
+        // z-order scene
+        makeMenu("Z-Order", SCENE_KEY_ZORDER);
+
+        // effect scene
+        makeMenu("Scene-Effect", SCENE_KEY_SCENEEFFECT);
+
     } catch(e) {
         var errMsg = this._identify + ".registerMenus.catched: " + e;
         console.log(errMsg);

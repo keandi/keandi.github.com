@@ -184,3 +184,29 @@ function MoveTowards(srcX, srcY, dstX, dstY, velocity) {
 
     return [srcX, srcY, false];
 }
+
+// get degree
+function getDegree(x1, y1, x2, y2) {
+    // angle in radians
+    var angleRadians = Math.atan2(y2 - y1, x2 - x1);
+
+    // angle in degrees
+    var angleDeg = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+    if (angleDeg < 0) {
+        angleDeg = 360 + angleDeg;
+    }
+
+    return angleDeg;
+}
+
+// number in ?
+function inAny(any, from, to) {
+    return (any >= from && any <= to) ? true : false;
+}
+
+// log + alert
+function logAlert(msg) {
+    console.log(msg);
+    alert(msg);
+}

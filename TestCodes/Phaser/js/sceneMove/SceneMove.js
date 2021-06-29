@@ -57,6 +57,7 @@ SceneMove.prototype.onStop = function() {
     try {
         //alert("onStop " + this.getKey());
         this.input.off('pointerdown');
+        this._arrowSprite.destroyAll();
     } catch(e) {
         var errMsg = this.getKey() + ".onStop.catched: " + e;
         console.log(errMsg);
@@ -66,8 +67,16 @@ SceneMove.prototype.onStop = function() {
 
 SceneMove.prototype.onLoadAssets = function() {
     try {
-        this.load.image("Thunder", "assets/image/Thunder-icon.png");
-        this.load.start();
+        if (this._assetLoadCompleted == true)
+        {
+            this.onLoadAssetsComplete();
+        }
+        else
+        {
+            this.load.image("Thunder", "assets/image/Thunder-icon.png");
+            this.load.spritesheet("ArrowSpriteSheet", "assets/image/Arrow_test.png", { frameWidth: 48, frameHeight: 48 });
+            this.load.start();
+        }
     } catch(e) {
         var errMsg = this.getKey() + ".onLoadAssets.catched: " + e;
         console.log(errMsg);
@@ -90,6 +99,39 @@ SceneMove.prototype.onLoadAssetsComplete = function() {
         console.log(this.getKey() + " asset load completed !!!");
 
         var selfIt = this;
+
+        //this._arrowSprite = new ArrowSprite(this, this._gameHost._game);
+
+        // ArrowSpriteSheet
+        /*this._anims = {};
+        var anims = this._anims;
+        function createArrowAnim(key, start) {
+            return selfIt.anims.create({
+                key: key,
+                frameRate: 7,
+                duration: null,
+                frames: selfIt.anims.generateFrameNumbers("ArrowSpriteSheet", { start: start, end: start + 4 }),
+                repeat: -1
+            });
+        }
+
+        this._anims.toR = createArrowAnim("toR", 0);
+        this._anims.toRB = createArrowAnim("toRB", 5);
+        this._anims.toB = createArrowAnim("toB", 10);
+        this._anims.toLB = createArrowAnim("toLB", 15);
+        this._anims.toL = createArrowAnim("toL", 20);
+        this._anims.toLT = createArrowAnim("toLT", 25);
+        this._anims.toT = createArrowAnim("toT", 30);
+        this._anims.toRT = createArrowAnim("toRT", 35);
+
+        this._sprite = this.add.sprite(50, 50, "ArrowSpriteSheet");
+        this._sprite.play(this._anims.toR);*/
+
+        //
+        this._arrowSprite = new ArrowSpriteAnime("SceneMove-ArrowSpriteAnime", this, 50, 50);
+        //var a = new AnimeSprite("aa", this, 1, 1, "ArrowSpriteSheet");
+
+        //
         this.input.on('pointerdown', function(pointer, x, y, event) {
             selfIt.pointAction(pointer.x, pointer.y);
         });
@@ -103,24 +145,48 @@ SceneMove.prototype.onLoadAssetsComplete = function() {
 
 SceneMove.prototype.pointAction = function(x, y) {
     try {
+        this.clearMoveTimer();
+
         var thunderObj = new Thunder(this, x, y);
-        //this.children.add(thunderObj);
         thunderObj.action(x, y);
 
-        /*var selfIt = this;
+        //
+        var selfIt = this;
+        var sprite = this._arrowSprite;
 
-        var thunderObj = new Thunder(this, x, y);
-        this.children.add(thunderObj);
+        //
+        let degree = getDegree(sprite.getX(), sprite.getY(), x, y);
+        //alert(degree);
+        this._arrowSprite.playDegree(degree);
 
-        function action() {
-            selfIt.children.remove(thunderObj);
-            thunderObj.destroy();
-        };
-        setTimeout(() => action(), 2000);*/
+        //
+        var moveAction = function() {
+            // set anime
+            var xGap = Math.abs(x - sprite.getX());
+            var yGap = Math.abs(y - sprite.getY());
+
+            //
+            var res = MoveTowards(sprite.getX(), sprite.getY(), x, y, 5.0);
+            sprite.moveTo(res[0], res[1]);
+            if (res[2] == true) {
+                selfIt.clearMoveTimer();
+            }
+        }
+
+        this._moveTimer = setInterval(() => moveAction(), 40);
 
     } catch(e) {
         var errMsg = this.getKey() + ".pointAction.catched: " + e;
         console.log(errMsg);
         alert(errMsg);
     }
+}
+
+SceneMove.prototype.clearMoveTimer = function() {
+    if (this._moveTimer != undefined) {
+        clearInterval(this._moveTimer);
+        this._moveTimer = undefined;
+    }
+
+    this._currentAnime = undefined;
 }

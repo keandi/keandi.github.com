@@ -15,7 +15,7 @@ SceneSwitch.prototype.onPreload = function() {
 
 SceneSwitch.prototype.onCreate = function() {
     //alert("create " + this.getKey());
-    this.cameras.main.setBackgroundColor('#6e6eef');
+    this.cameras.main.setBackgroundColor('#AE3535');
     //this.cameras.main.backgroundColor.setTo(255,0,0);
     this.registerMenus();
 }

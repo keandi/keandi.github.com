@@ -61,12 +61,16 @@ window.onload = function() {
                     }
                 }
             };
-            _sceneCollision = new SceneCollision(120, _gameHost, config);
+            _sceneCollision = new SceneCollision(60, _gameHost, config);
         }
 
-        _sceneMove = new SceneMove(20, _gameHost);
+        _sceneMove = new SceneMove(60, _gameHost);
 
-        let scenes = [ _sceneMain, _sceneSwitch, _sceneSound, _sceneCollision, _sceneMove ];
+        _sceneZOrder = new SceneZOrder(5, _gameHost);
+
+        _sceneSceneEffect = new SceneEffect(60, _gameHost);
+
+        let scenes = [ _sceneMain, _sceneSwitch, _sceneSound, _sceneCollision, _sceneMove, _sceneZOrder, _sceneSceneEffect ];
 
         if (_gameHost.createGame(sceneDiv.id, scenes) == false) {
             alert("Failed createGame");
