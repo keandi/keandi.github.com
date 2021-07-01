@@ -24,7 +24,8 @@ class GameHost extends ClsObject {
                 physics: {
                     default: 'arcade',
                     arcade: {
-                        gravity: {y: this._preSetData.gravity}
+                        gravity: {y: this._preSetData.gravity},
+                        debug: false
                     },
                     matter: {},
                 },

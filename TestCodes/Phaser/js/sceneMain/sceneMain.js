@@ -90,6 +90,12 @@ SceneMain.prototype.registerMenus = function() {
         // effect scene
         makeMenu("Scene-Effect", SCENE_KEY_SCENEEFFECT);
 
+        // drag scene
+        makeMenu("Drag", SCENE_KEY_DRAG);
+
+        // delay effect scene
+        makeMenu("Delay-Effect", SCENE_KEY_DELAYEFFECT);
+
     } catch(e) {
         var errMsg = this._identify + ".registerMenus.catched: " + e;
         console.log(errMsg);

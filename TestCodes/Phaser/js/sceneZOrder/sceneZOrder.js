@@ -76,7 +76,7 @@ SceneZOrder.prototype.onLoadAssets = function() {
         }
         else
         {
-            this.load.image("southKorea", "assets/image/South-Korea-Flag-icon.png");
+            this.load.image("zorderImage", "assets/image/South-Korea-Flag-icon.png");
             //this.load.image("Thunder", "assets/image/Thunder-icon.png");
             this.load.start();
         }

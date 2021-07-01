@@ -6,3 +6,5 @@ const SCENE_KEY_COLLISION = "sceneCollision";
 const SCENE_KEY_MOVE = "sceneMove";
 const SCENE_KEY_ZORDER = "sceneZOrder";
 const SCENE_KEY_SCENEEFFECT = "sceneSceneEffect";
+const SCENE_KEY_DRAG = "sceneDrag";
+const SCENE_KEY_DELAYEFFECT = "sceneDelayEffect";

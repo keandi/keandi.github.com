@@ -5,7 +5,7 @@ class SouthKorea extends GOWImage {
             super(name);
             this.printName();
 
-            this.setImgInfo(x, y, "southKorea").loadByScene(scene);
+            this.setImgInfo(x, y, "zorderImage").loadByScene(scene);
             this.setScale(3.0);
             this.setInteractive(true);
             this.registerPointerDown();

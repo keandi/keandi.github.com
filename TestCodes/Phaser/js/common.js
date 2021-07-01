@@ -210,3 +210,29 @@ function logAlert(msg) {
     console.log(msg);
     alert(msg);
 }
+
+// get distance
+function getDistance(x1, y1, x2, y2) {
+    return Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
+}
+
+// get point by point distance
+function getPointByPointDistance(x1, y1, x2, y2, dis) {
+    let rad = Math.atan2(y2 - y1, x2 - x1);
+    
+    let point = {
+        x: x1 + (dis * Math.cos(rad)),
+        y: y1 + (dis * Math.sign(rad))
+    };
+    return point;
+}
+
+// string format
+function stringFormat() {
+	let args = arguments;
+
+	return args[0].replace(/{(\d+)}/g, function(match, num) {
+		num = Number(num) + 1;
+		return typeof(args[num]) != undefined ? args[num] : match;
+    });
+}
