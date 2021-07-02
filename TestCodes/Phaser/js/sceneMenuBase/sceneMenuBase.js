@@ -31,8 +31,11 @@ class SceneMenuBase extends MielScene {
 
     registerMenus() {
         try {
-            // switch scene
-            {
+            var selfIt = this;
+            this._goMainMenu = this.registerMenu(80, 20, "[Go To Main]", ()=>{
+                selfIt._gameHost.switchScene(SCENE_KEY_MAIN)
+            });
+            /*{
                 var menu = this.add.text(80, 20, "[Go To Main]").setOrigin(0.5);
                 var selfIt = this;
                 var menuUp = function() {
@@ -41,9 +44,24 @@ class SceneMenuBase extends MielScene {
                 setClick(menu, menuUp);                
 
                 this._goMainMenu = menu;
-            }
+            }*/
         } catch(e) {
             var errMsg = this._identify + ".registerMenus.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    registerMenu(x, y, text, cb) {
+        try {
+            var menu = this.add.text(x, y, text).setOrigin(0.5);
+            setClick(menu, cb);
+
+            if (this._menus == undefined) { this._menus = []; }
+            this._menus.push(menu);
+            return menu;
+        } catch(e) {
+            var errMsg = this._identify + ".registerMenu.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -53,7 +71,12 @@ class SceneMenuBase extends MielScene {
         try {
             //alert("onStop " + this.getKey());
 
-            this._goMainMenu.destroy();
+            //this._goMainMenu.destroy();
+            if (this._menus != undefined) {
+                this._menus.forEach(element => {
+                    element.destroy();
+                });
+            }
             this._menuPan.destroy();
             
         } catch(e) {

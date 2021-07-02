@@ -74,7 +74,9 @@ window.onload = function() {
 
         _sceneDelayEffect = new SceneDelayEffect(60, _gameHost);
 
-        let scenes = [ _sceneMain, _sceneSwitch, _sceneSound, _sceneCollision, _sceneMove, _sceneZOrder, _sceneSceneEffect, _sceneDrag, _sceneDelayEffect ];
+        _sceneHtml = new SceneHtml(5, _gameHost);
+
+        let scenes = [ _sceneMain, _sceneSwitch, _sceneSound, _sceneCollision, _sceneMove, _sceneZOrder, _sceneSceneEffect, _sceneDrag, _sceneDelayEffect, _sceneHtml ];
 
         if (_gameHost.createGame(sceneDiv.id, scenes) == false) {
             alert("Failed createGame");

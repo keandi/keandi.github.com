@@ -143,6 +143,8 @@ class SceneDelayEffect extends SceneMenuBase {
                     colliderCoord.x = ball.x;
                     colliderCoord.y = ball.y;
                     selfIt.setBackgroundColor(colliderColor.getColor());
+
+                    var effectBlock = new BlockImage("EffectBlockImage", selfIt, selfIt._block.getX(), selfIt._block.getY(), true);
                 }
 
                 selfIt._colliding = true;
@@ -175,7 +177,7 @@ class SceneDelayEffect extends SceneMenuBase {
 
                 var res = MoveTowards(x, y, this._ballTarget.x, this._ballTarget.y, this._ballTarget.distance);
                 this._ball.moveTo(res[0], res[1]);
-                if (res[2] == true) {
+                if (res[2] == true || (x < 0 || y < 0 || x > this._screenWidth || y > this._screenHeight) ) {
                     this._ballTarget = undefined;
                     this._ball.resetPosition();
                 }

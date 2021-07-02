@@ -96,6 +96,9 @@ SceneMain.prototype.registerMenus = function() {
         // delay effect scene
         makeMenu("Delay-Effect", SCENE_KEY_DELAYEFFECT);
 
+        // html example scene
+        makeMenu("Html", SCENE_KEY_HTML);
+
     } catch(e) {
         var errMsg = this._identify + ".registerMenus.catched: " + e;
         console.log(errMsg);

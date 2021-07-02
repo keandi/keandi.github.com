@@ -11,3 +11,4 @@ let _sceneZOrder = undefined;
 let _sceneSceneEffect = undefined;
 let _sceneDrag = undefined;
 let _sceneDelayEffect = undefined;
+let _sceneHtml = undefined;

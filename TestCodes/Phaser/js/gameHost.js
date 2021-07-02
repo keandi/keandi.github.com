@@ -29,6 +29,9 @@ class GameHost extends ClsObject {
                     },
                     matter: {},
                 },
+                dom: {
+                    createContainer: true
+                },
                 scene: scenes,
                 /*scene: {
                     preload: preload,

@@ -146,6 +146,26 @@ MielScene.prototype.setBackgroundColor = function(color) {
     this.cameras.main.setBackgroundColor(color);
 }
 
+// get scene width
+MielScene.prototype.getSceneWidth = function() {
+    return this._gameHost._config.scale.width;
+}
+
+// get scene height
+MielScene.prototype.getSceneHeight = function() {
+    return this._gameHost._config.scale.height;
+}
+
+// get scene center x
+MielScene.prototype.getSceneCenterX = function() {
+    return (this._gameHost._config.scale.width / 2);
+}
+
+// get scene center y
+MielScene.prototype.getSceneCenterY = function() {
+    return (this._gameHost._config.scale.height / 2);
+}
+
 // flash effect launch option
 let FlashEffect_LaunchOption = {
     APPEND: {value: 0, description: "끝나면 뒤에 추가"},
