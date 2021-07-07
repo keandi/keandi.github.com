@@ -108,6 +108,35 @@ class GOWImage extends ClsObject {
         return this;
     }
 
+    // get width
+    getWidth(isCurrent) {
+        try {
+            return (isCurrent == true) ? this._image.width * this._image.scaleX : this._image.width;
+        } catch(e) {
+            var errMsg = this._name + ".getWidth.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+        return 0;
+    }
+
+    // get height
+    getHeight(isCurrent) {
+        try {
+            return (isCurrent == true) ? this._image.height * this._image.scaleY : this._image.height;
+        } catch(e) {
+            var errMsg = this._name + ".getHeight.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+        return 0;
+    }
+
+    // print width / height
+    printSize(isCurrent) {
+        console.log(stringFormat("{0}.image width: {1}, height{2}", this._name, this.getWidth(isCurrent), this.getHeight(isCurrent)));
+    }
+
     // set alpha
     setAlpha(alpha) {
         try {
@@ -259,6 +288,50 @@ class GOWImage extends ClsObject {
         }
 
         return this;
+    }
+
+    // print x, y
+    printXY() {
+        try {
+            console.log(this._name + ".image x: " + this.getX() + ", y: " + this.getY());
+        } catch(e) {
+            var errMsg = this._name + ".printXY.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // set rotate
+    setRotate(val) {
+        try {
+            this._image.rotation = val;
+        } catch(e) {
+            var errMsg = this._name + ".setRotate.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // increase rotate
+    incRotate(val) {
+        try {
+            this._image.rotation += val;
+        } catch(e) {
+            var errMsg = this._name + ".setRotate.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // get rotate
+    getRotate() {
+        try {
+            return this._image.rotation;
+        } catch(e) {
+            var errMsg = this._name + ".setRotate.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }
 

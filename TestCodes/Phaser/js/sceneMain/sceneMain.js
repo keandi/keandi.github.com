@@ -65,7 +65,7 @@ SceneMain.prototype.registerMenus = function() {
         }
 
         // switch scene
-        makeMenu("Switch", SCENE_KEY_SWITCH);
+        makeMenu("Switch(text-scale)", SCENE_KEY_SWITCH);
         /*{
             var menu = this.add.text(80, 25, "Switch Scene").setOrigin(0.5);
             var selfIt = this;
@@ -98,6 +98,12 @@ SceneMain.prototype.registerMenus = function() {
 
         // html example scene
         makeMenu("Html", SCENE_KEY_HTML);
+
+        // rotate scene
+        //makeMenu("Rotate", SCENE_KEY_ROTATE);
+        _sceneData.forEach(element=>{
+            makeMenu(element.menu, element.key);
+        });
 
     } catch(e) {
         var errMsg = this._identify + ".registerMenus.catched: " + e;

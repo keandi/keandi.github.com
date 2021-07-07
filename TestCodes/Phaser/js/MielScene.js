@@ -23,6 +23,8 @@ MielScene.prototype.constructor = MielScene;
 
 // init
 MielScene.prototype.init = function() {
+    this._reservedDestroy = [];
+    this._reservedInput = [];
     this.loadAssets();
     this.onInit();
 }
@@ -88,6 +90,19 @@ MielScene.prototype.stop = function() {
 
     this.load.off('progress');
     this.load.off('complete');
+    this.swipeOff();
+
+    //예약된 destroy 진행
+    if (this._reservedDestroy.length > 0) {
+        this._reservedDestroy.forEach(element=>{element.destroy();});
+        this._reservedDestroy = [];
+    }
+
+    //예약된 .input.off
+    if (this._reservedInput.length > 0) {
+        this._reservedInput.forEach(element=>{ this.input.off(element); });
+        this._reservedInput = [];
+    }
 }
 
 // scene stop event. (상속하여 사용)
@@ -299,53 +314,134 @@ MielScene.prototype.clearFlashEffectTimer = function() {
     this._currentEffect = undefined; //강제 초기화
 };
 
-/*class MielScene extends Phaser.Scene {
-    constructor(fps) {
-        super();
-        super.constructor({key: this.getKey()});
+// 자동 destroy 호출 예약
+MielScene.prototype.appendReservedDestroy = function(obj) {
+    if (obj == undefined) { return; }
 
-        this._fps = {};
-        this.recomputeFps(fps);
+    if (this._reservedDestroy == undefined) {
+        this._reservedDestroy = [];
     }
 
-    init() {
-    }
+    this._reservedDestroy.push(obj);
+}
 
-    preload() {
-    }
-    
-    create() {
-    }
+////////////<!-- SWIPE 
+// register
+MielScene.prototype.swipeOn = function() {
+    try {
+        if (this._swipeOn == true) { return; }
 
-    update(time, delta) {
-        this._fps.frameTime += delta;
-        if (this._fps.frameTime > this._fps._frameTimeLimit) {
-            this._fps.frameTime = 0;
-            this.onUpdate();
-        }
-    }
+        let selfIt = this;
 
-    onUpdate() {
+        // capture object
+        let swipeData = {
+            beginCoord: {
+                x: 0,
+                y: 0
+            },
+            endCoord: {
+                x: 0,
+                y: 0
+            },
+            direction: {
+                left: false,
+                top: false,
+                right: false,
+                bottom: false
+            },
+            resetDirection: function() {
+                this.direction.left = this.direction.top = this.direction.right = this.direction.bottom = false;
+            }
+        };
 
-    }
+        // pointerdown
+        this.input.on('pointerdown', function(pointer, x, y, event) {
+            swipeData.beginCoord.x = pointer.x;
+            swipeData.beginCoord.y = pointer.y;
+        });
 
-    getKey() {
-        return "MielScene";
-    }
+        // pointerup
+        this.input.on('pointerup', function(pointer, x, y, event) {
+            swipeData.endCoord.x = pointer.x;
+            swipeData.endCoord.y = pointer.y;
 
-    recomputeFps(fps) {
-        this._fps.frameTime = 0;
-        this._fps.frameTimeLimit = (1000 / fps);
+            let xGap = swipeData.endCoord.x - swipeData.beginCoord.x;
+            let yGap = swipeData.endCoord.y - swipeData.beginCoord.y;
+
+            if (xGap > -5 && xGap < 0) { xGap = 0; }
+            else if (xGap < 5 && xGap > 0) { xGap = 0; }
+
+            if (yGap > -5 && yGap < 0) { yGap = 0; }
+            else if (yGap < 5 && yGap > 0) { yGap = 0; }
+
+            swipeData.resetDirection();
+
+            //
+            if (Math.abs(xGap) > Math.abs(yGap)) {
+                yGap = 0;
+            } else if (Math.abs(xGap) < Math.abs(yGap)) {
+                xGap = 0;
+            }
+
+            if (xGap > 0) {
+                swipeData.direction.right = true;
+            } else if (xGap < 0) {
+                swipeData.direction.left = true;
+            }
+
+            if (yGap > 0) {
+                swipeData.direction.bottom = true;
+            } else if (yGap < 0) {
+                swipeData.direction.top = true;
+            }
+
+            if (swipeData.direction.left == true ||
+                swipeData.direction.top == true ||
+                swipeData.direction.right == true ||
+                swipeData.direction.bottom == true) 
+            {
+                selfIt.onSwipe(swipeData.direction);
+            }
+
+        });
+        
+        this._swipeOn = true;
+
+    } catch (e) {
+        var errMsg = this.getKey() + ".swipeOn.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
     }
 }
 
-class ABC {
-    constructor() {}
+// event (상속하여 사용)
+MielScene.prototype.onSwipe = function(direction) {
+    // nothing
 }
 
-class ABC1 extends ABC {
-    constructor() {
-        super();
-        super.constructor();
+// unregister
+MielScene.prototype.swipeOff = function() {
+    try {
+        if (this._swipeOn == false) { return; }
+
+        this.input.off('pointerdown');
+        this.input.off('pointerup');
+        
+        this._swipeOn = false;
+
+    } catch (e) {
+        var errMsg = this.getKey() + ".swipeOff.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
     }
-}*/
+}
+////////////SWIPE -->
+
+// push input on event
+MielScene.prototype.pushInputEvent = function(evt) {
+    if (this._reservedInput == undefined) {
+        this._reservedInput = [];
+    }
+
+    this._reservedInput.push(evt);
+}

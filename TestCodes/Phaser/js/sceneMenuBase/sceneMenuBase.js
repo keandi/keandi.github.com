@@ -22,6 +22,7 @@ class SceneMenuBase extends MielScene {
             const y = parseInt(h / 2);
 
             this._menuPan = this.add.rectangle(x, y, w, h, 0x6666ff);
+            this._menuPan.setDepth(1000);
         } catch(e) {
             var errMsg = this._identify + ".makeMenuPan.catched: " + e;
             console.log(errMsg);
@@ -55,6 +56,7 @@ class SceneMenuBase extends MielScene {
     registerMenu(x, y, text, cb) {
         try {
             var menu = this.add.text(x, y, text).setOrigin(0.5);
+            menu.setDepth(1000);
             setClick(menu, cb);
 
             if (this._menus == undefined) { this._menus = []; }
@@ -88,6 +90,31 @@ class SceneMenuBase extends MielScene {
 
     getMenuBottom() {
         return this._menuPanHeight;
+    }
+
+    // 메뉴 제외 구역 정보 반환
+    getMainArea() {
+        return {
+            left: 0,
+            top: this._menuPanHeight + 1,
+            right: this.getSceneWidth(),
+            bottom: this.getSceneHeight()
+        };
+    }
+
+    // 메뉴 제외 구역 center 기반 정보 반환
+    getMainAreaIncludeCenter() {
+        const area = this.getMainArea();
+        const wh = {
+            w: area.right - area.left,
+            h: area.bottom - area.top
+        }
+        return {
+            x: wh.w / 2,
+            y: (wh.h / 2) + this._menuPanHeight,
+            width: wh.w,
+            height: wh.h
+        }
     }
 }
 

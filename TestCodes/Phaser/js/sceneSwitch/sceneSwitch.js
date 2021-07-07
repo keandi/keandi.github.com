@@ -6,11 +6,21 @@ class SceneSwitch extends SceneMenuBase {
 
     onCreate() {
         //alert("create " + this.getKey());
+        this._testText = this.add.text(10, 100, "test text !!!").setOrigin(0);
+        this._testText.scaleX = 2.0;
+        this._testText.scaleY = 11.0;
+
     }
 
     getKey() {
         return SCENE_KEY_SWITCH;
     }   
+
+    onStop() {
+        super.onStop();
+
+        this._testText.destroy();
+    }
 }
 
 

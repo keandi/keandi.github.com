@@ -76,7 +76,13 @@ window.onload = function() {
 
         _sceneHtml = new SceneHtml(5, _gameHost);
 
-        let scenes = [ _sceneMain, _sceneSwitch, _sceneSound, _sceneCollision, _sceneMove, _sceneZOrder, _sceneSceneEffect, _sceneDrag, _sceneDelayEffect, _sceneHtml ];
+        //_sceneRotate = new SceneRotate(60, _gameHost);
+
+        let scenes = [ _sceneMain, _sceneSwitch, _sceneSound, _sceneCollision, _sceneMove, _sceneZOrder, _sceneSceneEffect, _sceneDrag, _sceneDelayEffect, _sceneHtml/*, _sceneRotate*/ ];
+
+        _sceneData.forEach(element=>{
+            scenes.push(element.getScene())
+        });
 
         if (_gameHost.createGame(sceneDiv.id, scenes) == false) {
             alert("Failed createGame");
