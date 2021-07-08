@@ -64,7 +64,7 @@ class SceneSwipe extends SceneMenuBase {
             this.appendReservedDestroy(this._swipeImage);
 
             //
-            this.swipeOn();
+            this.swipeOn(25, 100);
 
         } catch(e) {
             var errMsg = this.getKey() + ".onLoadAssetsComplete.catched: " + e;
@@ -73,9 +73,94 @@ class SceneSwipe extends SceneMenuBase {
         }
     }
 
-    onSwipe(direction) {
+    onSwipe(direction, value, swipeCount, isEnd, isCancel) {
         try {
-            this._direction = direction;
+            /* console.log( stringFormat("{0}::onSwipe direction: {1}, value: {2}, swipeCount: {3}, isEnd: {4}, isCancel: {5}", this.getKey()
+                , direction.description
+                , value
+                , swipeCount
+                , isEnd
+                , isCancel)); */
+
+            let selfIt = this;
+            
+            if (swipeCount == 0) {
+                this._orgCoord = {
+                    x: this._swipeImage.x,
+                    y: this._swipeImage.y
+                };
+            }
+
+            // get target coord
+            let getTargetCoord = function() {
+                switch (direction)
+                {
+                    case SwipeDirection.LEFT:
+                    case SwipeDirection.RIGHT:
+                        return {
+                            x: selfIt._orgCoord.x + value,
+                            y: selfIt._orgCoord.y
+                        };
+
+                    case SwipeDirection.UP:
+                    case SwipeDirection.DOWN:
+                        return {
+                            x: selfIt._orgCoord.x,
+                            y: selfIt._orgCoord.y + value
+                        };
+
+                    case SwipeDirection.UNKNOWN:
+                    default:
+                        return selfIt._orgCoord;
+                }
+            }
+
+            // get swipe result coord
+            let getSwipeEndCoord = function() {
+                switch (direction)
+                {
+                    case SwipeDirection.LEFT:
+                        return {
+                            x: (selfIt._swipeImage.width / 2) + 1,
+                            y: selfIt._orgCoord.y
+                        };
+
+                    case SwipeDirection.RIGHT:
+                        return {
+                            x: selfIt.getSceneWidth() - (selfIt._swipeImage.width / 2) - 1,
+                            y: selfIt._orgCoord.y
+                        };
+
+                    case SwipeDirection.UP:
+                        return {
+                            x: selfIt._orgCoord.x,
+                            y: selfIt.getMainArea().top + (selfIt._swipeImage.height / 2) + 1
+                        };
+
+                    case SwipeDirection.DOWN:
+                        return {
+                            x: selfIt._orgCoord.x,
+                            y: selfIt.getSceneHeight() - (selfIt._swipeImage.height / 2) - 1
+                        };
+
+                    case SwipeDirection.UNKNOWN:
+                    default:
+                        return selfIt._orgCoord;
+                }
+            }
+
+            if (isEnd == false) { // 임의 이동 중
+                this._targetCoord = getTargetCoord();
+                this._moveSpeed = 12.0;
+            } else if (isEnd == true) { // 종료 시
+                if (isCancel == true) { // 원복 필요
+                    this._targetCoord = this._orgCoord;
+                } else {
+                    this._targetCoord = getSwipeEndCoord();
+                }
+                this._moveSpeed = 35.0;
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onSwipe.catched: " + e;
             console.log(errMsg);
@@ -84,6 +169,18 @@ class SceneSwipe extends SceneMenuBase {
     }
 
     onUpdate() {
+
+        if (this._targetCoord == undefined) { return; }
+
+        var res = MoveTowards(this._swipeImage.x, this._swipeImage.y, this._targetCoord.x, this._targetCoord.y, this._moveSpeed);
+        this._swipeImage.x = res[0];
+        this._swipeImage.y = res[1];
+
+        if (res[2] == true) {
+            this._targetCoord = undefined;
+        }
+
+        /*
         if (this._direction == undefined) { return; }
 
         const move = 16.0;
@@ -132,5 +229,6 @@ class SceneSwipe extends SceneMenuBase {
 
             this._swipeImage.y = to;
         } 
+        */
     }
 }

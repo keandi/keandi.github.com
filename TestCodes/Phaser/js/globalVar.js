@@ -18,6 +18,8 @@ let _sceneTile = undefined;
 let _sceneSwipe = undefined;
 let _sceneSpriteChange = undefined;
 
+let _scenes = {};
+
 let _sceneData = [
     {
         key: SCENE_KEY_ROTATE,
@@ -67,6 +69,26 @@ let _sceneData = [
                 _sceneSpriteChange = new SceneSpriteChange(20, _gameHost);
             }
             return _sceneSpriteChange;
+        }
+    },
+    {
+        key: SCENE_KEY_CAMERAMOVE,
+        menu: "Camera Move",
+        getScene: function() {
+            if (_scenes.cameraMove == undefined) {
+                _scenes.cameraMove = new SceneCameraMove(60, _gameHost);
+            }
+            return _scenes.cameraMove;
+        }
+    },
+    {
+        key: SCENE_KEY_TILEMAPCAMERAMOVE,
+        menu: "TMap Cam-Move",
+        getScene: function() {
+            if (_scenes.tileMapCameraMove == undefined) {
+                _scenes.tileMapCameraMove = new SceneTileMapCameraMove(60, _gameHost);
+            }
+            return _scenes.tileMapCameraMove;
         }
     }
 ];

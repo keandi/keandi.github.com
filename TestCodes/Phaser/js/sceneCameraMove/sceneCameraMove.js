@@ -1,4 +1,4 @@
-class SceneSpriteChange extends SceneMenuBase {
+class SceneCameraMove extends SceneMenuBase {
     // ctor
     constructor(fps, gameHost) {
         super(fps, gameHost);
@@ -9,7 +9,7 @@ class SceneSpriteChange extends SceneMenuBase {
     }
 
     getKey() {
-        return SCENE_KEY_SPRITECHANGE;
+        return SCENE_KEY_CAMERAMOVE;
     }   
 
     onStop() {
@@ -33,7 +33,7 @@ class SceneSpriteChange extends SceneMenuBase {
             }
             else
             {
-                this.load.spritesheet("SpriteSheet_ARROW", "assets/image/Arrow_test.png", { frameWidth: 48, frameHeight: 48 });
+                this.load.image("background_gif", "assets/image/text-background.gif");
                 this.load.start();
             }
         } catch(e) {
@@ -57,19 +57,19 @@ class SceneSpriteChange extends SceneMenuBase {
         try {
             console.log(this.getKey() + " asset load completed !!!");
 
-            let selfIt = this;
+            // background
+            let background = this.addDestroyableObject( this.add.image(this.getSceneCenterX(), this.getSceneCenterY(), 'background_gif') );
 
-            // sprite
-            this._sprite = this.add.sprite(this.getSceneCenterX(), this.getSceneCenterY(), 'SpriteSheet_ARROW').setOrigin(0, 0);
-            this.appendReservedDestroy(this._sprite);
+            // background position reset
+            background.x += ((background.width / 2) - (this.getSceneWidth() / 2));
+            background.y += ((background.height / 2) - (this.getSceneHeight() / 2));
 
-            // pointerdown
-            let frame = new RINum(0, 5, 35);
-            this.input.on('pointerdown', function(pointer, x, y, event) {
-                selfIt._sprite.setTexture('SpriteSheet_ARROW', frame.Next);
-            });
-            this.pushInputEvent('pointerdown');
+            // camera set
+            this.cameras.main.setBounds(0, 0, background.width, background.height);
+            this._cameraCenter = { x: 0, y: 0};
 
+            //
+            this.sceneDragOn();
 
         } catch(e) {
             var errMsg = this.getKey() + ".onLoadAssetsComplete.catched: " + e;
@@ -78,8 +78,24 @@ class SceneSpriteChange extends SceneMenuBase {
         }
     }
 
+    onSceneDrag(x, y) {
+        try {
+            //console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}", this.getKey(), x, y) );
 
-    onUpdate() {
-  
+            this._cameraCenter.x -= (x * 5);
+            this._cameraCenter.y -= (y * 5);
+
+            /* console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}, camera-x: {3}, camera-y: {4}"
+                , this.getKey(), x, y
+                , this._cameraCenter.x, this._cameraCenter.y) ); */
+
+            this.cameras.main.centerOn(this._cameraCenter.x, this._cameraCenter.y);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".onSceneDrag.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
+    
 }
