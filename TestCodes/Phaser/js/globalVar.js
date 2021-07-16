@@ -90,5 +90,25 @@ let _sceneData = [
             }
             return _scenes.tileMapCameraMove;
         }
+    },
+    {
+        key: SCENE_KEY_COOLTIME,
+        menu: "Cool-Time",
+        getScene: function() {
+            if (_scenes.coolTime == undefined) {
+                _scenes.coolTime = new SceneCoolTime(60, _gameHost);
+            }
+            return _scenes.coolTime;
+        }
+    },
+    {
+        key: SCENE_KEY_MULTICAMERA,
+        menu: "Multi-Camera",
+        getScene: function() {
+            if (_scenes.multiCamera == undefined) {
+                _scenes.multiCamera = new SceneMultiCamera(60, _gameHost);
+            }
+            return _scenes.multiCamera;
+        }
     }
 ];

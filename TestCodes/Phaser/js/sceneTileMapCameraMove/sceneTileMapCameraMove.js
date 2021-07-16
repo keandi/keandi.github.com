@@ -72,7 +72,14 @@ class SceneTileMapCameraMove extends SceneMenuBase {
             background.y += ((background.height / 2) - (this.getSceneHeight() / 2));
 
             // camera set
+            this._cameraBounds = {
+                left: this.getSceneCenterX(),  
+                top: this.getSceneCenterY(),
+                right: fullSize.width - this.getSceneCenterX(),
+                bottom: fullSize.height - this.getSceneCenterY(),
+            };
             this.cameras.main.setBounds(0, 0, fullSize.width, fullSize.height);
+            //this.cameras.main.setBounds(cameraBounds.x, cameraBounds.y, cameraBounds.width, cameraBounds.heigh);
             this._cameraCenter = { x: 0, y: 0};
 
             //
@@ -95,14 +102,30 @@ class SceneTileMapCameraMove extends SceneMenuBase {
             });
             */
 
+            // temp-icon
+            let tempIcon = undefined;
+            let makeTempIcon = function() {
+                tempIcon = selfIt.addDestroyableObject( selfIt.add.image(selfIt.getSceneCenterX() + 64, selfIt.getSceneCenterY() + 64, 'mainIcon') );
+                tempIcon.setInteractive();
+                tempIcon.on('pointerdown', (pointer) => {
+                    selfIt._objDownPointer = { x: pointer.x, y: pointer.y };
+                    alert('This is temp-Icon !!!');
+                });
+                selfIt.addDestroyCB(()=>{ tempIcon.off('pointerdown'); });
+            }
+
             // mainIcon
             this._mainIcon = this.addDestroyableObject( this.add.image(this.getSceneCenterX(), this.getSceneCenterY(), 'mainIcon') );
             this._mainIcon.setInteractive();
             this._mainIcon.on('pointerdown', (pointer, x, y, event) => {
-                console.log( stringFormat("click x: {0}, y: {1}, img x: {2}, y: {3}", pointer.x, pointer.y
-                    , selfIt._mainIcon.x, selfIt._mainIcon.y) );
+                /*console.log( stringFormat("click x: {0}, y: {1}, img x: {2}, y: {3}", pointer.x, pointer.y
+                    , selfIt._mainIcon.x, selfIt._mainIcon.y) ); */
 
                 selfIt._objDownPointer = { x: pointer.x, y: pointer.y };
+
+                if (tempIcon == undefined) {
+                    makeTempIcon();
+                }
             });
             this.addDestroyCB( () => { 
                 selfIt._mainIcon.off('pointerdown'); 
@@ -116,8 +139,8 @@ class SceneTileMapCameraMove extends SceneMenuBase {
     }
 
     isDragEnable(x, y) {
-        console.log( stringFormat("{0}::isDragEnable - x: {1}, y: {2}, tmpRect x: {3}, y: {4}", this.getKey(), x, y
-            , this._mainIcon.x, this._mainIcon.y) );
+        /*console.log( stringFormat("{0}::isDragEnable - x: {1}, y: {2}, tmpRect x: {3}, y: {4}", this.getKey(), x, y
+            , this._mainIcon.x, this._mainIcon.y) ); */
 
         var result = false;
         if (this._objDownPointer == undefined) { 
@@ -128,7 +151,7 @@ class SceneTileMapCameraMove extends SceneMenuBase {
             result = true;
         }
 
-        console.log("isDragEnable: " + result);
+        //console.log("isDragEnable: " + result);
         this._objDownPointer = undefined;
         return result;
     }
@@ -137,16 +160,27 @@ class SceneTileMapCameraMove extends SceneMenuBase {
         try {
             //console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}", this.getKey(), x, y) );
 
-            this._cameraCenter.x -= (x * 5);
-            this._cameraCenter.y -= (y * 5);
+            this._cameraCenter.x -= x;//(x * 5);
+            this._cameraCenter.y -= y;//(y * 5);
 
-            if (this._cameraCenter.x < 0) {
+            /*if (this._cameraCenter.x < 0) {
                 this._cameraCenter.x = 0;
             } else if (this._cameraCenter.x > this._fullSize.width) {
                 this._cameraCenter.x = this._fullSize.width;
+            }*/
+
+            if (this._cameraCenter.x < this._cameraBounds.left) {
+                this._cameraCenter.x = this._cameraBounds.left;
+            } else if (this._cameraCenter.x > this._cameraBounds.right) {
+                this._cameraCenter.x = this._cameraBounds.right;
+            }
+            if (this._cameraCenter.y < this._cameraBounds.top) {
+                this._cameraCenter.y = this._cameraBounds.top;
+            } else if (this._cameraCenter.y > this._cameraBounds.bottom) {
+                this._cameraCenter.y = this._cameraBounds.bottom;
             }
 
-             /*console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}, camera-x: {3}, camera-y: {4}"
+            /* console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}, camera-x: {3}, camera-y: {4}"
                 , this.getKey(), x, y
                 , this._cameraCenter.x, this._cameraCenter.y) ); */
 

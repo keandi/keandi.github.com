@@ -16,3 +16,5 @@ const SCENE_KEY_SWIPE = "sceneSwipe";
 const SCENE_KEY_SPRITECHANGE = "sceneSpriteChange";
 const SCENE_KEY_CAMERAMOVE = "sceneCameraMove";
 const SCENE_KEY_TILEMAPCAMERAMOVE = "sceneTileMapCameraMove";
+const SCENE_KEY_COOLTIME = "sceneCoolTime";
+const SCENE_KEY_MULTICAMERA = "sceneMultiCamera";

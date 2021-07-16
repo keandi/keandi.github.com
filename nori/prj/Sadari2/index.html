@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Phaser Test Codes</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+        <!-- scale 이 고정되게 해준다 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+    
+        <!-- 화면이 너무 크게 보여질 경우 scale 값을 변경해주면 됨
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.1, maximum-scale=0.75, user-scalable=yes">
+        -->
+
+        <script type="text/javascript" src="../../../js/phaser.min.3.55.2.js"></script>
+
+        <script type="text/javascript" src="./js/clsObject.js"></script>
+        <script type="text/javascript" src="./js/common.js"></script>
+        <script type="text/javascript" src="./js/point.js"></script>
+        <script type="text/javascript" src="./js/rect.js"></script>
+        <script type="text/javascript" src="./js/destroyCallBacks.js"></script>
+        <script type="text/javascript" src="./js/destroyMap.js"></script>
+        <script type="text/javascript" src="./js/evtLock.js"></script>
+        <script type="text/javascript" src="./js/maxCounter.js"></script>
+        <script type="text/javascript" src="./js/effectButton.js"></script>
+
+        <script type="text/javascript" src="./js/define.js"></script>
+        <script type="text/javascript" src="./js/globalVar.js"></script>
+
+        <script type="text/javascript" src="./js/MielScene.js"></script>
+
+        <script type="text/javascript" src="./js/MessageBox.js"></script>
+
+        <script type="text/javascript" src="./js/lineConnecter.js"></script>
+        <script type="text/javascript" src="./js/sadariLinePoint.js"></script>
+        <script type="text/javascript" src="./js/sadariLineInfo.js"></script>
+        <script type="text/javascript" src="./js/sadari.js"></script>
+
+        <script type="text/javascript" src="./js/inputHtml.js"></script>
+
+        <script type="text/javascript" src="./js/sceneMain.js"></script>
+
+        <script type="text/javascript" src="./js/gameHost.js"></script>
+
+        <script type="text/javascript" src="./js/main.js"></script>
+
+    </head>
+
+    <style>
+        .backBorder {
+            background-color: rgb(240, 234, 234);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; height: 600px;
+            margin-left: -400px;
+            margin-top: -300px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .outerBorder {
+            background-color: rgb(245, 53, 203);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%; height: 100%;
+            margin-left: 0px;
+            margin-top: 0px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+    </style>
+
+<body>
+    <div id="scene" class="backBorder" style="display: block;">
+    </div>
+
+</body>
+</html>

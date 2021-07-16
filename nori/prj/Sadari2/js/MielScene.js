@@ -117,8 +117,6 @@ MielScene.prototype.onStop = function() {
 
 // asset load
 MielScene.prototype.loadAssets = function() {
-    this.onLoadAssets();
-
     var selfIt = this;
     this.load.on('progress', function(value){
         selfIt.onLoadingAssets(value);
@@ -128,6 +126,8 @@ MielScene.prototype.loadAssets = function() {
         selfIt.onLoadAssetsComplete();
         selfIt._assetLoadCompleted = true;
     });
+
+    this.onLoadAssets();
 }
 
 // asset load 를 구현 (상속하여 사용)

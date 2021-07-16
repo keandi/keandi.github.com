@@ -34,6 +34,7 @@ class SceneMenuBase extends MielScene {
         try {
             var selfIt = this;
             this._goMainMenu = this.registerMenu(80, 20, "[Go To Main]", ()=>{
+                if (selfIt.isGoMainEnable() != true) { return; }
                 selfIt._gameHost.switchScene(SCENE_KEY_MAIN)
             });
             /*{
@@ -51,6 +52,11 @@ class SceneMenuBase extends MielScene {
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // 이동 메뉴 사용 가능 체크 (상속하여 사용)
+    isGoMainEnable() {
+        return true;
     }
 
     registerMenu(x, y, text, cb) {
