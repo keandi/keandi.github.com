@@ -55,6 +55,8 @@ class SceneMain extends MielScene {
 
                 this.load.html('html_input', 'assets/htmls/inputbox.html'); counter++;
 
+                this.load.spritesheet("ArrowSpriteSheet", "assets/image/Arrow_test.png", { frameWidth: 48, frameHeight: 48 }); counter++;
+
                 this.#_assetsLoadCounter = new MaxCounter(counter);
 
                 this.load.start();
@@ -170,7 +172,7 @@ class SceneMain extends MielScene {
 
             // play button
             this.#_playButton =this.addDestroyableObject( new EffectButton("play-button", (sceneRect.Right - (128/2)) - 16, (32 / 2) + 10, "button_play", this, 0, ()=>{
-                this.#showMsg("GoPlay");
+                selfIt.#goPlay();
             }) );
             this.#_playButton.visible = false;
 
@@ -320,10 +322,10 @@ class SceneMain extends MielScene {
                 this.#_gameCamera.center.y = this.#_gameCamera.bounds.Bottom;
             }
 
-            console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}, camera-x: {3}, camera-y: {4}, bound_left: {5}"
+            /* console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}, camera-x: {3}, camera-y: {4}, bound_left: {5}"
                 , this.getKey(), x, y
                 , this.#_gameCamera.center.x, this.#_gameCamera.center.y
-                , this.#_gameCamera.bounds.Left) ); 
+                , this.#_gameCamera.bounds.Left) ); */
 
             this.#_gameCamera.camera.centerOn(this.#_gameCamera.center.x, this.#_gameCamera.center.y);
 
@@ -485,6 +487,39 @@ class SceneMain extends MielScene {
         }
     }
 
+    //go play
+    #goPlay() {
+        try {
+            console.log("start play");
+
+            // clear guiders
+            for (let [k, v] of this.#_dragGuiders) {
+                v.destroyGuider();
+            }
+            this.#_dragGuiders.clear();
+
+            //
+            this.#_playButton.visible = false;
+            _gameStatus = GameStatus.PLAYING;
+
+            // event lock
+            _evtLock.IsDragLock = true;
+
+            //
+            let sadari_index = 0;
+            let point_index = 0;
+            let prev_point = undefined;
+            //let 
+
+            //
+            this.#showMsg("gogogo");
+        } catch(e) {
+            var errMsg = this.getKey() + ".goPlay.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     //// <!-- drag guiders
 
     // add drag objects
@@ -544,11 +579,14 @@ class SceneMain extends MielScene {
             // fix drag coordinate
             let fixDragCoords = function(pointer, dragX, dragY) {
                 if (dragX <= selfIt.getSceneWidth()) {
-                    dragX += selfIt.getSceneWidth();
+                    dragX += selfIt.#_gameCamera.center.x - selfIt.#_gameCamera.bounds.X + selfIt.getSceneWidth();
                 }
                 
-                if (dragY > pointer.y) {
+                console.log( stringFormat("org y: {0}, pointer.Y: {1}, gap: {2}", dragY, pointer.y, pointer.y - dragY) );
+                //if (dragY >= pointer.y) {
+                if (pointer.y - dragY < DRAG_MENU_HEIGHT_GAP) {
                     dragY -= selfIt.#_gameCamera.rect.Top;
+                    console.log( stringFormat("after y: {0}, pointer.Y: {1}, camera.rect.top: {2}, gap: {3}", dragY, pointer.y, selfIt.#_gameCamera.rect.Top, pointer.y - dragY) );
                 }
 
                 return {x: dragX, y: dragY};
@@ -561,8 +599,6 @@ class SceneMain extends MielScene {
                 if (srcSadari.isInArea(x, y) == true) { return undefined; }
 
                 //
-
-
                 for (let [k, v] of selfIt.#_dragGuiders) {
                     //console.log( stringFormat("parentIdx: {0}", v.Parent.Index) );
 
@@ -614,8 +650,8 @@ class SceneMain extends MielScene {
                 lineConnecter.x2 = drag.x;
                 lineConnecter.y2 = drag.y;
 
-                let targetLintPoint = findCollisionPoint(linePoint, drag.x, drag.y);
-                let isConnected = (targetLintPoint == undefined) ? false : true;
+                let targetLinePoint = findCollisionPoint(linePoint, drag.x, drag.y);
+                let isConnected = (targetLinePoint == undefined) ? false : true;
 
                 lineConnecter.connecter.redraw(lineConnecter.x1, lineConnecter.y1, drag.x, drag.y, isConnected);
 
@@ -630,9 +666,22 @@ class SceneMain extends MielScene {
                 linePoint.resetGuiderPosition();
 
                 //
-                lineConnecter.connecter.redraw(lineConnecter.x1, lineConnecter.y1, lineConnecter.x2, lineConnecter.y2);
-                lineConnecter.connecter.destroy();
-                lineConnecter = undefined;
+                let targetLinePoint = findCollisionPoint(linePoint, lineConnecter.x2, lineConnecter.y2);
+                if (targetLinePoint != undefined) {
+                    lineConnecter.connecter.redraw(lineConnecter.x1, lineConnecter.y1, targetLinePoint.GuiderPointer.X, targetLinePoint.GuiderPointer.Y, false);
+
+                    selfIt.#_dragGuiders.delete(targetLinePoint.Guider);
+                    selfIt.#_dragGuiders.delete(linePoint.Guider);
+
+                    targetLinePoint.setNext(linePoint);
+                    targetLinePoint.destroyGuider();
+
+                    linePoint.setNext(targetLinePoint);
+                    linePoint.destroyGuider();
+                } else {
+                    lineConnecter.connecter.destroy();
+                    lineConnecter = undefined;
+                }
             });
 
         } catch(e) {

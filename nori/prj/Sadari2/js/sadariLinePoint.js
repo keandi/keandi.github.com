@@ -37,6 +37,7 @@ class SadariLinePoint extends ClsObject {
             }
 
             this.#_PV.point = this.#_PV.scene.add.circle(0, 0, SADARI_POINT_RADIUS, SADARI_LINE_COLOR);
+            this.#_PV.point.setDepth(DEPTH_POINT);
             if (this.#_PV.index > 0 && this.#_PV.index < this.#_PV.pointMaxCount - 1) {
                 // guider 생성
                 this.#_PV.pointGuider = this.#_PV.scene.add.image(0, 0, 'point_guider');
@@ -169,7 +170,7 @@ class SadariLinePoint extends ClsObject {
             this.#_PV.pointGuiderRect.makeFromCenterPointer(this.#_PV.pointGuiderPt.X, this.#_PV.pointGuiderPt.Y, this.#_PV.pointGuider.width, this.#_PV.pointGuider.height);
 
             let res = this.#_PV.pointGuiderRect.ptInRect(x, y);
-            console.log(
+            /*console.log(
                 stringFormat(
                     "isIn:: l:{0}, t:{1}, r:{2}, b:{3}, x:{4}, y{5}, isIn? {6} "
                     , this.#_PV.pointGuiderRect.Left
@@ -180,7 +181,7 @@ class SadariLinePoint extends ClsObject {
                     , y
                     , res
                 )
-            );
+            );*/
 
             return res;
 
@@ -191,5 +192,16 @@ class SadariLinePoint extends ClsObject {
         }
 
         return false;
+    }
+
+    // set next
+    setNext(point) {
+        try {
+            this.#_PV.next = point;
+        } catch(e) {
+            var errMsg = this.getExpMsg("setNext", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

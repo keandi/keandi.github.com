@@ -36,6 +36,7 @@ class Sadari extends ClsObject {
             this.#create();
 
             // enable
+            //this.#setEnable(true);
             this.#setEnable( (_gameStatus == GameStatus.INPUT) ? false : true );
 
         } catch(e) {
@@ -69,14 +70,17 @@ class Sadari extends ClsObject {
             this.#_pan = this.#_scene.add.graphics();
             this.#_pan.fillStyle(0x901111);
             this.#_pan.fillRect(0, 0, SADARI_PAN_WIDTH, this.#_panHeight);
+            this.#_pan.setDepth(DEPTH_SADARI_OBJECT);
             this.#_destroyMap.add(this.#_pan);
 
             // head text
             this.#_headText = addText(this.#_scene, 0, 0, this._name);//this.#_scene.add.text(0, 0, this._name).setOrigin(0.5);
+            this.#_headText.setDepth(DEPTH_SADARI_OBJECT);
             this.#_destroyMap.add(this.#_headText);
 
             // tail text
             this.#_tailText = addText(this.#_scene, 0, 0, this._name);//this.#_scene.add.text(0, 0, this._name).setOrigin(0.5);
+            this.#_tailText.setDepth(DEPTH_SADARI_OBJECT);
             this.#_destroyMap.add(this.#_tailText);
 
             if (_gameStatus == GameStatus.INPUT) {
@@ -86,6 +90,7 @@ class Sadari extends ClsObject {
                     selfIt.#setEnable(true);
                 });
                 this.#_buttonO.visible = false;
+                this.#_buttonO.setDepth(DEPTH_SADARI_OBJECT);
                 this.#_destroyMap.add(this.#_buttonO);
 
                 // x button
@@ -93,12 +98,14 @@ class Sadari extends ClsObject {
                     //alert(this._name +  ' - x button');
                     selfIt.#setEnable(false);
                 });
+                this.#_buttonX.setDepth(DEPTH_SADARI_OBJECT);
                 this.#_destroyMap.add(this.#_buttonX);
 
                 // input button
                 this.#_buttonInput = new EffectButton("input-button", 0, 0, "button_t", this.#_scene, 0, ()=>{
                     selfIt.#_inputCb(selfIt.#_index);
                 });
+                this.#_buttonInput.setDepth(DEPTH_SADARI_OBJECT);
                 this.#_destroyMap.add(this.#_buttonInput);
             } else if (_gameStatus == GameStatus.MAKE) {
                 const edge = this.#_headText.height + (SADARI_TEXT_EDGE * 2);

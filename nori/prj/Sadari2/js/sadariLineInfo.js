@@ -49,6 +49,7 @@ class SadariLineInfo extends ClsObject {
                 this.#_private.lineArea.CenterX, 
                 this.#_private.lineArea.Bottom, 
                 SADARI_LINE_THIKNESS, SADARI_LINE_COLOR) );
+            this.#_private.base.setDepth(DEPTH_LINE);
 
             // line points
             const lineCY = this.#_private.lineArea.Height;

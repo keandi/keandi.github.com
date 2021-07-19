@@ -17,6 +17,7 @@ const BORDER_COLOR = "0x66816E";
 
 // menu height
 const MENU_HEIGHT = 48;
+const DRAG_MENU_HEIGHT_GAP = MENU_HEIGHT - 16;
 
 // border gap
 const BORDER_DEPTH = 8;
@@ -41,8 +42,10 @@ const SADARI_TEXT_EDGE = 15;
 //object depth
 const DEPTH_MSGBOX = 1000;
 const DEPTH_HTML = 100;
-const DEPTH_LINE = 1;
-const DEPTH_LINE_CONNECTER = 2;
+const DEPTH_SADARI_OBJECT = 8;
+const DEPTH_LINE = 9;
+const DEPTH_LINE_CONNECTER = 10;
+const DEPTH_POINT = 11;
 const DEPTH_POINT_GUIDER = 49;
 const DEPTH_POINT_DRAG_GUIDER = 50;
 

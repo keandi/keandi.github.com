@@ -167,6 +167,6 @@ class Rect {
         let halfWidth = (width != 0) ? width / 2 :  0;
         let halfHeight = (height != 0) ? height / 2 :  0;
 
-        this.set( x - halfWidth, y - halfHeight, x + halfWidth, y + halfHeight );
+        this.set( x - halfWidth, y - halfHeight, width, height );
     }
 }
