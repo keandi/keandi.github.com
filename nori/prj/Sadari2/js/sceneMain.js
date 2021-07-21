@@ -9,6 +9,7 @@ class SceneMain extends MielScene {
     #_gameBackground = undefined;
     #_assetsLoadCounter = undefined;
     #_dragGuiders = undefined;
+    #_playCharacter = undefined;
 
     // ctor
     constructor(fps, gameHost) {
@@ -55,7 +56,7 @@ class SceneMain extends MielScene {
 
                 this.load.html('html_input', 'assets/htmls/inputbox.html'); counter++;
 
-                this.load.spritesheet("ArrowSpriteSheet", "assets/image/Arrow_test.png", { frameWidth: 48, frameHeight: 48 }); counter++;
+                this.load.spritesheet("ArrowSpriteSheet", "assets/images/Arrow_test.png", { frameWidth: 48, frameHeight: 48 }); counter++;
 
                 this.#_assetsLoadCounter = new MaxCounter(counter);
 
@@ -308,8 +309,19 @@ class SceneMain extends MielScene {
         try {
             //console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}", this.getKey(), x, y) );
 
-            this.#_gameCamera.center.x -= x;
-            this.#_gameCamera.center.y -= y;
+            this.setCameraCenter(this.#_gameCamera.center.x - x, this.#_gameCamera.center.y - y);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".onSceneDrag.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    setCameraCenter(x, y) {
+        try {
+            this.#_gameCamera.center.x = x;
+            this.#_gameCamera.center.y = y;
             
             if (this.#_gameCamera.center.x < this.#_gameCamera.bounds.Left) {
                 this.#_gameCamera.center.x = this.#_gameCamera.bounds.Left;
@@ -322,15 +334,14 @@ class SceneMain extends MielScene {
                 this.#_gameCamera.center.y = this.#_gameCamera.bounds.Bottom;
             }
 
-            /* console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}, camera-x: {3}, camera-y: {4}, bound_left: {5}"
+             /* console.log( stringFormat("{0}::setCameraCenter x: {1}, y: {2}, camera-x: {3}, camera-y: {4}, bound_left: {5}"
                 , this.getKey(), x, y
                 , this.#_gameCamera.center.x, this.#_gameCamera.center.y
                 , this.#_gameCamera.bounds.Left) ); */
 
             this.#_gameCamera.camera.centerOn(this.#_gameCamera.center.x, this.#_gameCamera.center.y);
-
         } catch(e) {
-            var errMsg = this.getKey() + ".onSceneDrag.catched: " + e;
+            var errMsg = this.getKey() + ".setCameraCenter.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -506,13 +517,95 @@ class SceneMain extends MielScene {
             _evtLock.IsDragLock = true;
 
             //
-            let sadari_index = 0;
-            let point_index = 0;
-            let prev_point = undefined;
-            //let 
+            let selfIt = this;
 
             //
-            this.#showMsg("gogogo");
+            var beginPointer = this.#_sadaris[0].getPointerOfPoint(0);
+            let arrow = new ArrowSpriteAnime("arrow", this, beginPointer.X, beginPointer.Y);
+            arrow.setDepth(DEPTH_PLAY_CHARACTER);
+            arrow.play("toB");
+
+            //
+            /* autoMove(arrow.Sprite, beginPointer.X, beginPointer.Y + 300, 5, 20, ()=>{
+                selfIt.#showMsg("move finished");  
+            }); */
+
+            //
+            let moveOnSadari = function(sadari_index) {
+                // index overflow
+                if (sadari_index >= selfIt.#_sadaris.length) {
+                    arrow.destroyAll();
+                    selfIt.#showMsg("F.I.N.I.S.H.E.D !!!");
+                    _evtLock.IsDragLock = false;
+                    return;
+                }
+
+                //
+                let sadari = selfIt.#_sadaris[sadari_index];
+                beginPointer = sadari.getPointerOfPoint(0);
+                arrow.moveTo(beginPointer.X, beginPointer.Y);
+
+                let sadari_head_text = getStorageHeadValue(sadari_index);
+                let curr = sadari.getLinePoint(0);
+                let prev = curr.Prev;
+                let next = curr.Next;
+
+                // 이동 함수
+                let onMove = function() {
+                    // set animation
+                    if (curr.SadariIndex > next.SadariIndex) {
+                        arrow.play("toL");
+                    } else if (curr.SadariIndex < next.SadariIndex) {
+                        arrow.play("toR");
+                    } else {
+                        arrow.play("toB");
+                    }
+
+                    //
+                    let nextPointer = next.GuiderPointer;
+                    autoMove(arrow.Sprite, nextPointer.X, nextPointer.Y, PLAY_MOVE_VELOCITY, PLAY_MOVE_INTERVAL, ()=>{
+                        // next 지정
+                        if (prev == undefined) { //index == 0
+                            prev = curr;
+                            curr = next;
+                            next = curr.Next;
+                        } else if (next.SadariIndex != curr.SadariIndex) {
+                            prev = curr;
+                            curr = next;
+                            next = curr.OrgNext;
+                        } else {
+                            prev = curr;
+                            curr = next;
+                            next = curr.Next;
+                        }
+
+                        //
+                        if (next == undefined) { //line finished
+                            // set head text
+                            let currPointer = curr.GuiderPointer;
+                            addText(selfIt, currPointer.X, currPointer.Y, sadari_head_text).setDepth(DEPTH_FINISH_TEXT);
+
+                            // go next line
+                            moveOnSadari(sadari_index + 1);
+                        } else { // go next point
+                            onMove();
+                        }
+                    }, (x, y) => {
+                        //console.log( stringFormat("moving x: {0}, y: {1}", x, y) );
+                        selfIt.setCameraCenter(x, y);
+                        return true;
+                    });
+                }
+
+                //
+                onMove();                   
+            }
+
+            //
+            moveOnSadari(0);
+
+            //
+            //this.#showMsg("gogogo");
         } catch(e) {
             var errMsg = this.getKey() + ".goPlay.catched: " + e;
             console.log(errMsg);
@@ -582,11 +675,11 @@ class SceneMain extends MielScene {
                     dragX += selfIt.#_gameCamera.center.x - selfIt.#_gameCamera.bounds.X + selfIt.getSceneWidth();
                 }
                 
-                console.log( stringFormat("org y: {0}, pointer.Y: {1}, gap: {2}", dragY, pointer.y, pointer.y - dragY) );
+                //console.log( stringFormat("org y: {0}, pointer.Y: {1}, gap: {2}", dragY, pointer.y, pointer.y - dragY) );
                 //if (dragY >= pointer.y) {
                 if (pointer.y - dragY < DRAG_MENU_HEIGHT_GAP) {
                     dragY -= selfIt.#_gameCamera.rect.Top;
-                    console.log( stringFormat("after y: {0}, pointer.Y: {1}, camera.rect.top: {2}, gap: {3}", dragY, pointer.y, selfIt.#_gameCamera.rect.Top, pointer.y - dragY) );
+                   //console.log( stringFormat("after y: {0}, pointer.Y: {1}, camera.rect.top: {2}, gap: {3}", dragY, pointer.y, selfIt.#_gameCamera.rect.Top, pointer.y - dragY) );
                 }
 
                 return {x: dragX, y: dragY};

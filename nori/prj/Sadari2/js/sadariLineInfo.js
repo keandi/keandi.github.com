@@ -70,7 +70,7 @@ class SadariLineInfo extends ClsObject {
 
                 this.#_private.points.push(
                     this.#_private.destroyMap.add(
-                        new SadariLinePoint( stringFormat("{0}_point_{1}", this._name, this.#_private.index)
+                        new SadariLinePoint( stringFormat("{0}_point_{1}", this._name, i)
                             , this.#_private.scene
                             , this
                             , i
@@ -79,6 +79,10 @@ class SadariLineInfo extends ClsObject {
                             )
                     )
                 );
+            }
+
+            for (var i = 0; i < pointsCount; i++) {
+                this.#_private.points[i].resetLinkInfo();
             }
 
         } catch(e) {
@@ -121,5 +125,16 @@ class SadariLineInfo extends ClsObject {
     // get index
     get Index() {
         return this.#_private.index;
+    }
+
+    // get pointer by point index
+    getPointerOfPoint(index) {
+        try {
+            return this.getSadariPoint(index).GuiderPointer;
+        } catch(e) {
+            var errMsg = this.getExpMsg("getPointerOfPoint", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

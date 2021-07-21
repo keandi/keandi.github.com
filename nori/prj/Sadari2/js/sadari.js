@@ -247,4 +247,26 @@ class Sadari extends ClsObject {
             alert(errMsg);
         }
     }
+
+    // get point coordinate point
+    getPointerOfPoint(index) {
+        try {
+            return this.#_lineInfo.getPointerOfPoint(index);
+        } catch(e) {
+            var errMsg = this.getExpMsg("getPointerOfPoint", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // get line point
+    getLinePoint(index) {
+        try {
+            return this.#_lineInfo.getSadariPoint(index);
+        } catch(e) {
+            var errMsg = this.getExpMsg("getLinePoint", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 }

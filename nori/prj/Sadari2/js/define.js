@@ -48,6 +48,8 @@ const DEPTH_LINE_CONNECTER = 10;
 const DEPTH_POINT = 11;
 const DEPTH_POINT_GUIDER = 49;
 const DEPTH_POINT_DRAG_GUIDER = 50;
+const DEPTH_PLAY_CHARACTER = 60;
+const DEPTH_FINISH_TEXT = 60;
 
 // sadari line info
 const SADARI_LINE_MIN_YGAP = 65;
@@ -58,3 +60,7 @@ const SADARI_POINT_RADIUS = 8;
 
 // sepcial value
 const INVALID_COORD = -99999;
+
+// play interval
+const PLAY_MOVE_VELOCITY = 5;
+const PLAY_MOVE_INTERVAL = 20;

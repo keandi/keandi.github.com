@@ -185,6 +185,32 @@ function MoveTowards(srcX, srcY, dstX, dstY, velocity) {
     return [srcX, srcY, false];
 }
 
+// object move
+function autoMove(object, dstX, dstY, velocity, interval, finCB, ingCB) {
+    try {
+
+        let action = function() {
+            var res = MoveTowards(object.x, object.y, dstX, dstY, velocity);
+            object.x = res[0];
+            object.y = res[1];
+            if (res[2] == true) {
+                clearInterval(timerId);
+                finCB();
+            } else if (ingCB != undefined) {
+                if (ingCB(res[0], res[1]) == false) {
+                    clearInterval(timerId);                    
+                }
+            }
+        }
+        let timerId = setInterval(() => action(), interval);
+
+    } catch (e) {
+        var errMsg = "move.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
 // get degree
 function getDegree(x1, y1, x2, y2) {
     // angle in radians

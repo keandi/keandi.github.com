@@ -111,5 +111,21 @@ class AnimeSprite extends ClsObject {
             alert(errMsg);
         } 
     }
+
+    // set depth
+    setDepth(depth) {
+        try {
+            this._sprite.setDepth(depth);
+        } catch(e) {
+            var errMsg = this._name + ".setDepth.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // get sprite object
+    get Sprite() {
+        return this._sprite;
+    }
 }
 

@@ -25,17 +25,6 @@ class SadariLinePoint extends ClsObject {
     #create() {
         try {
 
-            if (this.#_PV.index <= 0) {
-                this.#_PV.prev = undefined;
-                this.#_PV.next = this.#_PV.parent.getSadariPoint(this.#_PV.index + 1);
-            } else if (this.#_PV.index >= this.#_PV.pointMaxCount - 1) {
-                this.#_PV.prev = this.#_PV.parent.getSadariPoint(this.#_PV.index - 1);
-                this.#_PV.next = undefined;
-            } else {
-                this.#_PV.prev = this.#_PV.parent.getSadariPoint(this.#_PV.index - 1);
-                this.#_PV.next = this.#_PV.parent.getSadariPoint(this.#_PV.index + 1);
-            }
-
             this.#_PV.point = this.#_PV.scene.add.circle(0, 0, SADARI_POINT_RADIUS, SADARI_LINE_COLOR);
             this.#_PV.point.setDepth(DEPTH_POINT);
             if (this.#_PV.index > 0 && this.#_PV.index < this.#_PV.pointMaxCount - 1) {
@@ -80,6 +69,28 @@ class SadariLinePoint extends ClsObject {
         }
     }
 
+    // reset prev/next info
+    resetLinkInfo() {
+        try {
+
+            if (this.#_PV.index <= 0) {
+                this.#_PV.prev = undefined;
+                this.#_PV.next = this.#_PV.parent.getSadariPoint(this.#_PV.index + 1);
+            } else if (this.#_PV.index >= this.#_PV.pointMaxCount - 1) {
+                this.#_PV.prev = this.#_PV.parent.getSadariPoint(this.#_PV.index - 1);
+                this.#_PV.next = undefined;
+            } else {
+                this.#_PV.prev = this.#_PV.parent.getSadariPoint(this.#_PV.index - 1);
+                this.#_PV.next = this.#_PV.parent.getSadariPoint(this.#_PV.index + 1);
+            }
+
+        } catch(e) {
+            var errMsg = this.getExpMsg("resetLinkInfo", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     setPosition(x, y) {
         try {
 
@@ -88,11 +99,15 @@ class SadariLinePoint extends ClsObject {
             this.#_PV.point.x = x;
             this.#_PV.point.y = y;
 
-            if (this.#_PV.pointGuider == undefined) { return; }
+            if (this.#_PV.pointGuider != undefined) {
+                this.setGuiderPosition(x, y);
+            }
 
-            this.setGuiderPosition(x, y);
-
-            this.#_PV.pointGuiderPt = new Point(x, y);
+            if (this.#_PV.pointGuiderPt == undefined) {
+                this.#_PV.pointGuiderPt = new Point(x, y);
+            } else {
+                this.#_PV.pointGuiderPt.set(x, y);
+            }
         } catch(e) {
             var errMsg = this.getExpMsg("setPosition", e);
             console.log(errMsg);
@@ -156,8 +171,24 @@ class SadariLinePoint extends ClsObject {
         return this.#_PV.index;
     }
 
+    get SadariIndex() {
+        return this.Parent.Index;
+    }
+
     get GuiderPointer() {
         return this.#_PV.pointGuiderPt;
+    }
+
+    get Prev() {
+        return this.#_PV.prev;
+    }
+
+    get Next() {
+        return this.#_PV.next;
+    }
+
+    get OrgNext() {
+        return this.#_PV.parent.getSadariPoint(this.#_PV.index + 1);
     }
 
     // in point
