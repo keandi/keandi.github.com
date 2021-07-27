@@ -99,6 +99,31 @@ function getOSType() {
     }  
 }
 
+// app type define
+const AppType = {
+    UNKNOWN: { value: 0, name: "UNKNOWN" },
+    WEBAPPTESTER: { value: 1, name: "WEBAPPTESTER" },
+    SADARIAPP: { value: 2, name: "SADARIAPP" },
+};
+
+// get app type
+function getAppType() {
+    try {
+        var userAgent = navigator.userAgent.toUpperCase();
+
+        if (userAgent.indexOf(AppType.WEBAPPTESTER.name) >= 0 || userAgent.indexOf(AppType.SADARIAPP.name) >= 0) {
+            return AppType.SADARIAPP;
+        }
+
+        return AppType.UNKNOWN;
+
+    } catch (e) {
+        var errMsg = "getAppType.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }  
+}
+
 // load css file
 function loadCSS(cssId, cssUrl) {
     try {
@@ -315,12 +340,26 @@ function hit_test(player, block) {
 
 //// <!-- local storage
 function setLocalStorage(name, value) {
-    localStorage[name] = value;
+    if (_app.value == AppType.SADARIAPP.value)
+    {
+        _webapp_api.setData(name, value);
+    }
+    else
+    {
+        localStorage[name] = value;
+    }
 }
 
 function getLocalStorage(name) {
-    var value = localStorage[name];
-    return (value == null || value == undefined) ? "" : value;
+    if (_app.value == AppType.SADARIAPP.value)
+    {
+        return _webapp_api.getData(name);
+    }
+    else
+    {
+        var value = localStorage[name];
+        return (value == null || value == undefined) ? "" : value;
+    }
 }
 //// local storage -->
 

@@ -3,31 +3,47 @@ window.onload = function() {
     //setTimeout(() => delayedInit(), 1000);
     try {
         _os = getOSType();
-        if (_os == OSType.ANDROID)
-        {
-            loadCSS("orientationCss", "./css/orientation.css");
-        }
-
-        let sceneDiv = document.getElementById('scene');
-        let sizeGapWidth = 50;
-        let sizeGapHeight = 50;
-
+        _app = getAppType();
         let w, h;
-        if (_os == OSType.ANDROID)
+        let sceneDiv = document.getElementById('scene');
+
+        if (_app.value == AppType.SADARIAPP.value)
         {
-            w = screen.width - 30;
-            h = screen.height - 220;
+            sceneDiv.className = "appBackBorder";
+            w = window.innerWidth;
+            h = window.innerHeight;
+            sceneDiv.style.width = w + 'px';
+            sceneDiv.style.height = h + 'px';
+
+            _webapp_api = new WAApi("sadariAppApi", "SADARIAPP");
+            _storage = new Storage("sadariStorage");
         }
         else
         {
-            h = window.innerHeight - 50;
-            w = parseInt(h * (2/3));
-        }
+            if (_os == OSType.ANDROID)
+            {
+                loadCSS("orientationCss", "./css/orientation.css");
+            }
 
-        sceneDiv.style.width = w + 'px';
-        sceneDiv.style.height = h + 'px';
-        sceneDiv.style.marginLeft = '-' + (parseInt(w / 2)) + 'px';
-        sceneDiv.style.marginTop = '-' + (parseInt(h / 2)) + 'px';
+            let sizeGapWidth = 50;
+            let sizeGapHeight = 50;
+
+            if (_os == OSType.ANDROID)
+            {
+                w = screen.width - 30;
+                h = screen.height - 220;
+            }
+            else
+            {
+                h = window.innerHeight - 50;
+                w = parseInt(h * (2/3));
+            }
+
+            sceneDiv.style.width = w + 'px';
+            sceneDiv.style.height = h + 'px';
+            sceneDiv.style.marginLeft = '-' + (parseInt(w / 2)) + 'px';
+            sceneDiv.style.marginTop = '-' + (parseInt(h / 2)) + 'px';
+        }
         
         _gameHost = new GameHost("Sadari2", w, h, BACK_COLOR, 0);
         
