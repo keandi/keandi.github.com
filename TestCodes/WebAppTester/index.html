@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebApp Test Codes</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+        <!-- scale 이 고정되게 해준다 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+    
+        <!-- 화면이 너무 크게 보여질 경우 scale 값을 변경해주면 됨
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.1, maximum-scale=0.75, user-scalable=yes">
+        -->
+        
+        <script type="text/javascript" src="./js/common.js"></script>
+        <script type="text/javascript" src="./js/clsObject.js"></script>
+
+        <script type="text/javascript" src="./js/waapi.js"></script>
+
+        <script type="text/javascript" src="./js/globalvar.js"></script>
+
+        <script type="text/javascript" src="./js/storage.js"></script>
+
+        <script type="text/javascript" src="./js/main.js"></script>
+
+    </head>
+
+    <style>
+        .backBorder {
+            background-color: rgb(240, 234, 234);
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 800px; height: 600px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .outerBorder {
+            background-color: rgb(245, 53, 203);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%; height: 100%;
+            margin-left: 0px;
+            margin-top: 0px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+    </style>
+
+<body>
+    <div id="scene" class="backBorder" style="display: block;">
+        <!-- <div id="browserDetail"></div> -->
+        <div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; background-color:skyblue;">browser-info</div>
+            </div>
+            <div style="display: table-row;">
+                <div id="browserDetail" style="display: table-cell;"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; background-color:skyblue;">input</div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell; width: 100px;">input:</div>
+                    <div style="display: table-cell;"> <input type="text" id="input_text"> </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;"></div>
+                    <div style="display: table-cell;"> 
+                        <input type="button" value="setData" onclick="javascript:onSetData();">
+                        <input type="button" value="getData" onclick="javascript:onGetData();">
+                     </div>
+                </div>    
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; background-color:skyblue;">output</div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell; width: 100px;">output:</div>
+                    <div id="output_text" style="display: table-cell;"></div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>
