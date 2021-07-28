@@ -37,7 +37,7 @@ const SADARI_PAN_GAP = 10;
 const SADARI_TEXT_EDGE = 15;
 
 // sadari text
-//const SADARI_TEXT_Y_GAP = 25;
+const SADARI_FINISH_TEXT_BACK_HEIGHT = 30;
 
 //object depth
 const DEPTH_MSGBOX = 1000;
@@ -50,6 +50,9 @@ const DEPTH_POINT_GUIDER = 49;
 const DEPTH_POINT_DRAG_GUIDER = 50;
 const DEPTH_PLAY_CHARACTER = 60;
 const DEPTH_FINISH_TEXT = 60;
+
+// sadari
+const SADARI_PAN_COLOR = 0x322F2F;
 
 // sadari line info
 const SADARI_LINE_MIN_YGAP = 65;

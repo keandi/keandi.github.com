@@ -158,6 +158,9 @@ SceneCollision.prototype.addImages = function() {
             //alert("nk1");
             selfIt._moveInfo.moveToTarget = selfIt._nk0;
         });
+
+        //
+        this._nk1.setTint(0xff8888);
     } catch(e) {
         var errMsg = this.getKey() + ".addImages.catched: " + e;
         console.log(errMsg);

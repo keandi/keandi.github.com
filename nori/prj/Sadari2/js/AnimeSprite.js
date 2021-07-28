@@ -127,5 +127,9 @@ class AnimeSprite extends ClsObject {
     get Sprite() {
         return this._sprite;
     }
+
+    set Visible(value) {
+        this._sprite.visible = value;
+    }
 }
 

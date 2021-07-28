@@ -583,10 +583,21 @@ class SceneMain extends MielScene {
                         if (next == undefined) { //line finished
                             // set head text
                             let currPointer = curr.GuiderPointer;
+
+                            var graphics = selfIt.add.graphics();
+                            graphics.fillStyle(BACK_COLOR, 1);
+                            graphics.fillRoundedRect(currPointer.X - (SADARI_PAN_WIDTH / 2), currPointer.Y - (SADARI_FINISH_TEXT_BACK_HEIGHT / 2), SADARI_PAN_WIDTH, SADARI_FINISH_TEXT_BACK_HEIGHT, 16).setDepth(DEPTH_FINISH_TEXT);
+                            graphics.alpha = 0.6;
+
                             addText(selfIt, currPointer.X, currPointer.Y, sadari_head_text).setDepth(DEPTH_FINISH_TEXT);
 
                             // go next line
-                            moveOnSadari(sadari_index + 1);
+                            arrow.Visible = false;
+                            setTimeout(() => {
+                                arrow.Visible = true;
+                                moveOnSadari(sadari_index + 1);
+                            }
+                            , 1000);
                         } else { // go next point
                             onMove();
                         }

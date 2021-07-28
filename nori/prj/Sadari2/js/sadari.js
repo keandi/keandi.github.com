@@ -68,7 +68,7 @@ class Sadari extends ClsObject {
 
             // pan
             this.#_pan = this.#_scene.add.graphics();
-            this.#_pan.fillStyle(0x901111);
+            this.#_pan.fillStyle(SADARI_PAN_COLOR);
             this.#_pan.fillRect(0, 0, SADARI_PAN_WIDTH, this.#_panHeight);
             this.#_pan.setDepth(DEPTH_SADARI_OBJECT);
             this.#_destroyMap.add(this.#_pan);
