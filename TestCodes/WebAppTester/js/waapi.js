@@ -27,4 +27,9 @@ class WAApi extends ClsObject {
     getData(name) {
         return WebAppApi.getData(this.#_PV.appId, name);
     }
+
+    // command
+    command(value) {
+        return WebAppApi.command(this.#_PV.appId, value);
+    }
 }

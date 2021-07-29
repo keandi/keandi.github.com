@@ -52,3 +52,34 @@ function onGetData() {
         alert(errMsg);
     }  
 }
+
+// test command
+function onCommand() {
+    try {
+        var json = {
+            cmd: 0x71,
+            msg: "die",
+            level: 72
+        };
+        var res = _webapp_api.command(JSON.stringify(json));
+        alert("result: " + res);
+
+    } catch (e) {
+        var errMsg = "onSetData.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }  
+}
+
+// app to web
+function getAnyData() {
+    var res = {
+        word: "hello",
+        name: "박영",
+        class: 99,
+        city: "seoul",
+        isLive: true
+    };
+
+    return JSON.stringify(res);
+}
