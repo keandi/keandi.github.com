@@ -185,6 +185,14 @@ function MoveTowards(srcX, srcY, dstX, dstY, velocity) {
     return [srcX, srcY, false];
 }
 
+// object move towards
+function objectMoveTowards(object, x, y, velocity) {
+    var res = MoveTowards(object.x, object.y, x, y, velocity);
+    object.x = res[0];
+    object.y = res[1];
+    return res[2];
+}
+
 // get degree
 function getDegree(x1, y1, x2, y2) {
     // angle in radians

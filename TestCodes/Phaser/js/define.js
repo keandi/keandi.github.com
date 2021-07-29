@@ -18,3 +18,4 @@ const SCENE_KEY_CAMERAMOVE = "sceneCameraMove";
 const SCENE_KEY_TILEMAPCAMERAMOVE = "sceneTileMapCameraMove";
 const SCENE_KEY_COOLTIME = "sceneCoolTime";
 const SCENE_KEY_MULTICAMERA = "sceneMultiCamera";
+const SCENE_KEY_PRESSEDPOINTER = "scenePressedPointer";

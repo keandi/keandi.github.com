@@ -72,12 +72,14 @@ class SceneCoolTime extends SceneMenuBase {
 
                 let alpha = 0.0;
                 button.alpha = alpha;
+                button.setTint(0x656565);
 
                 let onCoolTime = function() {
                     alpha += 0.01;
                     if (alpha >= 1.0) {
                         clearInterval(timerId);
                         button.alpha = 1.0;
+                        button.setTint(0xffffff);
                         percentText.visible = false;
                         selfIt._isCoolTime = false;
                         return;

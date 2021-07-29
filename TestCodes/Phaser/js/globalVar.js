@@ -110,5 +110,16 @@ let _sceneData = [
             }
             return _scenes.multiCamera;
         }
+    },
+    {
+        key: SCENE_KEY_PRESSEDPOINTER,
+        menu: "Pressed-Pointer",
+        getScene: function() {
+            if (_scenes.pressedPointer == undefined) {
+                _scenes.pressedPointer = new ScenePressedPointer(60, _gameHost);
+            }
+            return _scenes.pressedPointer;
+        }
     }
 ];
+
