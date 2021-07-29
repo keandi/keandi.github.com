@@ -29,7 +29,7 @@ class WAApi extends ClsObject {
     }
 
     // command
-    command(value) {
-        return WebAppApi.command(this.#_PV.appId, value);
+    command(type, value) {
+        return WebAppApi.command(this.#_PV.appId, type, value);
     }
 }

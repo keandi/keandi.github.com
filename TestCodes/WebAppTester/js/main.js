@@ -57,11 +57,12 @@ function onGetData() {
 function onCommand() {
     try {
         var json = {
-            cmd: 0x71,
-            msg: "die",
-            level: 72
+            id: "heroine0",
+            level: 45,
+            map: 77,
+            isDied: true
         };
-        var res = _webapp_api.command(JSON.stringify(json));
+        var res = _webapp_api.command("0x00", JSON.stringify(json));
         alert("result: " + res);
 
     } catch (e) {
