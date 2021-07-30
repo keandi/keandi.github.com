@@ -32,4 +32,9 @@ class WAApi extends ClsObject {
     command(type, value) {
         return WebAppApi.command(this.#_PV.appId, type, value);
     }
+
+    // vib
+    cmdVib() {
+        this.command("DxV1", "");
+    }
 }

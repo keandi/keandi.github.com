@@ -37,6 +37,15 @@ class ScenePressedPointer extends SceneMenuBase {
             }
 
             if (this.#_PV.balls != undefined) {
+                for (var i = 0; i < this.#_PV.balls.length; i++) {
+                    var ball = this.#_PV.balls[i];
+                    if (ball.timer != undefined) {
+                        clearInterval(ball.timer);
+                        ball.timer = undefined;
+                    }
+                    ball.ball.destroy();
+                    ball.ball = undefined;
+                }
                 this.#_PV.balls = [];
                 this.#_PV.balls = undefined;
             }
@@ -171,6 +180,8 @@ class ScenePressedPointer extends SceneMenuBase {
 
                 //if (this.#_PV.balls != undefined) { return; }
 
+                if (this.isInMenuArea(pointer.x, pointer.y) == true) { return; }
+
                 let ball = this.getBall();
                 let ballMove = function() {
                     var isFinished = objectMoveTowards(ball.ball, selfIt.#_PV.enemy.x, selfIt.#_PV.enemy.y, 15);
@@ -211,7 +222,7 @@ class ScenePressedPointer extends SceneMenuBase {
 
                 selfIt.#_PV.ballGroup.add(img);
 
-                selfIt.addDestroyableObject(img);
+                //selfIt.addDestroyableObject(img);
                 img.index = ballArray.length;
                 var ball = {
                     ball: img,
@@ -262,4 +273,15 @@ class ScenePressedPointer extends SceneMenuBase {
         }
     }
     
+    isGoMainEnable() {
+        if (this.#_PV.balls == undefined) { return true; }
+        
+        for (var i = 0; i < this.#_PV.balls.length; i++) {
+            if (this.#_PV.balls[i].enable == false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -84,3 +84,14 @@ function getAnyData() {
 
     return JSON.stringify(res);
 }
+
+// vib command
+function onVibCmd() {
+    try {
+        _webapp_api.cmdVib();
+    } catch (e) {
+        var errMsg = "onSetData.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }  
+}

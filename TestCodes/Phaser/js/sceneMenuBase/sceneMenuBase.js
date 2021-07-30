@@ -1,4 +1,6 @@
 class SceneMenuBase extends MielScene {
+    #_PV = {};
+
     // ctor
     constructor(fps, gameHost, config) {
         super(fps, gameHost, config);
@@ -23,6 +25,16 @@ class SceneMenuBase extends MielScene {
 
             this._menuPan = this.add.rectangle(x, y, w, h, 0x6666ff);
             this._menuPan.setDepth(1000);
+
+            //
+            this.#_PV.menuArea = {
+                left: 0,
+                top: 0,
+                right: w,
+                bottom: h,
+                width: w,
+                height: h
+            };
         } catch(e) {
             var errMsg = this._identify + ".makeMenuPan.catched: " + e;
             console.log(errMsg);
@@ -120,6 +132,22 @@ class SceneMenuBase extends MielScene {
             y: (wh.h / 2) + this._menuPanHeight,
             width: wh.w,
             height: wh.h
+        }
+    }
+
+    // 
+    isInMenuArea(x, y) {
+        try {
+            return (x >= this.#_PV.menuArea.left
+                && x <= this.#_PV.menuArea.right
+                && y >= this.#_PV.menuArea.top
+                && y <= this.#_PV.menuArea.bottom)
+                ? true : false;
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".isInMenuArea.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
         }
     }
 }
