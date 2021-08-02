@@ -11,4 +11,9 @@ class ClsObject {
         }
         console.log(this._name);
     }
+    
+    // get exception error
+    getExpMsg(f, e) {
+        return this._name + "." + f + ".catched: " + e;
+    }
 }

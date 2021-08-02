@@ -120,6 +120,16 @@ let _sceneData = [
             }
             return _scenes.pressedPointer;
         }
+    },
+    {
+        key: SCENE_KEY_SERIALLOAD,
+        menu: "Serial-Load",
+        getScene: function() {
+            if (_scenes.serialLoad == undefined) {
+                _scenes.serialLoad = new SceneSerialLoad(60, _gameHost);
+            }
+            return _scenes.serialLoad;
+        }
     }
 ];
 
