@@ -143,11 +143,12 @@ MielScene.prototype.loadAssets = function() {
     }
     else
     {
+        /* _serialLoadHistory 을 사용하기 위해 막는다.
         if (this._assetLoadCompleted == true)
         {
             this.onCompleteSerialLoadAllAssets();
         }
-        else
+        else */
         {
             this.onSerialLoadAssets();          // 상속된 함수에서 add 를 한다.
             this.makeSerialLoaderProgress();    
@@ -193,12 +194,16 @@ MielScene.prototype.onSerialLoadAssets = function() {
 }
 
 // add load asset
-MielScene.prototype.addSerialLoadAsset = function(load_callback) {
+MielScene.prototype.addSerialLoadAsset = function(name, load_callback) {
     if (this._serialLoader == undefined) {
         this._serialLoader = new Queue();
     }
 
-    this._serialLoader.enque(load_callback);
+    this._serialLoader.enque(
+        {
+            name: name,
+            cb: load_callback
+        } );
 }
 
 // start serial load assset
@@ -209,9 +214,22 @@ MielScene.prototype.startSerialLoadAssets = function() {
         return;
     }
 
-    var cb = this._serialLoader.deque();
-    cb();
-    this.load.start();
+    var loader = this._serialLoader.deque();
+
+    if (_serialLoadHistory.isLoadedAsset(loader.name) == true)
+    {
+        //console.log("이미 로딩=" + loader.name);
+
+        this.onCompleteSerialLoadAsset(false);
+        this.showSerialLoaderProgress();
+    }
+    else
+    {
+        //console.log("신규 로딩=" + loader.name);
+        loader.cb();
+        _serialLoadHistory.ReservedKey = loader.name;
+        this.load.start();
+    }
 }
 
 // serial load progress 
@@ -224,6 +242,7 @@ MielScene.prototype.onProgressSerialLoadAsset = function(value)
 MielScene.prototype.onCompleteSerialLoadAsset = function(isAllFinished)
 {
     //console.log( this.getKey() + " onCompleteSerialLoadAsset = " + isAllFinished);
+    _serialLoadHistory.addReservedKey();
 
     if (isAllFinished == true)
     {

@@ -20,10 +20,12 @@ let _sceneSpriteChange = undefined;
 
 let _scenes = {};
 
+let _serialLoadHistory = new SerialLoadHistory("global_serial_asset_load_history");
+
 let _sceneData = [
     {
         key: SCENE_KEY_ROTATE,
-        menu: "Rotate",
+        menu: "회전",
         getScene: function() {
             if (_sceneRotate == undefined) {
                 _sceneRotate = new SceneRotate(60, _gameHost);
@@ -33,7 +35,7 @@ let _sceneData = [
     },
     {
         key: SCENE_KEY_GROUPCOLLISION,
-        menu: "Group-collision",
+        menu: "그룹충돌",
         getScene: function() {
             if (_sceneGroupCollision == undefined) {
                 _sceneGroupCollision = new SceneGroupCollision(60, _gameHost);
@@ -93,7 +95,7 @@ let _sceneData = [
     },
     {
         key: SCENE_KEY_COOLTIME,
-        menu: "Cool-Time",
+        menu: "쿨타임",
         getScene: function() {
             if (_scenes.coolTime == undefined) {
                 _scenes.coolTime = new SceneCoolTime(60, _gameHost);
@@ -103,7 +105,7 @@ let _sceneData = [
     },
     {
         key: SCENE_KEY_MULTICAMERA,
-        menu: "Multi-Camera",
+        menu: "멀티카메라",
         getScene: function() {
             if (_scenes.multiCamera == undefined) {
                 _scenes.multiCamera = new SceneMultiCamera(60, _gameHost);
@@ -113,7 +115,7 @@ let _sceneData = [
     },
     {
         key: SCENE_KEY_PRESSEDPOINTER,
-        menu: "Pressed-Pointer",
+        menu: "터치눌림",
         getScene: function() {
             if (_scenes.pressedPointer == undefined) {
                 _scenes.pressedPointer = new ScenePressedPointer(60, _gameHost);

@@ -37,7 +37,8 @@ class SceneSerialLoad extends SceneMenuBase {
         var selfIt = this;
         for (var i = 0; i < 150; i++) {
             let imgName = "FireBase_" + i;
-            this.addSerialLoadAsset( () => {
+            this.addSerialLoadAsset( imgName,
+                () => {
                     selfIt.load.image(imgName, "assets/image/fire_base.png"); 
                     //console.log("img name=" + imgName);
                 } );
@@ -56,7 +57,7 @@ class SceneSerialLoad extends SceneMenuBase {
             this.addDestroyableObject( this.add.image(100, 100, "FireBase_10") );
             this.addDestroyableObject( this.add.image(130, 130, "FireBase_48") );
             this.addDestroyableObject( this.add.image(190, 190, "FireBase_49") );
-            
+            this.addDestroyableObject( this.add.image(190, 240, "buttonImage") );
 
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
