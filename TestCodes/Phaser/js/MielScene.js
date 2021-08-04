@@ -17,6 +17,24 @@ var MielScene = function(fps, gameHost, config) {
     this._destroyMap = new DestroyMap();
     this._destroyCB = new DestroyCallbacks();
 
+    // serial load count
+    this._serialLoadCount = {
+        max: 0,
+        current: 0,
+        reset: function(max) {
+            if (max == undefined || max <= 0) { max = 1; }
+            this.max = max;
+            this.current = 0;
+        },
+        increase: function(value) {
+            if (value == undefined || value <= 0) { value = 1; }
+            this.current += value;
+        },
+        isOver: function() {
+            return (this.current >= this.max) ? true : false;
+        }
+    };
+
     // preset
     this.onPreset();
 }
@@ -151,6 +169,11 @@ MielScene.prototype.loadAssets = function() {
         else */
         {
             this.onSerialLoadAssets();          // 상속된 함수에서 add 를 한다.
+            if (this._serialLoader == undefined || this._serialLoader.count == 0) {
+                this.onCompleteSerialLoadAllAssets();
+                return;
+            }
+
             this.makeSerialLoaderProgress();    
 
             // progress 등록
@@ -194,15 +217,20 @@ MielScene.prototype.onSerialLoadAssets = function() {
 }
 
 // add load asset
-MielScene.prototype.addSerialLoadAsset = function(name, load_callback) {
+MielScene.prototype.addSerialLoadAsset = function(name, load_callback, load_count) {
     if (this._serialLoader == undefined) {
         this._serialLoader = new Queue();
+    }
+
+    if (load_count == undefined || load_count <= 0) {
+        load_count = 1;
     }
 
     this._serialLoader.enque(
         {
             name: name,
-            cb: load_callback
+            cb: load_callback,
+            load_count: load_count
         } );
 }
 
@@ -225,6 +253,8 @@ MielScene.prototype.startSerialLoadAssets = function() {
     }
     else
     {
+        this._serialLoadCount.reset(loader.load_count);
+
         //console.log("신규 로딩=" + loader.name);
         loader.cb();
         _serialLoadHistory.ReservedKey = loader.name;
@@ -236,12 +266,15 @@ MielScene.prototype.startSerialLoadAssets = function() {
 MielScene.prototype.onProgressSerialLoadAsset = function(value)
 {
     //console.log( this.getKey() + " onProgressSerialLoadAsset = " + value);
+    if (value == undefined || value <= 0) { return; }
+
+    this._serialLoadCount.increase(value);
 }
 
 // serial load complete
 MielScene.prototype.onCompleteSerialLoadAsset = function(isAllFinished)
 {
-    //console.log( this.getKey() + " onCompleteSerialLoadAsset = " + isAllFinished);
+    console.log( this.getKey() + " onCompleteSerialLoadAsset = " + isAllFinished);
     _serialLoadHistory.addReservedKey();
 
     if (isAllFinished == true)
@@ -252,7 +285,9 @@ MielScene.prototype.onCompleteSerialLoadAsset = function(isAllFinished)
     }
     else
     { // 진행 중  
-        setTimeout(()=>this.startSerialLoadAssets(), 1); // next load
+        if (this._serialLoadCount.isOver() == true) {
+            setTimeout(()=>this.startSerialLoadAssets(), 1); // next load
+        }
     }
 }
 
@@ -297,6 +332,7 @@ MielScene.prototype.showSerialLoaderProgress = function() {
     try {
         //console.log("직렬 로딩 UI 진행 = " + this._serialLoader.count);
 
+        if (this._serialLoaderProgress == undefined) { return; }
         this._serialLoaderProgress.update();
 
     } catch(e) {

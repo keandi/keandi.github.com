@@ -132,6 +132,16 @@ let _sceneData = [
             }
             return _scenes.serialLoad;
         }
+    },
+    {
+        key: SCENE_KEY_TEXTUREATLAS,
+        menu: "Tex-Atlas",
+        getScene: function() {
+            if (_scenes.textureAtlas == undefined) {
+                _scenes.textureAtlas = new SceneTextureAtlas(60, _gameHost);
+            }
+            return _scenes.textureAtlas;
+        }
     }
 ];
 

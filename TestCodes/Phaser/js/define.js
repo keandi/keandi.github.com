@@ -20,3 +20,4 @@ const SCENE_KEY_COOLTIME = "sceneCoolTime";
 const SCENE_KEY_MULTICAMERA = "sceneMultiCamera";
 const SCENE_KEY_PRESSEDPOINTER = "scenePressedPointer";
 const SCENE_KEY_SERIALLOAD = "sceneSerialLoad";
+const SCENE_KEY_TEXTUREATLAS = "sceneTextureAtlas";
