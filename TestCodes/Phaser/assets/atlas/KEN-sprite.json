@@ -1,99 +1,620 @@
-{"frames": [
-    {
-        "filename": "KEN0000",
-        "frame": {"x":9,"y":282,"w":99,"h":103},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":99,"h":103},
-        "sourceSize": {"w":99,"h":103}
-    },
-    {
-        "filename": "KEN0001",
-        "frame": {"x":125,"y":291,"w":108,"h":94},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":108,"h":94},
-        "sourceSize": {"w":108,"h":94}
-    },
-    {
-        "filename": "KEN0002",
-        "frame": {"x":250,"y":290,"w":109,"h":96},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":109,"h":96},
-        "sourceSize": {"w":109,"h":96}
-    },
-    {
-        "filename": "KEN0003",
-        "frame": {"x":378,"y":293,"w":136,"h":90},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":136,"h":90},
-        "sourceSize": {"w":136,"h":90}
-    },
-    {
-        "filename": "KEN0004",
-        "frame": {"x":525,"y":291,"w":137,"h":91},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":137,"h":91},
-        "sourceSize": {"w":137,"h":91}
-    },
-    {
-        "filename": "KEN0005",
-        "frame": {"x":674,"y":283,"w":133,"h":97},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":133,"h":97},
-        "sourceSize": {"w":133,"h":97}
-    },
-    {
-        "filename": "KEN0006",
-        "frame": {"x":821,"y":286,"w":125,"h":96},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":125,"h":96},
-        "sourceSize": {"w":125,"h":96}
-    },
-    {
-        "filename": "KEN0007",
-        "frame": {"x":16,"y":408,"w":125,"h":95},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":125,"h":95},
-        "sourceSize": {"w":125,"h":95}
-    },
-    {
-        "filename": "KEN0008",
-        "frame": {"x":156,"y":406,"w":125,"h":95},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":125,"h":95},
-        "sourceSize": {"w":125,"h":95}
-    },
-    {
-        "filename": "KEN0009",
-        "frame": {"x":288,"y":407,"w":125,"h":92},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":125,"h":92},
-        "sourceSize": {"w":125,"h":92}
-    },
-    {
-        "filename": "KEN0010",
-        "frame": {"x":431,"y":406,"w":106,"h":96},
-        "rotated": false,
-        "trimmed": true,
-        "spriteSourceSize": {"x":0,"y":0,"w":106,"h":96},
-        "sourceSize": {"w":106,"h":96}
-    },
-    {
-        "filename": "background",
-        "frame": {"x":22,"y":791,"w":383,"h":224},
-        "rotated": false,
-        "trimmed": false,
-        "spriteSourceSize": {"x":0,"y":0,"w":383,"h":224},
-        "sourceSize": {"w":32,"h":32},
-        "pivot": {"x":0.5,"y":0.5}
-    }]
+{
+    "frames": [
+        {
+            "filename": "KEN0000",
+            "frame": {
+                "x": 9,
+                "y": 282,
+                "w": 99,
+                "h": 103
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 99,
+                "h": 103
+            },
+            "sourceSize": {
+                "w": 99,
+                "h": 103
+            }
+        },
+        {
+            "filename": "KEN0001",
+            "frame": {
+                "x": 125,
+                "y": 291,
+                "w": 108,
+                "h": 94
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 108,
+                "h": 94
+            },
+            "sourceSize": {
+                "w": 108,
+                "h": 94
+            }
+        },
+        {
+            "filename": "KEN0002",
+            "frame": {
+                "x": 250,
+                "y": 290,
+                "w": 109,
+                "h": 96
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 109,
+                "h": 96
+            },
+            "sourceSize": {
+                "w": 109,
+                "h": 96
+            }
+        },
+        {
+            "filename": "KEN0003",
+            "frame": {
+                "x": 378,
+                "y": 293,
+                "w": 136,
+                "h": 90
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 136,
+                "h": 90
+            },
+            "sourceSize": {
+                "w": 136,
+                "h": 90
+            }
+        },
+        {
+            "filename": "KEN0004",
+            "frame": {
+                "x": 525,
+                "y": 291,
+                "w": 137,
+                "h": 91
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 137,
+                "h": 91
+            },
+            "sourceSize": {
+                "w": 137,
+                "h": 91
+            }
+        },
+        {
+            "filename": "KEN0005",
+            "frame": {
+                "x": 674,
+                "y": 283,
+                "w": 133,
+                "h": 97
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 133,
+                "h": 97
+            },
+            "sourceSize": {
+                "w": 133,
+                "h": 97
+            }
+        },
+        {
+            "filename": "KEN0006",
+            "frame": {
+                "x": 821,
+                "y": 286,
+                "w": 125,
+                "h": 96
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 125,
+                "h": 96
+            },
+            "sourceSize": {
+                "w": 125,
+                "h": 96
+            }
+        },
+        {
+            "filename": "KEN0007",
+            "frame": {
+                "x": 16,
+                "y": 408,
+                "w": 125,
+                "h": 95
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 125,
+                "h": 95
+            },
+            "sourceSize": {
+                "w": 125,
+                "h": 95
+            }
+        },
+        {
+            "filename": "KEN0008",
+            "frame": {
+                "x": 156,
+                "y": 406,
+                "w": 125,
+                "h": 95
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 125,
+                "h": 95
+            },
+            "sourceSize": {
+                "w": 125,
+                "h": 95
+            }
+        },
+        {
+            "filename": "KEN0009",
+            "frame": {
+                "x": 288,
+                "y": 407,
+                "w": 125,
+                "h": 92
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 125,
+                "h": 92
+            },
+            "sourceSize": {
+                "w": 125,
+                "h": 92
+            }
+        },
+        {
+            "filename": "KEN0010",
+            "frame": {
+                "x": 431,
+                "y": 406,
+                "w": 106,
+                "h": 96
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 106,
+                "h": 96
+            },
+            "sourceSize": {
+                "w": 106,
+                "h": 96
+            }
+        },
+        {
+            "filename": "background",
+            "frame": {
+                "x": 21,
+                "y": 790,
+                "w": 385,
+                "h": 224
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 385,
+                "h": 224
+            },
+            "sourceSize": {
+                "w": 385,
+                "h": 224
+            }
+        },
+        {
+            "filename": "JUMP0000",
+            "frame": {
+                "x": 26,
+                "y": 521,
+                "w": 79,
+                "h": 107
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 79,
+                "h": 107
+            },
+            "sourceSize": {
+                "w": 79,
+                "h": 107
+            }
+        },
+        {
+            "filename": "JUMP0001",
+            "frame": {
+                "x": 121,
+                "y": 538,
+                "w": 87,
+                "h": 89
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 87,
+                "h": 89
+            },
+            "sourceSize": {
+                "w": 87,
+                "h": 89
+            }
+        },
+        {
+            "filename": "JUMP0002",
+            "frame": {
+                "x": 229,
+                "y": 553,
+                "w": 90,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 90,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 90,
+                "h": 78
+            }
+        },
+        {
+            "filename": "JUMP0003",
+            "frame": {
+                "x": 329,
+                "y": 563,
+                "w": 87,
+                "h": 70
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 87,
+                "h": 70
+            },
+            "sourceSize": {
+                "w": 87,
+                "h": 70
+            }
+        },
+        {
+            "filename": "JUMP0004",
+            "frame": {
+                "x": 425,
+                "y": 556,
+                "w": 107,
+                "h": 86
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 107,
+                "h": 86
+            },
+            "sourceSize": {
+                "w": 107,
+                "h": 86
+            }
+        },
+        {
+            "filename": "JUMP0005",
+            "frame": {
+                "x": 552,
+                "y": 563,
+                "w": 89,
+                "h": 75
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 89,
+                "h": 75
+            },
+            "sourceSize": {
+                "w": 89,
+                "h": 75
+            }
+        },
+        {
+            "filename": "JUMP0006",
+            "frame": {
+                "x": 21,
+                "y": 650,
+                "w": 75,
+                "h": 133
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 75,
+                "h": 133
+            },
+            "sourceSize": {
+                "w": 75,
+                "h": 133
+            }
+        },
+        {
+            "filename": "JUMP0007",
+            "frame": {
+                "x": 117,
+                "y": 648,
+                "w": 75,
+                "h": 133
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 75,
+                "h": 133
+            },
+            "sourceSize": {
+                "w": 75,
+                "h": 133
+            }
+        },
+        {
+            "filename": "JUMP0008",
+            "frame": {
+                "x": 211,
+                "y": 669,
+                "w": 73,
+                "h": 109
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 73,
+                "h": 109
+            },
+            "sourceSize": {
+                "w": 73,
+                "h": 109
+            }
+        },
+        {
+            "filename": "JUMP0009",
+            "frame": {
+                "x": 297,
+                "y": 674,
+                "w": 69,
+                "h": 97
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 69,
+                "h": 97
+            },
+            "sourceSize": {
+                "w": 69,
+                "h": 97
+            }
+        },
+        {
+            "filename": "JUMP0010",
+            "frame": {
+                "x": 386,
+                "y": 676,
+                "w": 74,
+                "h": 87
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 74,
+                "h": 87
+            },
+            "sourceSize": {
+                "w": 74,
+                "h": 87
+            }
+        },
+        {
+            "filename": "JUMP0011",
+            "frame": {
+                "x": 489,
+                "y": 683,
+                "w": 73,
+                "h": 84
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 73,
+                "h": 84
+            },
+            "sourceSize": {
+                "w": 73,
+                "h": 84
+            }
+        },
+        {
+            "filename": "JUMP0012",
+            "frame": {
+                "x": 580,
+                "y": 682,
+                "w": 72,
+                "h": 87
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 72,
+                "h": 87
+            },
+            "sourceSize": {
+                "w": 72,
+                "h": 87
+            }
+        },
+        {
+            "filename": "JUMP0013",
+            "frame": {
+                "x": 668,
+                "y": 683,
+                "w": 70,
+                "h": 99
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 70,
+                "h": 99
+            },
+            "sourceSize": {
+                "w": 70,
+                "h": 99
+            }
+        },
+        {
+            "filename": "JUMP0014",
+            "frame": {
+                "x": 757,
+                "y": 679,
+                "w": 71,
+                "h": 112
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 71,
+                "h": 112
+            },
+            "sourceSize": {
+                "w": 71,
+                "h": 112
+            }
+        },
+        {
+            "filename": "JUMP0015",
+            "frame": {
+                "x": 846,
+                "y": 667,
+                "w": 71,
+                "h": 125
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 71,
+                "h": 125
+            },
+            "sourceSize": {
+                "w": 71,
+                "h": 125
+            }
+        },
+        {
+            "filename": "JUMP0016",
+            "frame": {
+                "x": 931,
+                "y": 669,
+                "w": 72,
+                "h": 126
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 72,
+                "h": 126
+            },
+            "sourceSize": {
+                "w": 72,
+                "h": 126
+            }
+        }
+    ],
+    "meta": {
+        "App": "SpriteJsonGenerator",
+        "PNGPath": "C:\\_miel\\Work\\keandi.github.com\\TestCodes\\Phaser\\assets\\image\\KEN-sprite.png",
+        "PNGName": "KEN-sprite.png",
+        "PNGWidth": 1021,
+        "PNGHeight": 1015
+    }
 }
