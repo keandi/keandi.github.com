@@ -74,7 +74,7 @@ class SceneTextureAtlas extends SceneMenuBase {
             background.scaleY = 3.5;
             
             // animation
-            var jump_ken = this.addDestroyableObject( this.anims.create({ key: 'JUMP', frames: this.anims.generateFrameNames('KEN-sprite', { prefix: 'JUMP', end: 16, zeroPad: 4 }), duration: 1000, repeat: -1 },) );
+            var jump_ken = this.addDestroyableObject( this.anims.create({ key: 'JUMP', frames: this.anims.generateFrameNames('KEN-sprite', { prefix: 'JUMP', end: 16, zeroPad: 4 }), duration: 1600, repeat: -1 },) );
             var ani_ken = this.addDestroyableObject( this.anims.create({ key: 'KEN', frames: this.anims.generateFrameNames('KEN-sprite', { prefix: 'KEN', end: 10, zeroPad: 4 }), duration: 1000, repeat: -1 },) );
 
             // play
@@ -127,7 +127,7 @@ class SceneTextureAtlas extends SceneMenuBase {
                     break;
 
                 case 11:
-                    jumpY = 100;
+                    jumpY = 95;
                     break;
 
                 case 12:
@@ -149,6 +149,11 @@ class SceneTextureAtlas extends SceneMenuBase {
                 default:
                     jumpY = 0;
                     break;
+            }
+            //console.log("frameIndex: " + frameIndex);
+
+            if (frameIndex == 0) {
+                ani.jump.obj.flipX = !ani.jump.obj.flipX;
             }
 
             ani.jump.obj.y = ani.jump.orgY - jumpY;
