@@ -161,6 +161,8 @@ MielScene.prototype.loadAssets = function() {
     }
     else
     {
+        this._serialAssetsCount = 0;
+
         /* _serialLoadHistory 을 사용하기 위해 막는다.
         if (this._assetLoadCompleted == true)
         {
@@ -232,6 +234,9 @@ MielScene.prototype.addSerialLoadAsset = function(name, load_callback, load_coun
             cb: load_callback,
             load_count: load_count
         } );
+
+    // all assets count
+    this._serialAssetsCount += load_count;
 }
 
 // start serial load assset
@@ -249,7 +254,7 @@ MielScene.prototype.startSerialLoadAssets = function() {
         //console.log("이미 로딩=" + loader.name);
 
         this.onCompleteSerialLoadAsset(false);
-        this.showSerialLoaderProgress();
+        this.showSerialLoaderProgress(loader.load_count);
     }
     else
     {
@@ -265,7 +270,7 @@ MielScene.prototype.startSerialLoadAssets = function() {
 // serial load progress 
 MielScene.prototype.onProgressSerialLoadAsset = function(value)
 {
-    //console.log( this.getKey() + " onProgressSerialLoadAsset = " + value);
+    console.log( this.getKey() + " onProgressSerialLoadAsset = " + value);
     if (value == undefined || value <= 0) { return; }
 
     this._serialLoadCount.increase(value);
@@ -302,7 +307,7 @@ MielScene.prototype.makeSerialLoaderProgress = function() {
         //console.log("직렬 로딩 UI 생성");
         
         this.destroySerialLoaderProgress();
-        this._serialLoaderProgress = new SerialLoaderProgress("loader_progress", this, 0, 0, this.getSceneWidth(), this.getSceneHeight(), this._serialLoader.count);
+        this._serialLoaderProgress = new SerialLoaderProgress("loader_progress", this, 0, 0, this.getSceneWidth(), this.getSceneHeight(), this._serialAssetsCount);
 
     } catch(e) {
         var errMsg = this.getKey() + ".makeSerialLoaderProgress.catched: " + e;
@@ -328,12 +333,12 @@ MielScene.prototype.destroySerialLoaderProgress = function() {
 }
 
 // 직렬 로딩 UI 진행
-MielScene.prototype.showSerialLoaderProgress = function() {
+MielScene.prototype.showSerialLoaderProgress = function(value) {
     try {
         //console.log("직렬 로딩 UI 진행 = " + this._serialLoader.count);
 
         if (this._serialLoaderProgress == undefined) { return; }
-        this._serialLoaderProgress.update();
+        this._serialLoaderProgress.update(value);
 
     } catch(e) {
         var errMsg = this.getKey() + ".showSerialLoaderProgress.catched: " + e;

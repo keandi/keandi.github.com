@@ -22,3 +22,4 @@ const SCENE_KEY_PRESSEDPOINTER = "scenePressedPointer";
 const SCENE_KEY_SERIALLOAD = "sceneSerialLoad";
 const SCENE_KEY_TEXTUREATLAS = "sceneTextureAtlas";
 const SCENE_KEY_PIXELSCALE = "scenePixelScale";
+const SCENE_KEY_KEYBUTTON = "sceneKeyButton";

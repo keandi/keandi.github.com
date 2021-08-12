@@ -112,9 +112,11 @@ class SerialLoaderProgress extends ClsObject {
     }
 
     // update
-    update() {
+    update(value) {
         try {
             if (this.#_PV.object == undefined) { return; }
+
+            if (value == undefined) { value = 1; }
 
             var progressRect = this.#_PV.rect.progress;
             /*progressRect.Width += this.#_PV.progress.singleWidth;
@@ -127,7 +129,7 @@ class SerialLoaderProgress extends ClsObject {
             progress.h = this.#_PV.rect.backInner.Height;
             */
 
-            this.#_PV.progress.current++;
+            this.#_PV.progress.current += value;
 
             var progress = this.#_PV.object.progress;
             let current = this.#_PV.progress.current / this.#_PV.progress.max;

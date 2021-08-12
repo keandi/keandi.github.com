@@ -152,6 +152,16 @@ let _sceneData = [
             }
             return _scenes.pixelScale;
         }
+    },
+    {
+        key: SCENE_KEY_KEYBUTTON,
+        menu: "KeyButton",
+        getScene: function() {
+            if (_scenes.keyButton == undefined) {
+                _scenes.keyButton = new SceneKeyButton(60, _gameHost);
+            }
+            return _scenes.keyButton;
+        }
     }
 ];
 
