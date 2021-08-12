@@ -19,6 +19,20 @@ SceneMain.prototype.onCreate = function() {
     this.cameras.main.setBackgroundColor('#000');
     //this.cameras.main.backgroundColor.setTo(255,0,0);
     this.registerMenus();
+
+    // camera set
+    this._cameraCenter = { x: 0, y: 0};
+    this._cameraBounce = {
+        left: this.getSceneWidth() / 2,
+        top: this.getSceneHeight() / 2,
+        right: this.getSceneWidth() / 2,
+        bottom: 0
+    };
+    this._cameraBounce.bottom = (this.getSceneHeight() * 2) - this._cameraBounce.top;
+    this.cameras.main.setBounds(0, 0, this.getSceneWidth(), this.getSceneHeight() * 2);
+
+    //
+    this.sceneDragOn();
 }
 
 SceneMain.prototype.onUpdate = function() {
@@ -107,6 +121,35 @@ SceneMain.prototype.registerMenus = function() {
 
     } catch(e) {
         var errMsg = this._identify + ".registerMenus.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+SceneMain.prototype.onSceneDrag = function(x, y) {
+    try {
+        //console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}", this.getKey(), x, y) );
+
+        //this._cameraCenter.x -= x;
+        this._cameraCenter.y -= y;
+
+        // camera bounce limit
+        this._cameraCenter.x = this._cameraBounce.left;
+        if (this._cameraCenter.y < this._cameraBounce.top) {
+            this._cameraCenter.y = this._cameraBounce.top;
+        }
+        else if (this._cameraCenter.y > this._cameraBounce.bottom) {
+            this._cameraCenter.y = this._cameraBounce.bottom;
+        }
+
+         console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}, camera-x: {3}, camera-y: {4}"
+            , this.getKey(), x, y
+            , this._cameraCenter.x, this._cameraCenter.y) ); 
+
+        this.cameras.main.centerOn(this._cameraCenter.x, this._cameraCenter.y);
+
+    } catch(e) {
+        var errMsg = this.getKey() + ".onSceneDrag.catched: " + e;
         console.log(errMsg);
         alert(errMsg);
     }

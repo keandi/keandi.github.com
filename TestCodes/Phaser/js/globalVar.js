@@ -142,6 +142,16 @@ let _sceneData = [
             }
             return _scenes.textureAtlas;
         }
+    },
+    {
+        key: SCENE_KEY_PIXELSCALE,
+        menu: "PixelScale",
+        getScene: function() {
+            if (_scenes.pixelScale == undefined) {
+                _scenes.pixelScale = new ScenePixelScale(60, _gameHost);
+            }
+            return _scenes.pixelScale;
+        }
     }
 ];
 

@@ -294,3 +294,31 @@ function hit_test(player, block) {
 
     return result;
 }
+
+// add text (for font)
+function addText(scene, x, y, text) {
+    var text = scene.add.text(x, y, text, {
+        fontFamily: 'consolas',
+        fontSize: 16
+    }).setOrigin(0.5);
+    text.setFontSize(16);
+    return text;
+}
+
+// image scale width control by pixel
+function setPixelScaleX(obj, pixel) {
+    if (pixel == 0 || obj.width == 0) { return; }
+    obj.scaleX = pixel / obj.width;
+}
+
+// image scale height control by pixel
+function setPixelScaleY(obj, pixel) {
+    if (pixel == 0 || obj.height == 0) { return; }
+    obj.scaleY = pixel / obj.height;
+}
+
+// image scale control by pixel
+function setPixelScale(obj, pixelX, pixelY) {
+    setPixelScaleX(obj, pixelX);
+    setPixelScaleY(obj, pixelY);
+}
