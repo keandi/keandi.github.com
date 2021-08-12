@@ -23,6 +23,11 @@ class SceneKeyButton extends SceneMenuBase {
             console.log("onStop " + this.getKey());
 
             super.onStop();
+
+            if (this.#_PV.goButton != undefined) {
+                this.#_PV.goButton.destroy();
+                this.#_PV.goButton = undefined;
+            }
             
         } catch(e) {
             var errMsg = this.getKey() + ".onStop.catched: " + e;
@@ -138,6 +143,9 @@ class SceneKeyButton extends SceneMenuBase {
                 selfIt.input.keyboard.removeKey('SPACE');
             } );
 
+            //
+            this.goButtonTest();
+
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
             console.log(errMsg);
@@ -170,6 +178,21 @@ class SceneKeyButton extends SceneMenuBase {
             }
         } catch(e) {
             var errMsg = this.getKey() + ".onKeyUp.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    goButtonTest() {
+        try {
+            let button = this.#_PV.button;
+            this.#_PV.goButton = new GOImageButton("GOImgaeButton_TEST", this, button.x, button.y + button.height, "key_button", "KEY_UP", "key_button", "KEY_DOWN",
+                ()=>{
+                    alert('me?');
+                });
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".goButtonTest.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
