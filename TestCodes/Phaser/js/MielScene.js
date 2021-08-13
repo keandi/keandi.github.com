@@ -13,9 +13,14 @@ var MielScene = function(fps, gameHost, config) {
     this._gameHost = gameHost;
     this.recomputeFps(fps);
 
+    this._isPause = false; //pause flag
+
     this._assetLoadCompleted = false;
     this._destroyMap = new DestroyMap();
     this._destroyCB = new DestroyCallbacks();
+
+    this._pointerEventManager = new PointerEventManager("pem_" + this.getKey(), this);
+    this._cameraDragManager = new CameraDragManager("cdm_" + this.getKey());
 
     // serial load count
     this._serialLoadCount = {
@@ -84,6 +89,8 @@ MielScene.prototype.onCreate = function() {
 
 // update. fps 수치에 맞게 onUpdate 호출
 MielScene.prototype.update = function(time, delta) {
+    if (this._isPause == true) { return; }
+
     this._fps.frameTime += delta;
     //console.log("mielscene update" + this._fps.frameTime + " / " + this._fps._frameTimeLimit);
     if (this._fps.frameTime > this._fps.frameTimeLimit) {
@@ -112,6 +119,8 @@ MielScene.prototype.recomputeFps = function(fps) {
 MielScene.prototype.stop = function() {
     // stop flash effect
     this.stopFlashEffect();
+    this._pointerEventManager.destroy();
+    this._cameraDragManager.destroy();
 
     //scene stop
     this.onStop();
@@ -579,7 +588,7 @@ let SwipeDirection = {
 // register
 MielScene.prototype.swipeOn = function(minMove, maxMove) {
     try {
-        if (this._swipeOn == true) { return; }
+        if (this._swipeDownEvent != undefined) { return; }
 
         let selfIt = this;
 
@@ -680,7 +689,7 @@ MielScene.prototype.swipeOn = function(minMove, maxMove) {
         }
 
         // pointerdown
-        this.input.on('pointerdown', function(pointer, x, y, event) {
+        this._swipeDownEvent = this.addPointerEvent('down', (pointer)=>{
             swipeData.beginCoord.x = pointer.x;
             swipeData.beginCoord.y = pointer.y;
             swipeData.endCoord.x = swipeData.endCoord.y = 0;
@@ -689,7 +698,7 @@ MielScene.prototype.swipeOn = function(minMove, maxMove) {
         });
 
         // pointerup
-        this.input.on('pointerup', function(pointer, x, y, event) {
+        this._swipeUpEvent = this.addPointerEvent('up', (pointer)=>{
             if (swipeData.captured == false) { return; }
             swipeData.captured = false;
 
@@ -697,13 +706,13 @@ MielScene.prototype.swipeOn = function(minMove, maxMove) {
         });
 
         // pointerdown
-        this.input.on('pointermove', function(pointer, x, y, event) {
+        this._swipeMoveEvent = this.addPointerEvent('move', (pointer)=>{
             if (swipeData.captured != true) { return; }
 
             checkSwipe(pointer, false);
         });
         
-        this._swipeOn = true;
+        //this._swipeOn = true;
 
     } catch (e) {
         var errMsg = this.getKey() + ".swipeOn.catched: " + e;
@@ -720,13 +729,20 @@ MielScene.prototype.onSwipe = function(direction, value, swipeCount, isEnd, isCa
 // unregister
 MielScene.prototype.swipeOff = function() {
     try {
-        if (this._swipeOn == false) { return; }
+        if (this._swipeDownEvent != undefined) {
+            this.removePointerEvent(this._swipeDownEvent);
+            this._swipeDownEvent = undefined;
+        }
 
-        this.input.off('pointerdown');
-        this.input.off('pointerup');
-        this.input.off('pointermove');
-        
-        this._swipeOn = false;
+        if (this._swipeUpEvent != undefined) {
+            this.removePointerEvent(this._swipeUpEvent);
+            this._swipeUpEvent = undefined;
+        }
+
+        if (this._swipeMoveEvent != undefined) {
+            this.removePointerEvent(this._swipeMoveEvent);
+            this._swipeMoveEvent = undefined;
+        }
 
     } catch (e) {
         var errMsg = this.getKey() + ".swipeOff.catched: " + e;
@@ -741,7 +757,7 @@ MielScene.prototype.swipeOff = function() {
 // register
 MielScene.prototype.sceneDragOn = function() {
     try {
-        if (this._sceneDragOn == true) { return; }
+        if (this._sceneDragDownEvent != undefined) { return; }
 
         let selfIt = this;
 
@@ -775,7 +791,7 @@ MielScene.prototype.sceneDragOn = function() {
         }
 
         // pointerdown
-        this.input.on('pointerdown', function(pointer, x, y, event) {
+        this._sceneDragDownEvent = this.addPointerEvent('down', (pointer)=>{
             if (selfIt.isDragEnable(pointer.x, pointer.y) != true) { return; }
 
             sceneDragData.preCoord.x = sceneDragData.currentCoord.x = pointer.x;
@@ -785,21 +801,19 @@ MielScene.prototype.sceneDragOn = function() {
         });
 
         // pointerup
-        this.input.on('pointerup', function(pointer, x, y, event) {
+        this._sceneDragUpEvent = this.addPointerEvent('up', (pointer)=>{
             if (sceneDragData.captured == false) { return; }
             sceneDragData.captured = false;
 
             sceneDragging(pointer);
         });
 
-        // pointerdown
-        this.input.on('pointermove', function(pointer, x, y, event) {
+        // pointermove
+        this._sceneDragMoveEvent = this.addPointerEvent('move', (pointer)=>{
             if (sceneDragData.captured != true) { return; }
 
             sceneDragging(pointer);
         });
-        
-        this._swipeOn = true;
 
     } catch (e) {
         var errMsg = this.getKey() + ".sceneDragOn.catched: " + e;
@@ -821,13 +835,20 @@ MielScene.prototype.onSceneDrag = function(x, y) {
 // unregister
 MielScene.prototype.sceneDragOff = function() {
     try {
-        if (this._sceneDragOn == false) { return; }
+        if (this._sceneDragDownEvent != undefined) {
+            this.removePointerEvent(this._sceneDragDownEvent);
+            this._sceneDragDownEvent = undefined;
+        }
 
-        this.input.off('pointerdown');
-        this.input.off('pointerup');
-        this.input.off('pointermove');
-        
-        this._sceneDragOn = false;
+        if (this._sceneDragUpEvent != undefined) {
+            this.removePointerEvent(this._sceneDragUpEvent);
+            this._sceneDragUpEvent = undefined;
+        }
+
+        if (this._sceneDragMoveEvent != undefined) {
+            this.removePointerEvent(this._sceneDragMoveEvent);
+            this._sceneDragMoveEvent = undefined;
+        }
 
     } catch (e) {
         var errMsg = this.getKey() + ".sceneDragOff.catched: " + e;
@@ -845,3 +866,67 @@ MielScene.prototype.pushInputEvent = function(evt) {
 
     this._reservedInput.push(evt);
 }
+
+////<!-- puase
+// pause
+MielScene.prototype.pause = function() {
+    this.onPause();
+    this._isPause = true;
+}
+
+// resume
+MielScene.prototype.resume = function() {
+    this.onResume();
+    this._isPause = false;
+}
+
+// on pause (상속하여 사용)
+MielScene.prototype.onPause = function() {
+    
+}
+
+// on resume (상속하여 사용)
+MielScene.prototype.onResume = function() {
+    
+}
+//// puase -->
+
+
+/// <!-- pointer event manager
+// add
+MielScene.prototype.addPointerEvent = function(kind, cb) {
+    this._pointerEventManager.add(kind, cb);
+    return cb;
+}
+
+// remove
+MielScene.prototype.removePointerEvent = function(cb) {
+    this._pointerEventManager.remove(cb);
+}
+
+///  pointer event manager -->
+
+/// <!-- camera
+
+// add
+MielScene.prototype.addCameraDrag = function(name, camera, bounds, boundsLimit) {
+    if (this._cameraDragManager.Count <= 0) {
+        this.sceneDragOn();
+    }
+    return this._cameraDragManager.add(name, camera, bounds, boundsLimit);
+}
+
+// remove
+MielScene.prototype.removeCameraDrag = function(camera) {
+    this._cameraDragManager.remove(camera);
+    if (this._cameraDragManager.Count <= 0) {
+        this.sceneDragOff();
+    }
+}
+
+// camera drag
+MielScene.prototype.cameraDrag = function(camera, x, y) {
+    this._cameraDragManager.onSceneDrag(camera, x, y);
+}
+
+/// camera  -->

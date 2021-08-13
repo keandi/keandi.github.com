@@ -1,4 +1,7 @@
 class SceneSwitch extends SceneMenuBase {
+
+    #_PV = {};
+
     // ctor
     constructor(fps, gameHost) {
         super(fps, gameHost);
@@ -20,6 +23,10 @@ class SceneSwitch extends SceneMenuBase {
         super.onStop();
 
         this._testText.destroy();
+    }
+
+    onUpdate() {
+        
     }
 }
 

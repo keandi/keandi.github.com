@@ -65,11 +65,9 @@ class SceneSpriteChange extends SceneMenuBase {
 
             // pointerdown
             let frame = new RINum(0, 5, 35);
-            this.input.on('pointerdown', function(pointer, x, y, event) {
+            this.addPointerEvent('down', (pointer)=>{
                 selfIt._sprite.setTexture('SpriteSheet_ARROW', frame.Next);
             });
-            this.pushInputEvent('pointerdown');
-
 
         } catch(e) {
             var errMsg = this.getKey() + ".onLoadAssetsComplete.catched: " + e;

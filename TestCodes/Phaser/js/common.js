@@ -296,12 +296,13 @@ function hit_test(player, block) {
 }
 
 // add text (for font)
-function addText(scene, x, y, text) {
+function addText(scene, x, y, text, fontSize) {
+    if (fontSize == undefined) { fontSize = 16; }
     var text = scene.add.text(x, y, text, {
         fontFamily: 'consolas',
-        fontSize: 16
+        fontSize: fontSize
     }).setOrigin(0.5);
-    text.setFontSize(16);
+    text.setFontSize(fontSize);
     return text;
 }
 

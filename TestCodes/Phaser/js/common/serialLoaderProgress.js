@@ -80,6 +80,10 @@ class SerialLoaderProgress extends ClsObject {
                 percent: percent
             };
 
+            this.#_PV.object.outer.visible = this.#_PV.object.inner.visible = this.#_PV.object.progress.visible = this.#_PV.object.percent.visible = false;
+
+            this.#_PV.stopWatch = new ElapsedTime();
+
             //
             //progress.x = this.#_PV.rect.backInner.x;
             //progress.y = this.#_PV.rect.backInner.y;
@@ -104,6 +108,8 @@ class SerialLoaderProgress extends ClsObject {
 
             this.#_PV.object = undefined;
 
+            this.#_PV.stopWatch = undefined;
+
         } catch (e) {
             var m = this.getExpMsg("destroy", e);
             console.log(m);
@@ -117,6 +123,17 @@ class SerialLoaderProgress extends ClsObject {
             if (this.#_PV.object == undefined) { return; }
 
             if (value == undefined) { value = 1; }
+
+            if (this.#_PV.stopWatch != undefined) {
+                if (this.#_PV.stopWatch.Elapsed > 500) {
+                    this.#_PV.object.outer.visible = this.#_PV.object.inner.visible = this.#_PV.object.progress.visible = this.#_PV.object.percent.visible = true;
+                    this.#_PV.stopWatch = undefined;
+                } else {
+                    console.log("elspsed: " + this.#_PV.stopWatch.Elapsed);
+                }
+            }
+
+            if (this.#_PV.object.outer.visible == false) { return; }
 
             var progressRect = this.#_PV.rect.progress;
             /*progressRect.Width += this.#_PV.progress.singleWidth;
@@ -141,7 +158,7 @@ class SerialLoaderProgress extends ClsObject {
             progress.fillStyle(0xFE4545, 1.0);
             progress.fillRect(this.#_PV.rect.progress.X, this.#_PV.rect.progress.Y, this.#_PV.progress.current * this.#_PV.progress.singleWidth, this.#_PV.rect.progress.Height);
 
-            progress.visible = true;
+            //progress.visible = true;
 
             // percent
             var percentText = parseInt(current * 100) + " %";

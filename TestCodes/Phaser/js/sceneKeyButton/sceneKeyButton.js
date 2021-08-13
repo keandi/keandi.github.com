@@ -113,8 +113,8 @@ class SceneKeyButton extends SceneMenuBase {
                 button.off('pointerup'); 
             } );
 
-            // up
-            this.input.on('pointermove', (pointer, x, y, event) => {
+            // pointer move
+            this.addPointerEvent('move', (pointer)=>{
                 //console.log( stringFormat( "move pointer - x: {0}, y: {1}", pointer.x, pointer.y) );
                 if (buttonArea.ptInRect(pointer.x, pointer.y) == false) {
                     if (isKeyPressed == true) {
@@ -123,9 +123,6 @@ class SceneKeyButton extends SceneMenuBase {
                     }
                 }
             });
-            this.addDestroyCB( () => { 
-                this.input.off('pointermove'); 
-            } );
 
             // key-space down
             let keyObj = this.input.keyboard.addKey('SPACE');

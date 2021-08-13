@@ -25,7 +25,7 @@ class SceneRotate extends SceneMenuBase {
             // destroy resource
             this._fireBase.destroy();
 
-            this.input.off('pointerdown');
+            //this.input.off('pointerdown');
             //this.input.off('pointerup'); 
             
         } catch(e) {
@@ -80,7 +80,7 @@ class SceneRotate extends SceneMenuBase {
             //this._fireBase.printSize(true);
 
             // pointer event
-            this.input.on('pointerdown', function(pointer, x, y, event) {
+            this.addPointerEvent('down', (pointer)=>{
                 let radian = selfIt._fireBase.getRotate() - (Math.PI / 2);
                 let ballPos = getPointByRadianDistance(selfIt._fireBase.getX(), selfIt._fireBase.getY(), radian, 35);
                 let target = getPointByPointDistance(selfIt._fireBase.getX(), selfIt._fireBase.getY(), ballPos.x, ballPos.y, selfIt.getSceneCenterY() + 20);

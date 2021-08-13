@@ -55,6 +55,7 @@ class GOImageButton extends ClsObject {
             }
 
             if (pointerEvents.move != undefined) {
+                this.#_PV.scene.removePointerEvent(pointerEvents.move);
                 pointerEvents.move = undefined;
             }
         }
@@ -144,7 +145,7 @@ class GOImageButton extends ClsObject {
                 setUp(false);
             });
 
-            this.#_PV.pointerEvents.move = this.#_PV.scene.input.on('pointermove', (pointer, x, y, event) => {
+            this.#_PV.pointerEvents.move = this.#_PV.scene.addPointerEvent('move', (pointer)=>{
                 //console.log( stringFormat( "move pointer - x: {0}, y: {1}", pointer.x, pointer.y) );
                 if (buttonRc.ptInRect(pointer.x, pointer.y) == false) {
                     if (isPressed == true) {

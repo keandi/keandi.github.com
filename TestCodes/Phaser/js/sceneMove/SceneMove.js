@@ -56,7 +56,7 @@ SceneMove.prototype.registerMenus = function() {
 SceneMove.prototype.onStop = function() {
     try {
         //alert("onStop " + this.getKey());
-        this.input.off('pointerdown');
+        //this.input.off('pointerdown');
         this._arrowSprite.destroyAll();
     } catch(e) {
         var errMsg = this.getKey() + ".onStop.catched: " + e;
@@ -132,7 +132,10 @@ SceneMove.prototype.onLoadAssetsComplete = function() {
         //var a = new AnimeSprite("aa", this, 1, 1, "ArrowSpriteSheet");
 
         //
-        this.input.on('pointerdown', function(pointer, x, y, event) {
+        /*this.input.on('pointerdown', function(pointer, x, y, event) {
+            selfIt.pointAction(pointer.x, pointer.y);
+        });  */
+        this.addPointerEvent('down', (pointer)=>{
             selfIt.pointAction(pointer.x, pointer.y);
         });
 

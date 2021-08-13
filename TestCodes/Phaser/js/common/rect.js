@@ -136,6 +136,12 @@ class Rect {
         return this;
     }
 
+    // Copy From this
+    copyFromThis() {
+        let rc = new Rect(this.X, this.Y, this.Width, this.Height);
+        return rc;
+    }
+
     // is pointer in rect
     ptInRect(x, y) {
         return (x >= this.Left && x <= this.Right &&

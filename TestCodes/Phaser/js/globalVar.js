@@ -163,5 +163,16 @@ let _sceneData = [
             return _scenes.keyButton;
         }
     }
+    ,
+    {
+        key: SCENE_KEY_PAUSE,
+        menu: "Pause",
+        getScene: function() {
+            if (_scenes.pause == undefined) {
+                _scenes.pause = new ScenePause(60, _gameHost);
+            }
+            return _scenes.pause;
+        }
+    }
 ];
 

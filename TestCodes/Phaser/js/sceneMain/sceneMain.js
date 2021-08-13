@@ -21,6 +21,7 @@ SceneMain.prototype.onCreate = function() {
     this.registerMenus();
 
     // camera set
+    /*
     this._cameraCenter = { x: 0, y: 0};
     this._cameraBounce = {
         left: this.getSceneWidth() / 2,
@@ -33,6 +34,11 @@ SceneMain.prototype.onCreate = function() {
 
     //
     this.sceneDragOn();
+    */
+    let cameraBounds = new Rect(0, 0, this.getSceneWidth(), this.getSceneHeight() * 2);
+    let cameraBoundsLimit = cameraBounds.copyFromThis();
+    cameraBoundsLimit.deflate(this.getSceneWidth() / 2, this.getSceneHeight() / 2);
+    this.addCameraDrag("main_camera", this.cameras.main, cameraBounds, cameraBoundsLimit);
 }
 
 SceneMain.prototype.onUpdate = function() {
@@ -126,8 +132,10 @@ SceneMain.prototype.registerMenus = function() {
     }
 }
 
+
 SceneMain.prototype.onSceneDrag = function(x, y) {
     try {
+        /*
         //console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}", this.getKey(), x, y) );
 
         //this._cameraCenter.x -= x;
@@ -144,9 +152,10 @@ SceneMain.prototype.onSceneDrag = function(x, y) {
 
          console.log( stringFormat("{0}::onDragDrag x: {1}, y: {2}, camera-x: {3}, camera-y: {4}"
             , this.getKey(), x, y
-            , this._cameraCenter.x, this._cameraCenter.y) ); 
+            , this._cameraCenter.x, this._cameraCenter.y) );
 
-        this.cameras.main.centerOn(this._cameraCenter.x, this._cameraCenter.y);
+        this.cameras.main.centerOn(this._cameraCenter.x, this._cameraCenter.y); */
+        this.cameraDrag(this.cameras.main, x, y);
 
     } catch(e) {
         var errMsg = this.getKey() + ".onSceneDrag.catched: " + e;
@@ -154,6 +163,7 @@ SceneMain.prototype.onSceneDrag = function(x, y) {
         alert(errMsg);
     }
 }
+
 
 
 /*var SceneMain = new Phaser.Class({
