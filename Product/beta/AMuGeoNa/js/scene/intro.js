@@ -1,0 +1,158 @@
+class SceneIntro extends BaseScene {
+    #_SPV = {};
+
+    // ctor
+    constructor(name, gameHost) {
+        try {
+            super(name, gameHost);
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("ctor", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // secene key 반환
+    getKey() {
+        return KEY_INTRO;
+    }
+
+    onCreate() {
+        //alert("create " + this.getKey());
+
+        this._isStopped = false;
+
+        this.#addText();
+    }
+
+    onPreset() {
+        this._isUseSerialLoader = true;
+    }
+
+    onStop() {
+        try {
+            //console.log("onStop " + this.getKey());
+
+            super.onStop();
+
+            if (this.#_SPV.fireworkTimeout != undefined) {
+                clearTimeout(this.#_SPV.fireworkTimeout);
+                this.#_SPV.fireworkTimeout = undefined;
+            }
+
+            if (this.#_SPV.touchInterval != undefined) {
+                clearInterval(this.#_SPV.touchInterval);
+                this.#_SPV.touchInterval = undefined;
+            }
+
+            this._isStopped = true;
+            
+        } catch(e) {
+            var errMsg = this.getKey() + ".onStop.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    onSerialLoadAssets() {
+        this.addSerialLoadAsset( 'firework_yellow',
+        () => {
+            this.load.atlas(
+                'firework_yellow',
+                'assets/image/firework_yellow.png',
+                'assets/atlas/firework_yellow.json'
+            );
+        }, 2 );
+    };
+    
+    
+    onCompleteSerialLoadAllAssets() {
+        try {
+            //console.log(this.getKey() + " asset load completed !!!");
+
+            this.addDestroyableObject( this.anims.create({ key: 'firework', frames: this.anims.generateFrameNames('firework_yellow', { prefix: 'FW', end: 29, zeroPad: 4 }), duration: 1500, repeat: 0 },) );
+            var firework = this.addDestroyableObject( this.add.sprite(this.getSceneCenterX(), this.getSceneCenterY(), 'firework').play('firework') );
+            firework.setOrigin(0.5);
+
+            this.#_SPV.firework = firework;
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    #addText() {
+        try {
+            const sceneCenterY = this.getSceneCenterY();
+            const sceneCenterX = this.getSceneCenterX();
+            const sceneWidth = this.getSceneWidth();
+
+            // 아무거나
+            const logoTextY = sceneCenterY - (sceneWidth / 3);
+            this.addDestroyableObject( addText(this, sceneCenterX, logoTextY, _gameOption.selectText("아.무.거.나", "A.Mu.Geo.Na"), 50, 0x73BAE7) );
+
+            // touch please
+            const touchTextY = sceneCenterY + 35;
+            let touch = this.addDestroyableObject( addText(this, sceneCenterX, touchTextY, "Touch for 'start'", 16, 0xA0A0A0) );
+            let touchOff = false;
+            let touchBlink = function() {
+                if (touchOff == false) {
+                    touch.setTint(0x454545);
+                    touchOff = true;
+                } else {
+                    touch.setTint(0xA0A0A0);
+                    touchOff = false;
+                }
+            };
+            setInterval(()=>touchBlink(), 500);
+
+            // W.H.Soft
+            const companyTextY = sceneCenterY + (sceneWidth / 2);
+            this.addDestroyableObject( addText(this, sceneCenterX, companyTextY, "W.H.Soft (2021)", 16, 0xA0A0A0) );
+
+            // Thank you
+            const thankyouTextY = companyTextY + 30;
+            this.addDestroyableObject( addText(this, sceneCenterX, thankyouTextY, "Thank you, opengameart.org", 12, 0x606060) );
+        } catch(e) {
+            var errMsg = this.getKey() + ".addText.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    randomFireWork() {
+        try {
+            var firework = this.#_SPV.firework;
+            const fwHalfCX = Math.floor( firework.width / 2 );
+            const fwHalfCY = Math.floor( firework.height / 2 );
+            const areaWidth = this.getSceneWidth() - firework.width;
+            const areaHeight = this.getSceneHeight() - firework.height;
+
+            const x = Math.floor(Math.random() * areaWidth) + fwHalfCX;
+            const y = Math.floor(Math.random() * areaHeight) + fwHalfCY;
+
+            firework.x = x;
+            firework.y = y;
+            this.#_SPV.firework.visible = true;
+            firework.play('firework');
+
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".randomFireWork.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    onUpdate() {
+        if (this.#_SPV.firework == undefined) { return; }
+        //console.log("onUpdate => " + this.#_SPV.firework.frame.name);
+        if (this.#_SPV.firework.frame.name === "FW0029" && this.#_SPV.firework.visible == true) {
+            this.#_SPV.fireworkTimeout = setTimeout(() => this.randomFireWork(), 2000);
+            this.#_SPV.firework.visible = false;
+        }
+    }
+}

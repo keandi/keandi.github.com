@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>아무거나</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+        <!-- scale 이 고정되게 해준다 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+    
+        <!-- 화면이 너무 크게 보여질 경우 scale 값을 변경해주면 됨
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.1, maximum-scale=0.75, user-scalable=yes">
+        -->
+
+        <script type="text/javascript" src="../../../js/phaser.min.3.55.2.js"></script>
+
+        <script type="text/javascript" src="./js/define/define.js"></script>
+
+        <script type="text/javascript" src="./js/enum/ostype.js"></script>
+        <script type="text/javascript" src="./js/enum/apptype.js"></script>
+        <script type="text/javascript" src="./js/enum/flasheffectoption.js"></script>
+        <script type="text/javascript" src="./js/enum/swipedirection.js"></script>
+        <script type="text/javascript" src="./js/enum/language.js"></script>
+
+        <script type="text/javascript" src="./js/core/clsObject.js"></script>
+        <script type="text/javascript" src="./js/core/queue.js"></script>
+        <script type="text/javascript" src="./js/core/rect.js"></script>
+        <script type="text/javascript" src="./js/core/RINum.js"></script>
+        <script type="text/javascript" src="./js/core/callbackMap.js"></script>
+        <script type="text/javascript" src="./js/core/cameraDrag.js"></script>
+        <script type="text/javascript" src="./js/core/cameraDragManager.js"></script>
+        <script type="text/javascript" src="./js/core/destroyCallBacks.js"></script>
+        <script type="text/javascript" src="./js/core/destroyMap.js"></script>
+        <script type="text/javascript" src="./js/core/elapsedTime.js"></script>
+        <script type="text/javascript" src="./js/core/pointerEventManager.js"></script>
+        <script type="text/javascript" src="./js/core/serialLoadHistory.js"></script>
+        <script type="text/javascript" src="./js/core/serialLoaderProgress.js"></script>
+        <script type="text/javascript" src="./js/core/basescene.js"></script>
+
+        <script type="text/javascript" src="./js/common/common.js"></script>
+        <script type="text/javascript" src="./js/common/phaserfun.js"></script>
+        <script type="text/javascript" src="./js/common/language.js"></script>
+
+        <script type="text/javascript" src="./js/browser/browser.js"></script>
+
+        <script type="text/javascript" src="./js/global/global.js"></script>
+
+        <script type="text/javascript" src="./js/data/option.js"></script>
+
+        <script type="text/javascript" src="./js/scene/intro.js"></script>
+
+        <script type="text/javascript" src="./js/gamehost/gamehost.js"></script>
+
+        <script type="text/javascript" src="./js/main/loader.js"></script>
+        <script type="text/javascript" src="./js/main/load.js"></script>
+
+    </head>
+
+    <style>
+        .backBorder {
+            background-color: rgb(25, 25, 25);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; height: 600px;
+            margin-left: -400px;
+            margin-top: -300px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .appBackBorder {
+            background-color: rgb(25, 25, 25);
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 800px; height: 600px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .outerBorder {
+            background-color: rgb(245, 53, 203);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%; height: 100%;
+            margin-left: 0px;
+            margin-top: 0px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+
+        @font-face {
+			font-family: "gameFont";
+			src: url('assets/font/NanumBarunGothic.ttf');
+		}
+    </style>
+
+<body>
+    <div id="scene" class="backBorder" style="display: block;">
+    </div>
+</body>
+</html>
