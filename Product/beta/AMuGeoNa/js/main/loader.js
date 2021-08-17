@@ -26,6 +26,7 @@ class Loader extends ClsObject {
     #createGlobalData() {
         try {
             
+            _browserComm = new BrowserComm("browser_comm");
             _gameOption = new GameOption("option");
             _serialLoadHistory = new SerialLoadHistory("global_serial_asset_load_history");
             _gameHost = new GameHost("gamehost", this.#_PV.sceneSize.w, this.#_PV.sceneSize.h, "#252525", 0);
@@ -33,12 +34,20 @@ class Loader extends ClsObject {
             _sceneData = [
                 {
                     key: KEY_INTRO,
-                    menu: "intro",
                     getScene: function() {
                         if (_scenes.intro == undefined) {
                             _scenes.intro = new SceneIntro(60, _gameHost);
                         }
                         return _scenes.intro;
+                    }
+                },
+                {
+                    key: KEY_LEVEL,
+                    getScene: function() {
+                        if (_scenes.level == undefined) {
+                            _scenes.level = new SceneLevel(60, _gameHost);
+                        }
+                        return _scenes.level;
                     }
                 }
             ];

@@ -6,10 +6,45 @@ class GameOption extends ClsObject {
         try {
             super(name);
 
-            this.#_PV.language = Language.KOREAN;
+            this.#_PV.option = {};
+            this.#readOption();
 
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    #readOption() {
+        try {
+            this.setDefault();
+            var option = _browserComm.getObject("option");
+            if (option != undefined) {
+                // vibration
+                this.#_PV.option.useVibration = option.useVibration;
+
+                // language
+                this.#_PV.option.language = option.language;
+            }
+        } catch (e) {
+            var errMsg = this.getExpMsg("readOption", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 기본값으로 설정하기
+    setDefault() {
+        this.#_PV.option.language = Language.KOREAN;
+        this.#_PV.option.useVibration = false;
+    }
+
+    saveOption() {
+        try {
+            _browserComm.setObject("option", this.#_PV.option);
+        } catch (e) {
+            var errMsg = this.getExpMsg("saveOption", e);
             console.log(errMsg);
             alert(errMsg);
         }

@@ -76,6 +76,13 @@ class SceneIntro extends BaseScene {
             firework.setOrigin(0.5);
 
             this.#_SPV.firework = firework;
+            
+            let gameHost = this._gameHost;
+
+            // pointer event register
+            this.addPointerEvent('down', (pointer)=>{
+                _gameHost.switchScene(KEY_LEVEL);
+            });
 
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;

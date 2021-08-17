@@ -151,4 +151,9 @@ class Browser extends ClsObject {
             alert(errMsg);
         }
     }
+
+    // get app
+    get appId() {
+        return this.#_PV.appDetail.name;
+    }
 }
