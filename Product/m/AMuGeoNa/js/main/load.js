@@ -10,3 +10,10 @@ window.onload = function() {
         alert(errMsg);
     }
 }
+
+// call by App
+function onCalledbyApp(type, value) {
+    if (type === ACMD_AD) {
+        alert("Finishd A.D.");
+    }
+}

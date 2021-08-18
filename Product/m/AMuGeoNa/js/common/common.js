@@ -88,3 +88,9 @@ function hit_test(player, block) {
 
     return result;
 }
+
+// from: https://www.codegrepper.com/code-examples/javascript/convert+number+to+string+with+commas+javascript
+// Convert a number to a string with commas
+function numberWithCommas(x) {
+    return (x + "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

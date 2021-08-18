@@ -95,3 +95,21 @@ function onVibCmd() {
         alert(errMsg);
     }  
 }
+
+// ad command
+function onAd() {
+    try {
+        _webapp_api.cmdAd();
+    } catch (e) {
+        var errMsg = "onSetData.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }  
+}
+
+// call by App
+function onCalledbyApp(type, value) {
+    if (type === "DxA0") {
+        alert("Finishd A.D.");
+    }
+}

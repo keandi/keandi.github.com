@@ -1,4 +1,4 @@
-class SceneLevel extends BaseScene {
+class SceneLevel extends GameScene {
     #_SPV = {};
 
     // ctor
@@ -7,7 +7,7 @@ class SceneLevel extends BaseScene {
             super(name, gameHost);
 
         } catch (e) {
-            var errMsg = this.getExpMsg("ctor", e);
+            var errMsg = this.getKey() + ".ctor.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -45,62 +45,68 @@ class SceneLevel extends BaseScene {
     }
 
     onSerialLoadAssets() {
-        this.addSerialLoadAsset( 'firework_yellow',
+        super.onSerialLoadAssets();
+
+        this.addSerialLoadAsset( 'option_button',
         () => {
             this.load.atlas(
-                'firework_yellow',
-                'assets/image/firework_yellow.png',
-                'assets/atlas/firework_yellow.json'
+                'option_button',
+                'assets/image/option_button.png',
+                'assets/atlas/option_button.json'
             );
         }, 2 );
-    };
-    
+
+        this.addSerialLoadAsset( 'ad_button',
+        () => {
+            this.load.atlas(
+                'ad_button',
+                'assets/image/ad_button.png',
+                'assets/atlas/ad_button.json'
+            );
+        }, 2 );
+    };    
     
     onCompleteSerialLoadAllAssets() {
         try {
-            //console.log(this.getKey() + " asset load completed !!!");
+            super.onCompleteSerialLoadAllAssets();
 
-            this.#createMenu();
-        } catch(e) {
-            var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    // 상단 메뉴 설정
-    #createMenu() {
-        try {
-            let menuRc = new Rect(0, 0, this.getSceneWidth(), 52);
             let selfIt = this;
 
-            // bottom
-            {
-                let graphics = this.addDestroyableObject( this.add.graphics() );
+            //
+            //this.printTitle();
 
-                graphics.fillGradientStyle(0x252525, 0x7A7A7A, 0x252525, 0x7A7A7A, 1);
-                graphics.fillRect(menuRc.Left, menuRc.Top, menuRc.Width / 2, menuRc.Height);
+            // option button
+            const topMenuRc = this.TopMenuRc;
+            const option_button_x = topMenuRc.Right - 32;
+            const option_button_y = topMenuRc.CenterY;
+            let option_button = this.addDestroyableObject( new GOImageButton("option_button", this, option_button_x, option_button_y, 
+                'option_button', 'BTN_UP', 'option_button', 'BTN_DOWN',
+                () => {
+                    alert("option");
+                })
+            );
+            option_button.setDepth(DEPTH_MENU_BUTTON);
 
-                graphics.fillGradientStyle(0x7A7A7A, 0x252525, 0x7A7A7A, 0x252525, 1);
-                graphics.fillRect(menuRc.Left + (menuRc.Width / 2), menuRc.Top, menuRc.Width / 2, menuRc.Height);
-            }
+            // ad button
+            const ad_button_x = topMenuRc.Left + 32;
+            const ad_button_y = topMenuRc.CenterY;
+            let ad_button = this.addDestroyableObject( new GOImageButton("ad_button", this, ad_button_x, ad_button_y, 
+                'ad_button', 'BTN_UP', 'ad_button', 'BTN_DOWN',
+                () => {
+                    alert("ad");
+                })
+            );
+            ad_button.setDepth(DEPTH_MENU_BUTTON);
 
-            // border
-            {
-                let create = function(x, y, w, h, c) {
-                    var g = selfIt.addDestroyableObject( selfIt.add.graphics() );
-                    g.fillStyle(c, 1);
-                    g.fillRect(x, y, w, h);
-                    return g;
-                }
-
-                const borderDepth = 6;
-                const borderEdge = 2;
-                create(0, 0, menuRc.Width, borderDepth, 0xFFFFFF);
-            }
-
+            //
+            // pointerdown
+            
+            /*selfIt.addPointerEvent('down', (pointer)=>{
+                selfIt.addGold(1);
+            }); */
+            
         } catch(e) {
-            var errMsg = this.getKey() + ".createMenu.catched: " + e;
+            var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }

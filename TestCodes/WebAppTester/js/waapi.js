@@ -37,4 +37,9 @@ class WAApi extends ClsObject {
     cmdVib() {
         this.command("DxV1", "");
     }
+
+    // ad
+    cmdAd() {
+        this.command("DxA0", "");
+    }
 }

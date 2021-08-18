@@ -282,6 +282,7 @@ BaseScene.prototype.onProgressSerialLoadAsset = function(value)
     console.log( this.getKey() + " onProgressSerialLoadAsset = " + value);
     if (value == undefined || value <= 0) { return; }
 
+    value = Math.ceil(value);
     this._serialLoadCount.increase(value);
 }
 
@@ -852,6 +853,10 @@ BaseScene.prototype.pushInputEvent = function(evt) {
 
 ////<!-- puase
 // pause
+BaseScene.prototype.isPause = function() {
+    return this._isPause;
+}
+
 BaseScene.prototype.pause = function() {
     this.onPause();
     this._isPause = true;

@@ -28,6 +28,7 @@ class Loader extends ClsObject {
             
             _browserComm = new BrowserComm("browser_comm");
             _gameOption = new GameOption("option");
+            _gameData = new GameData("gameData");
             _serialLoadHistory = new SerialLoadHistory("global_serial_asset_load_history");
             _gameHost = new GameHost("gamehost", this.#_PV.sceneSize.w, this.#_PV.sceneSize.h, "#252525", 0);
 

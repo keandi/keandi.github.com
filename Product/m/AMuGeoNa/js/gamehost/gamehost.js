@@ -79,7 +79,16 @@ class GameHost extends ClsObject {
             alert(errMsg);
         }
     }
+
+    //get game
+    get Game() {
+        return this._game;
+    }
     
+    // get scene
+    get Scene() {
+        return this._game.scene;
+    }
 }
 
 // test
