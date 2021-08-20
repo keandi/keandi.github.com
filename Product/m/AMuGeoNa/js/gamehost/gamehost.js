@@ -1,4 +1,6 @@
 class GameHost extends ClsObject {
+    #_PV = {};
+
     constructor(name, gameWidth, gameHeight, gameBackgroundStr, gameGravity) {
         super(name);
 
@@ -84,10 +86,15 @@ class GameHost extends ClsObject {
     get Game() {
         return this._game;
     }
-    
-    // get scene
-    get Scene() {
-        return this._game.scene;
+
+    // set active scene
+    set ActiveScene(scene) {
+        this.#_PV.activeScene = scene;
+    }
+
+    // get active scene
+    get ActiveScene() {
+        return this.#_PV.activeScene;
     }
 }
 

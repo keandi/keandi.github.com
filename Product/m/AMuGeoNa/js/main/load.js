@@ -13,7 +13,17 @@ window.onload = function() {
 
 // call by App
 function onCalledbyApp(type, value) {
-    if (type === ACMD_AD) {
-        alert("Finishd A.D.");
+    try {
+        if (type === ACMD_AD) {
+            _gameData.read();
+
+            var scene = _gameHost.ActiveScene;
+            scene.refreshGold();
+        }
+    } catch (e) {
+        var errMsg = "onCalledbyApp.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
     }
+    
 }

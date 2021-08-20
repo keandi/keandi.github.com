@@ -82,7 +82,7 @@ class SceneLevel extends GameScene {
             let option_button = this.addDestroyableObject( new GOImageButton("option_button", this, option_button_x, option_button_y, 
                 'option_button', 'BTN_UP', 'option_button', 'BTN_DOWN',
                 () => {
-                    alert("option");
+                    _gameHost.switchScene(KEY_OPTION);
                 })
             );
             option_button.setDepth(DEPTH_MENU_BUTTON);
@@ -93,7 +93,7 @@ class SceneLevel extends GameScene {
             let ad_button = this.addDestroyableObject( new GOImageButton("ad_button", this, ad_button_x, ad_button_y, 
                 'ad_button', 'BTN_UP', 'ad_button', 'BTN_DOWN',
                 () => {
-                    alert("ad");
+                    _browserComm.goAd();
                 })
             );
             ad_button.setDepth(DEPTH_MENU_BUTTON);

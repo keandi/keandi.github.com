@@ -75,3 +75,23 @@ function setPixelScale(obj, pixelX, pixelY) {
     setPixelScaleX(obj, pixelX);
     setPixelScaleY(obj, pixelY);
 }
+
+// gameobject button
+function setClick(gameObject, callback) {
+    try {
+        let gameObjectY = gameObject.y;
+        gameObject.setInteractive().on('pointerdown', function(pointer, localX, localY, event){
+            gameObject.y = gameObjectY + 5;
+
+            function menuUp() {
+                gameObject.y = gameObjectY;
+                callback();
+            };
+            setTimeout(() => menuUp(), 100);
+        });
+    } catch (e) {
+        var errMsg = "setClick.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }  
+}

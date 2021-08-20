@@ -24,7 +24,7 @@ class SoundSpooler extends ClsObject {
     destroy() {
         try {
 
-            for (var i = 0; i < max; i++) {
+            for (var i = 0; i < this.#_PV.sounds.length; i++) {
                 if (this.#_PV.sounds[i] != undefined) {
                     this.#_PV.sounds[i].stop();
                     this.#_PV.sounds[i].destroy();

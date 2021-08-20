@@ -103,14 +103,14 @@ class SceneIntro extends BaseScene {
 
             // touch please
             const touchTextY = sceneCenterY + 35;
-            let touch = this.addDestroyableObject( addText(this, sceneCenterX, touchTextY, "Touch for 'start'", 16, 0xA0A0A0) );
+            let touch = this.addDestroyableObject( addText(this, sceneCenterX, touchTextY, "Touch for 'start'", 16, COLOR_INTRO_TOUCHBLINK_ON) );
             let touchOff = false;
             let touchBlink = function() {
                 if (touchOff == false) {
-                    touch.setTint(0x454545);
+                    touch.setTint(COLOR_INTRO_TOUCHBLINK_OFF);
                     touchOff = true;
                 } else {
-                    touch.setTint(0xA0A0A0);
+                    touch.setTint(COLOR_INTRO_TOUCHBLINK_ON);
                     touchOff = false;
                 }
             };
@@ -118,11 +118,11 @@ class SceneIntro extends BaseScene {
 
             // W.H.Soft
             const companyTextY = sceneCenterY + (sceneWidth / 2);
-            this.addDestroyableObject( addText(this, sceneCenterX, companyTextY, "W.H.Soft (2021)", 16, 0xA0A0A0) );
+            this.addDestroyableObject( addText(this, sceneCenterX, companyTextY, "W.H.Soft (2021)", 16, COLOR_INTRO_COMPANY) );
 
             // Thank you
             const thankyouTextY = companyTextY + 30;
-            this.addDestroyableObject( addText(this, sceneCenterX, thankyouTextY, "Thank you, opengameart.org", 12, 0x606060) );
+            this.addDestroyableObject( addText(this, sceneCenterX, thankyouTextY, "Thank you, opengameart.org", 12, COLOR_INTRO_THANKYOU) );
         } catch(e) {
             var errMsg = this.getKey() + ".addText.catched: " + e;
             console.log(errMsg);

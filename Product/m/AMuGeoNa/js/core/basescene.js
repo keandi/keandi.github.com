@@ -69,6 +69,8 @@ BaseScene.prototype.preload = function() {
 
 // create
 BaseScene.prototype.create = function() {
+    this._gameHost.ActiveScene = this;
+    this.unlockUI(); // ui unlock
     this.onCreate();
 }
 
@@ -879,6 +881,22 @@ BaseScene.prototype.onResume = function() {
 }
 //// puase -->
 
+//// <!-- ui lock: UI 컨트롤의 동작을 멈추기 위해
+
+// set ui lock
+BaseScene.prototype.lockUI = function() {
+    this._uiLock = true;
+}
+
+BaseScene.prototype.unlockUI = function() {
+    this._uiLock = false;
+}
+
+BaseScene.prototype.isUILocked = function() {
+    return this._uiLock;
+}
+
+//// ui lock -->
 
 /// <!-- pointer event manager
 // add

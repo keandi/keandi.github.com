@@ -30,7 +30,7 @@ class Loader extends ClsObject {
             _gameOption = new GameOption("option");
             _gameData = new GameData("gameData");
             _serialLoadHistory = new SerialLoadHistory("global_serial_asset_load_history");
-            _gameHost = new GameHost("gamehost", this.#_PV.sceneSize.w, this.#_PV.sceneSize.h, "#252525", 0);
+            _gameHost = new GameHost("gamehost", this.#_PV.sceneSize.w, this.#_PV.sceneSize.h, COLOR_BACKGROUND, 0);
 
             _sceneData = [
                 {
@@ -46,9 +46,18 @@ class Loader extends ClsObject {
                     key: KEY_LEVEL,
                     getScene: function() {
                         if (_scenes.level == undefined) {
-                            _scenes.level = new SceneLevel(60, _gameHost);
+                            _scenes.level = new SceneLevel(30, _gameHost);
                         }
                         return _scenes.level;
+                    }
+                },
+                {
+                    key: KEY_OPTION,
+                    getScene: function() {
+                        if (_scenes.option == undefined) {
+                            _scenes.option = new SceneOption(15, _gameHost);
+                        }
+                        return _scenes.option;
                     }
                 }
             ];

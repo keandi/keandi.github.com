@@ -115,9 +115,9 @@ class GOImageButton extends ClsObject {
 
             // scene pause 처리
             let ifPause = function() {
-                if (scene.isPause === true) {
+                if (scene.isPause() === true || scene.isUILocked() === true) {
                     if (isPressed === false) {
-                        image.setTexture(textureInfo.pressTexture, textureInfo.pressFrame);
+                        image.setTexture(textureInfo.normalTexture, textureInfo.normalFrame);
                         isPressed = false;
                     }
                     return true;
@@ -127,7 +127,7 @@ class GOImageButton extends ClsObject {
 
             // down image
             let setDown = function() {
-                if (ifPause === true) { return; }
+                if (ifPause() === true) { return; }
                 if (isPressed == true) { return; }
                 isPressed = true;
                 image.setTexture(textureInfo.pressTexture, textureInfo.pressFrame);

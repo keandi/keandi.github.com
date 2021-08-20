@@ -69,14 +69,12 @@ class GameScene extends BaseScene {
             let menuRc = this.#_PV.topMenuRc;
             let g = this.#_PV.graphics;
 
-            const color1 = 0x1AC1F1;
-            const color2 = 0x2DA1C2;
             const height = menuRc.Height / 2;
 
-            g.fillStyle(color1, 1);
+            g.fillStyle(COLOR_MENUCOLOR_1, 1);
             g.fillRect(menuRc.Left, menuRc.Top, menuRc.Width, height);
 
-            g.fillStyle(color2, 1);
+            g.fillStyle(COLOR_MENUCOLOR_2, 1);
             g.fillRect(menuRc.Left, menuRc.Top + height, menuRc.Width, height);
 
             /*//
@@ -117,14 +115,12 @@ class GameScene extends BaseScene {
             let g = this.#_PV.graphics;
 
             //
-            const color1 = 0x1AC1F1;
-            const color2 = 0x2DA1C2;
             const height = menuRc.Height / 2;
 
-            g.fillStyle(color1, 1);
+            g.fillStyle(COLOR_MENUCOLOR_1, 1);
             g.fillRect(menuRc.Left, menuRc.Top, menuRc.Width, height);
 
-            g.fillStyle(color2, 1);
+            g.fillStyle(COLOR_MENUCOLOR_2, 1);
             g.fillRect(menuRc.Left, menuRc.Top + height, menuRc.Width, height);
 
             // coin
@@ -135,7 +131,7 @@ class GameScene extends BaseScene {
             coin.y = menuRc.CenterY;
 
             // coin text
-            let coin_txt = this.addDestroyableObject( addText(this, coin.x + coin.width + 5, coin.y, "X 1,000 G", 12, 0xFAC613) );
+            let coin_txt = this.addDestroyableObject( addText(this, coin.x + coin.width + 5, coin.y, "X 1,000 G", 12, COLOR_GOLD) );
             coin_txt.setOrigin(0, 0.5);
             coin_txt.setDepth(DEPTH_MENU);
             this.#_PV.coinText = coin_txt;
@@ -213,7 +209,7 @@ class GameScene extends BaseScene {
             let menuRc = this.#_PV.topMenuRc;
 
             this.addDestroyableObject( addText(this, menuRc.CenterX, menuRc.CenterY, 
-                _gameOption.selectText("아.무.거.나", "A.Mu.Geo.Na"), 22, 0x252525) ).setDepth(DEPTH_MENU_GAMETITLE);
+                _gameOption.selectText("아.무.거.나", "A.Mu.Geo.Na"), 22, COLOR_MENUTITLE) ).setDepth(DEPTH_MENU_GAMETITLE);
 
         } catch(e) {
             var errMsg = this.getKey() + ".printTitle.catched: " + e;

@@ -10,7 +10,7 @@ class BrowserComm extends ClsObject {
         try {
 
             if (_browser.isApp === true) {
-                this.#_PV.api = new WAApi("webappapi", _browser.appId);
+                this.#_PV.api = new WAApi("webappapi", APPID/*_browser.appId*/);
             } else {
                 this.#_PV.api = new WebApi("webapi");    
             }
@@ -40,6 +40,10 @@ class BrowserComm extends ClsObject {
 
     // set data (object)
     setObject(name, obj) {
+        if (obj == undefined) { 
+            this.set(name, "");
+            return;
+        }
         var value = JSON.stringify(obj);
         this.set(name, value);
     }
@@ -48,10 +52,16 @@ class BrowserComm extends ClsObject {
     getObject(name) {
         try {
             var value = this.get(name);
+            if (value == undefined || value.length <= 1) { return undefined; }
             return JSON.parse(value);
         } catch (e) {
             console.log("browsercomm.getObject: " + e);
         }
         return undefined
+    }
+
+    // show ad
+    goAd() {
+        this.#_PV.api.cmdAd();
     }
 }

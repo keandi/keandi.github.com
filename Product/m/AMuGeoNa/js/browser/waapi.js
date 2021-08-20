@@ -27,4 +27,21 @@ class WAApi extends ClsObject {
     get(name) {
         return WebAppApi.getData(this.#_PV.appId, name);
     }
+
+    // command
+    command(type, value) {
+        return WebAppApi.command(this.#_PV.appId, type, value);
+    }
+
+    // vibration
+    cmdVib(level) {
+        if (level == 1) {
+            this.command(BCMD_VIBRATION1, "");
+        }
+    }
+
+    // ad
+    cmdAd() {
+        this.command(ACMD_AD, "");
+    }
 }

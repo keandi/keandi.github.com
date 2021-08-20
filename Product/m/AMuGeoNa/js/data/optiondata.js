@@ -52,7 +52,7 @@ class GameOption extends ClsObject {
 
     // select text (by language)
     selectText(kor, eng) {
-        if (this.#_PV.language === Language.ENGLISH) {
+        if (this.#_PV.option.language.value === Language.ENGLISH.value) {
             return eng;
         }
 
@@ -61,11 +61,33 @@ class GameOption extends ClsObject {
 
     // language set
     set language(lang) {
-        this.#_PV.language = lang;
+        this.#_PV.option.language = lang;
     }
 
     // language get
     get language() {
-        return this.#_PV.language;
+        return this.#_PV.option.language;
+    }
+
+    // save language
+    saveLanguage(lang) {
+        this.#_PV.option.language = lang;
+        this.saveOption();
+    }
+
+    // vibration set
+    set Vibration(use) {
+        this.#_PV.option.useVibration = use;
+    }
+
+    // vibration get
+    get Vibration() {
+        return this.#_PV.option.useVibration;
+    }
+
+    // save vibration
+    saveVibration(use) {
+        this.#_PV.option.useVibration = use;
+        this.saveOption();
     }
 }

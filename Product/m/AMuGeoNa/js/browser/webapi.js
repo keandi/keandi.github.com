@@ -45,4 +45,14 @@ class WebApi extends ClsObject {
             alert(errMsg);
         }
     }
+
+    // vibration
+    cmdVib(level) {
+        //nothing
+    }
+
+    // ad
+    cmdAd() {
+        setTimeout(() => onCalledbyApp(ACMD_AD, ""), 100);
+    }
 }
