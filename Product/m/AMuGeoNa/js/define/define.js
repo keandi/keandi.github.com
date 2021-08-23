@@ -17,6 +17,9 @@ const DATANAME_GAME = "0xG0";
 // browser command
 const BCMD_VIBRATION1 = "DxV1";
 const BCMD_AD = "DxA0";
+const BCMD_APP_ONPAUSE = "DxA1";    // app onPause
+const BCMD_APP_ONRESUME = "DxA2";   // app onResume
+const BCMD_APP_ONSTOP = "DxA3";     // app onStop
 
 // app command
 const ACMD_AD = "DxA0";
@@ -33,6 +36,9 @@ const COLOR_GOLD = 0xFAC613;
 const COLOR_MENUTITLE = 0x252525;
 const COLOR_OPTION_MENUTITLE = 0xFFFFFF;
 const COLOR_OPTION_MENU = 0xFFFFFF;
+
+// time
+const TIMEOUT_ASSET_DOWNLOAD = 10000;
 
 // coordinate
 const COORD_OPTIONMENU_YGAP = 10;   // 옵션내 제목과 선택 메뉴간의 높이

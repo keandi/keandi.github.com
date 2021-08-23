@@ -92,8 +92,12 @@ BaseScene.prototype.onCreate = function() {
 // update. fps 수치에 맞게 onUpdate 호출
 BaseScene.prototype.update = function(time, delta) {
     if (this._isPause == true) { return; }
-
+    
+    //console.log("upate time: " + time + ", delta: " + delta);
+    this._gameHost.Time = time;
     this._fps.frameTime += delta;
+    this.publishUpdate();
+    
     //console.log("mielscene update" + this._fps.frameTime + " / " + this._fps._frameTimeLimit);
     if (this._fps.frameTime > this._fps.frameTimeLimit) {
         this._fps.frameTime = 0;
@@ -131,6 +135,9 @@ BaseScene.prototype.stop = function() {
     this.load.off('complete');
     this.swipeOff();
     this.sceneDragOff();
+
+    // clear subcribe update objects
+    this.clearSubcribeUpdate();
 
     //예약된 destroy 진행
     if (this._reservedDestroy.length > 0) {
@@ -260,6 +267,8 @@ BaseScene.prototype.startSerialLoadAssets = function() {
 
     var loader = this._serialLoader.deque();
 
+    this.resetAssetDownloadTimeout();
+
     if (_serialLoadHistory.isLoadedAsset(loader.name) == true)
     {
         //console.log("이미 로딩=" + loader.name);
@@ -296,6 +305,7 @@ BaseScene.prototype.onCompleteSerialLoadAsset = function(isAllFinished)
 
     if (isAllFinished == true)
     {
+        this.clearAssetDownloadTimeout();
         this.destroySerialLoaderProgress();
         this._assetLoadCompleted = true;
         this.onCompleteSerialLoadAllAssets();
@@ -360,6 +370,45 @@ BaseScene.prototype.showSerialLoaderProgress = function(value) {
 
 }
 // serial asset load -->
+
+////////// <!-- serial load timeout
+
+// asset download timeout event (상속하여 사용)
+BaseScene.prototype.onAssetDownloadTimeout = function() {
+    //
+    console.log(this.getKey() + " => onAssetDownloadTimeout");
+}
+
+// reset download timeout
+BaseScene.prototype.resetAssetDownloadTimeout = function() {
+    try {
+        if (this._assetDownloadTimeout == undefined) {
+            let selfIt = this;
+            this._assetDownloadTimeout = this.addDestroyableObject( new GameTimeout("assetdownload_timeout", this, TIMEOUT_ASSET_DOWNLOAD, ()=>selfIt.onAssetDownloadTimeout()) );
+        } else {
+            this._assetDownloadTimeout.reset();
+        }
+    } catch(e) {
+        var errMsg = this.getKey() + ".resetAssetDownloadTimeout.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// reset download timeout
+BaseScene.prototype.clearAssetDownloadTimeout = function() {
+    try {
+        if (this._assetDownloadTimeout == undefined) { return; }
+
+        this._assetDownloadTimeout.destroy();
+    } catch(e) {
+        var errMsg = this.getKey() + ".clearAssetDownloadTimeout.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+////////// serial load timeout -->
 
 // set original backgound-color
 BaseScene.prototype.setOriginalBackground = function(color, isSet) {
@@ -570,6 +619,44 @@ BaseScene.prototype.destroyDestroyCB = function(cb) {
     }
 }
 ////////////Destroy CallBack -->
+
+///////////<!-- update publish
+
+// subcribe
+BaseScene.prototype.subscribeUpdate = function(obj) {
+    if (this._updateReceivers == undefined) {
+        this._updateReceivers = [];
+    }
+
+    this._updateReceivers.push(obj);
+}
+
+// unsubscribe
+BaseScene.prototype.unsubscribeUpdate = function(obj) {
+    if (this._updateReceivers == undefined) { return; }
+
+    const idx = this._updateReceivers.indexOf(obj);
+    if (idx > -1) {
+        this._updateReceivers.splice(idx);
+    }
+}
+
+// remove all
+BaseScene.prototype.clearSubcribeUpdate = function() {
+    this._updateReceivers = undefined;
+}
+
+// update
+BaseScene.prototype.publishUpdate = function() {
+    if (this._updateReceivers == undefined) { return; }
+
+    this._updateReceivers.forEach(element => {
+        element.update();
+    });
+}
+
+///////////update publish -->
+
 
 // register
 BaseScene.prototype.swipeOn = function(minMove, maxMove) {

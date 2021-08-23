@@ -56,6 +56,15 @@ class SceneIntro extends BaseScene {
     }
 
     onSerialLoadAssets() {
+        /*this.addSerialLoadAsset( 'ggg',
+        () => {
+            this.load.atlas(
+                'ggg',
+                'assets/imagdfee/ggg.png',
+                'assets/atlas/ggg.json'
+            );
+        }, 2 );*/
+
         this.addSerialLoadAsset( 'firework_yellow',
         () => {
             this.load.atlas(
@@ -77,8 +86,6 @@ class SceneIntro extends BaseScene {
 
             this.#_SPV.firework = firework;
             
-            let gameHost = this._gameHost;
-
             // pointer event register
             this.addPointerEvent('down', (pointer)=>{
                 _gameHost.switchScene(KEY_LEVEL);
@@ -114,7 +121,8 @@ class SceneIntro extends BaseScene {
                     touchOff = false;
                 }
             };
-            setInterval(()=>touchBlink(), 500);
+            //setInterval(()=>touchBlink(), 500);
+            let touchInterval = new GameInterval("touch_interval", this, 500, ()=>touchBlink());
 
             // W.H.Soft
             const companyTextY = sceneCenterY + (sceneWidth / 2);
@@ -161,5 +169,7 @@ class SceneIntro extends BaseScene {
             this.#_SPV.fireworkTimeout = setTimeout(() => this.randomFireWork(), 2000);
             this.#_SPV.firework.visible = false;
         }
+
+        //console.log("host time: " + this._gameHost.Time);
     }
 }

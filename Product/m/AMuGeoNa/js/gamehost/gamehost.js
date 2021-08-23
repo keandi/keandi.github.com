@@ -12,6 +12,8 @@ class GameHost extends ClsObject {
             gravity: gameGravity,
             background: gameBackgroundStr
         };
+
+        this.initTime();
     }
 
     createGame(parentId, scenes) {
@@ -96,6 +98,42 @@ class GameHost extends ClsObject {
     get ActiveScene() {
         return this.#_PV.activeScene;
     }
+
+    // scene pause
+    scenePause() {
+        //console.log("pause try");
+        //this._game.scene.pause();
+        //this.#_PV.activeScene.scene.pause();
+
+        this.#_PV.activeScene.pause();
+    }
+
+    // secene resume
+    sceneResume() {
+        //var key = this.#_PV.activeScene.getKey();
+        //console.log("resume try. key=" + key);
+        //this._game.scene.resume( key );
+        //this.#_PV.activeScene.scene.resume( key );
+
+        this.#_PV.activeScene.resume();
+    }
+
+    // <!-- time info
+    // init
+    initTime() {
+        this.#_PV.time = 0;
+    }
+
+    // set
+    set Time(value) {
+        this.#_PV.time = value;
+    }
+
+    // get
+    get Time() {
+        return this.#_PV.time;
+    }
+    // time info -->
 }
 
 // test

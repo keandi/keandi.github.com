@@ -45,8 +45,8 @@ class GameScene extends BaseScene {
             const bottomCY = 32;
             this.#_PV.topMenuRc = new Rect(0, 0, this.getSceneWidth(), topCY);
             this.#_PV.bottomMenuRc = new Rect(0, this.getSceneHeight() - bottomCY, this.getSceneWidth(), bottomCY);
-            this.#_PV.contentRc = new Rect(0, this.#_PV.bottomMenuRc.Bottom + 1, this.getSceneWidth(), 
-                this.getSceneHeight - (this.#_PV.topMenuRc.Height + this.#_PV.bottomMenuRc.Height));
+            this.#_PV.contentRc = new Rect(0, this.#_PV.topMenuRc.Bottom + 1, this.getSceneWidth(), 
+                this.getSceneHeight() - (this.#_PV.topMenuRc.Height + this.#_PV.bottomMenuRc.Height));
 
             this.#_PV.graphics = this.addDestroyableObject( this.add.graphics() );
             this.#_PV.graphics.setDepth(DEPTH_MENU);

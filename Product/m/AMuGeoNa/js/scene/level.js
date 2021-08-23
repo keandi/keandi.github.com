@@ -98,6 +98,9 @@ class SceneLevel extends GameScene {
             );
             ad_button.setDepth(DEPTH_MENU_BUTTON);
 
+            // 
+            this.#makeLevelObjects();
+
             //
             // pointerdown
             
@@ -107,6 +110,60 @@ class SceneLevel extends GameScene {
             
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // make level objects
+    #makeLevelObjects() {
+        try {
+            const contentRc = this.ContentRc;
+
+            // 영역 100 단위
+            let lv100Rc = new Rect(contentRc.Left, contentRc.Top, contentRc.Width / 5, contentRc.Height);
+
+            // 영역 10 단위
+            let lv10Rc = lv100Rc.copyFromThis();
+            lv10Rc.Left = lv100Rc.Right + 1;
+
+            // 영역 1 단위
+            let lv1Rc = new Rect(lv10Rc.Right + 1, lv10Rc.Top, contentRc.Width - (lv100Rc.Width + lv10Rc.Width), contentRc.Height);
+
+            lv100Rc.deflate(3, 3);
+            lv10Rc.deflate(3, 3);
+            lv1Rc.deflate(3, 3);
+
+            // test rect
+            { // 
+                /* var g = this.addDestroyableObject( this.add.graphics() );
+                g.fillStyle(0xFE8730, 1);
+                g.fillRect(lv100Rc.Left, lv100Rc.Top, lv100Rc.Width, lv100Rc.Height);
+
+                g.fillStyle(0xFE0730, 1);
+                g.fillRect(lv10Rc.Left, lv10Rc.Top, lv10Rc.Width, lv10Rc.Height);
+
+                g.fillStyle(0x6E8770, 1);
+                g.fillRect(lv1Rc.Left, lv1Rc.Top, lv1Rc.Width, lv1Rc.Height); */
+            }
+
+            // block 최대 
+            const block_max = 10;
+            const blockSize = { cx: lv100Rc.Width, cy: parseInt(lv100Rc.Height / block_max) };
+
+            // 영역 100 그리기
+            for (var i = 1; i <= 1; i++) // 현재 100 까지
+            {
+                var tmpRc = new Rect(lv100Rc.X, lv100Rc.Bottom - (blockSize.cy * i), blockSize.cx, blockSize.cy);
+                tmpRc.deflate(5, 12);
+
+                var block = new LevelBlock("lb_100_" + i, this, tmpRc, LevelBlockType.BLOCK100, 100, (levelBlock, levelGroup) => {
+                    
+                } );
+            }
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".makeLevelObjects.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
