@@ -45,6 +45,39 @@ function objectMoveTowards(object, x, y, velocity) {
     return res[2];
 }
 
+// point move towards y
+function objectMoveTowardsY(object, dstY, velocity) {
+
+    let moveFinishedCount = 0;
+
+    try {
+
+        let dy = dstY - object.y;
+
+        let angle = Math.atan2(dy, 0);
+        let velY = Math.sin(angle) * velocity;
+
+        let toY = object.y + velY;
+
+        if (Math.abs(toY - dstY) < velocity)
+        {
+            toY = dstY;
+            moveFinishedCount++;
+        }
+
+        object.y = toY;
+
+        return (moveFinishedCount == 1) ? true : false;
+
+    } catch (e) {
+        var errMsg = "objectMoveTowardsY.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+
+    return [srcX, srcY, false];
+}
+
 // add text (for font)
 function addText(scene, x, y, text, fontSize, color) {
     if (fontSize == undefined) { fontSize = 16; }
@@ -59,21 +92,44 @@ function addText(scene, x, y, text, fontSize, color) {
 }
 
 // image scale width control by pixel
-function setPixelScaleX(obj, pixel) {
+function setPixelScaleX(obj, pixel, autoYScale) {
     if (pixel == 0 || obj.width == 0) { return; }
     obj.scaleX = pixel / obj.width;
+
+    if (autoYScale === true) {
+        obj.scaleY = obj.scaleX;
+    }
 }
 
 // image scale height control by pixel
-function setPixelScaleY(obj, pixel) {
+function setPixelScaleY(obj, pixel, autoXScale) {
     if (pixel == 0 || obj.height == 0) { return; }
     obj.scaleY = pixel / obj.height;
+
+    if (autoXScale === true) {
+        obj.scaleX = obj.scaleY;
+    }
+}
+
+// width, height 중 큰 쪽을 사이즈를 우선 맞추고 그 비율에 맞게 나머지 하나를 맞추기
+function setPixelScaleXorY(obj, pixel) {
+    if (obj.width > obj.height) {
+        setPixelScaleX(obj, pixel, true);
+    } else {
+        setPixelScaleY(obj, pixel, true);
+    }
 }
 
 // image scale control by pixel
 function setPixelScale(obj, pixelX, pixelY) {
     setPixelScaleX(obj, pixelX);
     setPixelScaleY(obj, pixelY);
+}
+
+// game object set position
+function setPosition(obj, x, y) {
+    obj.x = x;
+    obj.y = y;
 }
 
 // gameobject button
@@ -91,6 +147,31 @@ function setClick(gameObject, callback) {
         });
     } catch (e) {
         var errMsg = "setClick.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }  
+}
+
+// destroy object
+function destroyObject(obj) {
+    try {
+        if (obj == undefined || obj == null) { return; }
+        obj.destroy();
+    } catch (e) {
+        var errMsg = "destroyObject.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }  
+}
+
+// destroy objects
+function destroyObjects() {
+    try {
+        for (var i = 0; i < arguments.length; i++) {
+            destroyObject(arguments[i]);
+        }
+    } catch (e) {
+        var errMsg = "destroyObject.catched: " + e;
         console.log(errMsg);
         alert(errMsg);
     }  

@@ -1,10 +1,10 @@
-class HorizontalOptionMenu extends ClsObject {
+class HorizontalOptionMenu extends DestroyableObject {
     #_PV = {}
 
     // ctor
     constructor(name, scene) {
         try {
-            super(name);
+            super(name, scene);
 
             this.#_PV.scene = scene;
             this.#_PV.optionMenus = [];

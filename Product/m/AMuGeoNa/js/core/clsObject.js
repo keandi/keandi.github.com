@@ -19,4 +19,9 @@ class ClsObject {
     getExpMsg(f, e) {
         return this.#_PV.name + "." + f + ".catched: " + e;
     }
+
+    // get name
+    get Name() {
+        return this.#_PV.name;
+    }
 }

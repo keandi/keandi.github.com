@@ -80,11 +80,21 @@ class ScenePause extends SceneMenuBase {
                 }
             });
 
+            // time text
+            this.#_PV.timeText = this.addDestroyableObject( addText(this, 100, 50, "It's time", 22) );
+
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    onPreUpdate(time, delta) {
+        if (this.#_PV.timeText == undefined) { return; }
+
+        var t = parseInt(time / 1000);
+        this.#_PV.timeText.setText( "sec: " + t );
     }
 
     onUpdate() {
@@ -124,4 +134,6 @@ class ScenePause extends SceneMenuBase {
             alert(errMsg);
         }
     }
+
+    // 
 }

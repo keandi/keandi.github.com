@@ -40,6 +40,7 @@ class OptionMenu extends ClsObject {
 
     // make object
     makeObjects(top_position) {
+        let selfIt = this;
         let bottom_position = top_position;
 
         try {
@@ -95,10 +96,19 @@ class OptionMenu extends ClsObject {
 
             // set click
             v.options.forEach(element => {
+                v.scene.addDestroyableObject( new ObjectDown("om_" + selfIt.Name, v.scene, element.object, ()=>{
+                    selfIt.#redrawMenuActive(element);
+                    element.callback();
+                }) );
+                /*this.#_PV.timeout = new GameTimeout("optionmenu_gametimeout", this.#_PV.scene, 200, ()=>{
+                    this.#redrawMenuActive(element);
+                    element.callback();
+                });*/
+                /*
                 setClick(element.object, ()=>{
                     this.#redrawMenuActive(element);
                     element.callback();
-                });
+                });*/
             });
 
             //
@@ -135,6 +145,7 @@ class OptionMenu extends ClsObject {
     destroy() {
         try {
             this.#_PV.options = [];
+            destroyObjects( this.#_PV.timeout )
         } catch (e) {
             var errMsg = this.getExpMsg("destroy", e);
             console.log(errMsg);

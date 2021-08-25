@@ -19,6 +19,13 @@ class Rect {
         this.#_height = height;
     }
 
+    setLTRB(l, t, r, b) {
+        this.Left = l;
+        this.Top = t;
+        this.Right = r;
+        this.Bottom = b;
+    }
+
     set X(x) {
         this.#_x = x;
     }

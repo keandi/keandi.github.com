@@ -22,6 +22,9 @@ var BaseScene = function(fps, gameHost, config) {
     this._pointerEventManager = new PointerEventManager("pem_" + this.getKey(), this);
     this._cameraDragManager = new CameraDragManager("cdm_" + this.getKey());
 
+    this._timerPool = new GameTimerPool("scene_timerpool_" + this.getKey(), this);
+    this._soundPool = new GameSoundPool("scene_soundpool_" + this.getKey(), this, SOUNDPOOL_MAX);
+
     // serial load count
     this._serialLoadCount = {
         max: 0,
@@ -42,6 +45,9 @@ var BaseScene = function(fps, gameHost, config) {
 
     // preset
     this.onPreset();
+
+    //
+    this._gameTimerPool = new GameTimerPool("gametimerpool", this);
 }
 
 BaseScene.prototype = Object.create(Phaser.Scene.prototype);
@@ -69,6 +75,7 @@ BaseScene.prototype.preload = function() {
 
 // create
 BaseScene.prototype.create = function() {
+    this._gameHost.Time = 0;
     this._gameHost.ActiveScene = this;
     this.unlockUI(); // ui unlock
     this.onCreate();
@@ -94,7 +101,7 @@ BaseScene.prototype.update = function(time, delta) {
     if (this._isPause == true) { return; }
     
     //console.log("upate time: " + time + ", delta: " + delta);
-    this._gameHost.Time = time;
+    this._gameHost.Time += delta;
     this._fps.frameTime += delta;
     this.publishUpdate();
     
@@ -290,7 +297,7 @@ BaseScene.prototype.startSerialLoadAssets = function() {
 // serial load progress 
 BaseScene.prototype.onProgressSerialLoadAsset = function(value)
 {
-    console.log( this.getKey() + " onProgressSerialLoadAsset = " + value);
+    //console.log( this.getKey() + " onProgressSerialLoadAsset = " + value);
     if (value == undefined || value <= 0) { return; }
 
     value = Math.ceil(value);
@@ -300,7 +307,7 @@ BaseScene.prototype.onProgressSerialLoadAsset = function(value)
 // serial load complete
 BaseScene.prototype.onCompleteSerialLoadAsset = function(isAllFinished)
 {
-    console.log( this.getKey() + " onCompleteSerialLoadAsset = " + isAllFinished);
+    //console.log( this.getKey() + " onCompleteSerialLoadAsset = " + isAllFinished);
     _serialLoadHistory.addReservedKey();
 
     if (isAllFinished == true)
@@ -1023,3 +1030,14 @@ BaseScene.prototype.cameraDrag = function(camera, x, y) {
 }
 
 /// camera  -->
+
+///////////////////////////////
+//// <!-- sound pool
+
+// play sound
+BaseScene.prototype.playSound = function(resource) {
+    this._soundPool.play(resource);
+}
+
+//// sound pool -->
+///////////////////////////////

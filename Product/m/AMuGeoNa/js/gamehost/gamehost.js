@@ -4,7 +4,7 @@ class GameHost extends ClsObject {
     constructor(name, gameWidth, gameHeight, gameBackgroundStr, gameGravity) {
         super(name);
 
-        this.printName();
+        //this.printName();
 
         this._preSetData = {
             width: gameWidth,

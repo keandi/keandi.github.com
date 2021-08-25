@@ -1,9 +1,9 @@
-class GOImageButton extends ClsObject {
+class GOImageButton extends DestroyableObject {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, x, y, normalTexture, normalFrame, pressTexture, pressFrame, fireCallback) {
-        super(name);
+    constructor(name, scene, x, y, normalTexture, normalFrame, pressTexture, pressFrame, fireCallback, isSuperControl) {
+        super(name, scene);
 
         try {
             this.#_PV.scene = scene;
@@ -21,6 +21,7 @@ class GOImageButton extends ClsObject {
             this.#_PV.image = undefined;
             this.#_PV.buttonRect = new Rect();
             this.#_PV.pointerEvents = {};
+            this.#_PV.isSuperControl = (isSuperControl === true) ? true : false;
 
             // 
             if (this.#create() == false) {
@@ -115,6 +116,7 @@ class GOImageButton extends ClsObject {
 
             // scene pause 처리
             let ifPause = function() {
+                if (selfIt.#_PV.isSuperControl === true) { return false; }
                 if (scene.isPause() === true || scene.isUILocked() === true) {
                     if (isPressed === false) {
                         image.setTexture(textureInfo.normalTexture, textureInfo.normalFrame);
@@ -142,7 +144,7 @@ class GOImageButton extends ClsObject {
                 image.setTexture(textureInfo.normalTexture, textureInfo.normalFrame);
                 
                 if (isCancel == false) {
-                    setTimeout(() => fireCb() , 100);
+                    setTimeout(() => fireCb() , 1);
                 }
             }
 

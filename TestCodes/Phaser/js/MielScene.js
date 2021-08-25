@@ -93,10 +93,17 @@ MielScene.prototype.update = function(time, delta) {
 
     this._fps.frameTime += delta;
     //console.log("mielscene update" + this._fps.frameTime + " / " + this._fps._frameTimeLimit);
+
+    this.onPreUpdate(time, delta);
     if (this._fps.frameTime > this._fps.frameTimeLimit) {
         this._fps.frameTime = 0;
         this.onUpdate();
     }
+}
+
+// onUpdate 이전 작업용 event (상속하여 사용)
+MielScene.prototype.onPreUpdate = function(time, delta) {
+    //
 }
 
 // update event (상속하여 사용)

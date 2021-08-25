@@ -129,7 +129,7 @@ class SerialLoaderProgress extends ClsObject {
                     this.#_PV.object.outer.visible = this.#_PV.object.inner.visible = this.#_PV.object.progress.visible = this.#_PV.object.percent.visible = true;
                     this.#_PV.stopWatch = undefined;
                 } else {
-                    console.log("elspsed: " + this.#_PV.stopWatch.Elapsed);
+                    //console.log("elspsed: " + this.#_PV.stopWatch.Elapsed);
                 }
             }
 

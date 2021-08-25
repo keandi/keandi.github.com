@@ -46,7 +46,7 @@ class SoundSpooler extends ClsObject {
         try {
             let v = this.#_PV;
             if (v.sounds[v.current] == undefined) {
-                v.sounds[v.current] = v.scene.addDestroyableObject( v.scene.sound.add(v.resource) );
+                v.sounds[v.current] = v.scene.sound.add(v.resource);
             }
 
             v.sounds[v.current].play();

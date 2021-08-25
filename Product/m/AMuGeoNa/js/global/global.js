@@ -6,3 +6,4 @@ let _gameOption = undefined;
 let _serialLoadHistory = undefined;
 let _browserComm = undefined;
 let _gameData = undefined;
+let _gameLevelTable = undefined;

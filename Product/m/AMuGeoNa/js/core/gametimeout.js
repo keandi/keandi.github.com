@@ -2,9 +2,13 @@ class GameTimeout extends GameInterval {
     #_PV = {};
 
     //ctor
-    constructor(name, scene, interval, callback) {
+    constructor(name, scene, interval, callback, runImmidately) {
         try {
-            super(name, scene, interval, callback);
+            super(name, scene, interval, callback, runImmidately);
+
+            this.#_PV.interval = interval;
+            this.#_PV.callback = callback;
+
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
             console.log(errMsg);
@@ -15,10 +19,13 @@ class GameTimeout extends GameInterval {
     // update
     update() {
         try {
-            if (this.Time.isExpired( this.#_PV.interval, this.#_PV.callback ) === true)
+            if (this.IsRun === false) { return; }
+
+            if (this.Time.isExpired( this.#_PV.interval, undefined, true ) === true)
             {
+                this.IsRun = false;
                 this.#_PV.callback();
-                this.destroy();
+                //this.destroy();                
             }
         } catch (e) {
             var errMsg = this.getExpMsg("update", e);
@@ -28,9 +35,10 @@ class GameTimeout extends GameInterval {
     }
 
     // reset
-    reset() {
+    reset(isRun) {
         try {
             this.Time.resetTime();
+            this.IsRun = (isRun === true) ? true : false
         } catch (e) {
             var errMsg = this.getExpMsg("reset", e);
             console.log(errMsg);

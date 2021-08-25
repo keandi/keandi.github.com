@@ -31,7 +31,7 @@ class GameData extends ClsObject {
                 }
 
                 if (data.lastLevel == undefined || data.lastLevel < 0) {
-                    this.#_PV.data.gold = 0;
+                    this.#_PV.data.lastLevel = 0;
                 } else {
                     this.#_PV.data.lastLevel = data.lastLevel;
                 }
@@ -90,4 +90,54 @@ class GameData extends ClsObject {
             alert(errMsg);
         }
     }
+
+    ////////////////////////////////
+    //// <!-- last leve
+
+    // get
+    get LastLevel() {
+        if (this.#_PV.lastLevel == undefined) {
+            this.#_PV.lastLevel = 0;
+        }
+        return this.#_PV.lastLevel;
+    }
+
+    // set
+    set LastLevel(value) {
+        this.#_PV.lastLevel = value;
+    }
+
+    //// last level -->
+    ////////////////////////////////
+
+    ////////////////////////////////
+    /// <!-- current level
+
+    // get
+    get CurrentLevel() {
+        let v = this.#_PV;
+
+        if (v.currentLevel == undefined) {
+            v.currentLevel = (v.lastLevel == undefined) ? 1 : v.lastLevel;
+        }
+        return v.currentLevel;
+    }
+
+    // set
+    set CurrentLevel(value) {
+        if (value == undefined) {
+            this.#_PV.currentLevel = 1;
+        } else {
+            this.#_PV.currentLevel = value;
+        }
+    }
+
+    /// current level -->
+    ////////////////////////////////
+
+    // 플레이 가능한 게임인가?
+    IsEnableLevel(level) {
+        return (level <= this.LastLevel + 1) ? true : false;
+    }
+
 }
