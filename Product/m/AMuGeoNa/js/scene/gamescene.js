@@ -23,6 +23,15 @@ class GameScene extends BaseScene {
             );
         }, 2 );
 
+        this.addSerialLoadAsset( 'msgbox_buttons',
+        () => {
+            this.load.atlas(
+                'msgbox_buttons',
+                'assets/image/msgbox_buttons.png',
+                'assets/atlas/msgbox_buttons.json'
+            );
+        }, 2 );
+
         this.addSerialLoadAsset( 'coin_drop',
             () => this.load.audio('coin_drop', 'assets/audio/coin_drop.mp3'), 1 );
     };    
@@ -232,4 +241,77 @@ class GameScene extends BaseScene {
     get ContentRc() {
         return this.#_PV.contentRc;
     }
+
+    ////////////////////////////////////
+    //// <!-- msgbox
+
+    // create msgbox
+    #createMsgBox() {
+        try {
+            if (this.#_PV.msgbox != undefined) { return; }
+
+            this.#_PV.msgbox = new MsgBox('msgbox_' + this.getKey(), this);
+        } catch(e) {
+            var errMsg = this.getKey() + ".showOk.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // show msgbox - ok
+    msgboxOk(title, message, cb) {
+        try {
+            let xy = this.getMsgBoxXY();
+            if (xy == undefined) { return; }
+            this.#createMsgBox();
+
+            this.#_PV.msgbox.showOk(title, message, xy.x, xy.y, ()=>{
+                this.resume();
+                if (cb != undefined) {
+                    this._timerPool.setTimeout(cb, 200);
+                }
+            });
+            this.pause();
+        } catch(e) {
+            var errMsg = this.getKey() + ".showOk.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // show msgbox - yes no
+    msgboxYesNo(title, message, cbYes, cbNo) {
+        try {
+            let xy = this.getMsgBoxXY();
+            if (xy == undefined) { return; }
+            this.#createMsgBox();
+
+            this.#_PV.msgbox.showYesNo(title, message, xy.x, xy.y, ()=>{
+                this.resume();
+                if (cbYes != undefined) {
+                    this._timerPool.setTimeout(cbYes, 200);
+                }
+            }, ()=>{
+                this.resume();
+                if (cbNo != undefined) {
+                    this._timerPool.setTimeout(cbNo, 200);
+                }
+            });
+            this.pause();
+        } catch(e) {
+            var errMsg = this.getKey() + ".showOk.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // get msgbox x, y (상속하여 반환 필요)
+    getMsgBoxXY() {
+        let msg = stringFormat('There is no required implementation - {0}::getMsgBoxXY', this.getKey());
+        console.log(msg);
+        alert( msg );
+    }
+
+    //// msgbox -->
+    ////////////////////////////////////
 }

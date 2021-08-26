@@ -91,7 +91,7 @@ class LevelEntryBlock extends DestroyableObject {
                     return true;
                 }
 
-                return v.downExpire.isExpired(1500, undefined, true);
+                return v.downExpire.isExpired(500, undefined, true);
             }
 
             // down event 등록

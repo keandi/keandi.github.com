@@ -170,6 +170,23 @@ class Rect {
         this.inflate(-x, -y);
     }
 
+    // offset
+    offset(x, y) {
+        if (x == undefined) { x = 0; }
+        if (y == undefined) { y = 0; }
+
+        this.move(this.#_x + x, this.#_y + y);
+    }
+
+    // move
+    move(x, y) {
+        if (x == undefined) { x = 0; }
+        if (y == undefined) { y = 0; }
+
+        this.X = x;
+        this.Y = y;
+    }
+
     // make from pointer
     makeFromCenterPointer(x, y, width, height) {
         if (x == undefined) x = 0;

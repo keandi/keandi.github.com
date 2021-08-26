@@ -60,6 +60,15 @@ class Loader extends ClsObject {
                         }
                         return _scenes.option;
                     }
+                },
+                {
+                    key: KEY_GAME_SHOOTTHESTARS,
+                    getScene: function() {
+                        if (_scenes.shootthestars == undefined) {
+                            _scenes.shootthestars = new SceneShootTheStars(60, _gameHost);
+                        }
+                        return _scenes.shootthestars;
+                    }
                 }
             ];
 

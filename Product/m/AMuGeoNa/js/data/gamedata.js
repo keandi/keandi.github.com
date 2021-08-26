@@ -44,6 +44,17 @@ class GameData extends ClsObject {
         }
     }
 
+    // save
+    save() {
+        try {
+            _browserComm.setObject(DATANAME_GAME, this.#_PV.data)
+        } catch (e) {
+            var errMsg = this.getExpMsg("read", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // get gold
     get Gold() {
         return this.#_PV.data.gold;

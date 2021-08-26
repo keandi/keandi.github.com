@@ -15,26 +15,30 @@ class GameLevelTable extends ClsObject {
         }
     }
 
-    #getEnableInfo(level, gamelevel, needgold, gamekind) {
+    #getEnableInfo(level, gamelevel, needgold, limitgold, gamekind) {
         try {
             if (gamekind.value === GameKind.UNKNOWN.value || _gameData.IsEnableLevel(level) === false) {
                 return {
+                    level: level,
                     gamekind: gamekind,
                     gamelevel: gamelevel,
                     needgold: 0,
+                    limitgold: 0,
                     enable: false,
                     texture: 'QUESTION'
                 };
             }
             
             return {
+                level: level,
                 gamekind: gamekind,
                 gamelevel: gamelevel,
                 needgold: needgold,
+                limitgold: limitgold,
                 enable: true,
                 texture: {
-                    1: 'STAR'
-                }[level]
+                    1: 'STAR'       // GameKind.SHOOTTHESTARS.value == 1
+                }[gamekind.value]
             };
             
         } catch (e) {
@@ -44,9 +48,11 @@ class GameLevelTable extends ClsObject {
         }
 
         return {
+            level: 0,
             gamekind: GameKind.UNKNOWN,
             gamelevel: gamelevel,
             needgold: 0,
+            limitgold: 0,
             enable: false,
             texture: 'QUESTION'
         };
@@ -57,10 +63,16 @@ class GameLevelTable extends ClsObject {
         try {
             switch (level) {
                 case 1:
-                    return this.#getEnableInfo(level, 1, 100, GameKind.SHOOTTHESTARS);
+                    return this.#getEnableInfo(level, 1, 0, 20, GameKind.SHOOTTHESTARS);
+
+                case 2:
+                    return this.#getEnableInfo(level, 1, 3, 35, GameKind.SHOOTTHESTARS);
+
+                case 3:
+                    return this.#getEnableInfo(level, 1, 6, 50, GameKind.SHOOTTHESTARS);
 
                 default:
-                    return this.#getEnableInfo(level, 0, 0, GameKind.UNKNOWN);
+                    return this.#getEnableInfo(level, 0, 0, 0, GameKind.UNKNOWN);
             }
         } catch (e) {
             var errMsg = this.getExpMsg("level", e);

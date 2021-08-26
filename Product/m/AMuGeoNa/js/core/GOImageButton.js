@@ -43,14 +43,14 @@ class GOImageButton extends DestroyableObject {
         if (pointerEvents != undefined) {
             if (pointerEvents.down != undefined) {
                 pointerEvents.down = undefined;
-                if (this.#_PV.image.image != undefined) {
+                if (this.#_PV.image != undefined) {
                     this.#_PV.image.off('pointerdown');
                 }
             }
 
             if (pointerEvents.up != undefined) {
                 pointerEvents.up = undefined;
-                if (this.#_PV.image.image != undefined) {
+                if (this.#_PV.image != undefined) {
                     this.#_PV.image.off('pointerup');
                 }
             }
@@ -64,9 +64,9 @@ class GOImageButton extends DestroyableObject {
         this.#_PV.pointerEvents = undefined;
 
         // image
-        if (this.#_PV.image.image != undefined) {
-            this.#_PV.image.image.destroy();
-            this.#_PV.image.image = undefined;
+        if (this.#_PV.image != undefined) {
+            this.#_PV.image.destroy();
+            this.#_PV.image = undefined;
         }
     }
 

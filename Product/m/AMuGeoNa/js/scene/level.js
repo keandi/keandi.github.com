@@ -91,6 +91,7 @@ class SceneLevel extends GameScene {
             super.onCompleteSerialLoadAllAssets();
 
             let selfIt = this;
+            _gameData.LastLevel = 2;
 
             //
             //this.printTitle();
@@ -115,7 +116,7 @@ class SceneLevel extends GameScene {
                 () => {
                     _browserComm.goAd();
                     //this.test();
-                }, true)
+                }, false)
             );
             ad_button.setDepth(DEPTH_MENU_BUTTON);
 
@@ -239,7 +240,9 @@ class SceneLevel extends GameScene {
                 ebX = ebBeginX;
                 for (var j = 0; j < 2; j++) {
                     var rc = new Rect(ebX + entryBlockEdge, ebY + entryBlockEdge, entryBlockSize.cx, entryBlockSize.cy);
-                    this.#_SPV.entryBlocks.push( new LevelEntryBlock("leb_" + i + "_" + j, this, this.#_SPV.representationImage, rc, (entryBlock)=>this.onEntryTry(entryBlock)) );
+                    this.#_SPV.entryBlocks.push( new LevelEntryBlock("leb_" + i + "_" + j, this, this.#_SPV.representationImage, rc, (entryBlock)=>{
+                        this._timerPool.setTimeout(()=>this.onEntryTry(entryBlock), 200)
+                    }) );
 
                     ebX += entryLevelSize.cx;
                 }
@@ -331,7 +334,42 @@ class SceneLevel extends GameScene {
         try {
             this.playSound('twink');
             let levelInfo = entryBlock.LevelInfo;
-            //alert("need gold - " + levelInfo.needgold);
+
+            if (_gameData.Gold < levelInfo.needgold) {
+                var entryFee = stringFormat("{0}G", levelInfo.needgold);
+                this.msgboxOk(_gameOption.selectText("알림", "Notice"),
+                    _gameOption.selectText( stringFormat("입장료({0})가 부족합니다.", entryFee), 
+                        stringFormat("Insufficient entrance fee ({0})", entryFee)));
+                return;
+            } else if (_gameData.Gold >= levelInfo.limitgold) {
+                var limitFee = stringFormat("{0}G", levelInfo.limitgold);
+                this.msgboxOk(_gameOption.selectText("알림", "Notice"),
+                    _gameOption.selectText( stringFormat("입장 제한 ({0})", limitFee), 
+                        stringFormat("Entry limit ({0})", limitFee)));
+                return;
+            }
+
+            // 게임 진입
+            let entryGame = function() {
+                _gameHost.switchScene(KEY_GAME_SHOOTTHESTARS);
+            };
+
+            if (levelInfo.needgold > 0) {
+                var entryFee = stringFormat("{0}G", levelInfo.needgold);
+                var kor = stringFormat("입장료: {0}\r\n지불하시겠습니까?", entryFee);
+                var eng = stringFormat("Admission: {0}\r\nWould you like to pay?", entryFee);
+                this.msgboxYesNo(_gameOption.selectText("입장료", "Admission"), _gameOption.selectText(kor, eng),
+                    () => { 
+                        this.useGold(levelInfo.needgold);
+                        this._gameData.save();
+                        entryGame();
+                    },
+                    () => {}
+                );
+            } else {
+                entryGame();
+            }
+            
         } catch(e) {
             var errMsg = this.getKey() + ".onEntryTry.catched: " + e;
             console.log(errMsg);
@@ -358,6 +396,7 @@ class SceneLevel extends GameScene {
             } */   
         }
 
+        // pause test
         {
             /* if (this.#_SPV.flag != true) {
                 this.pause();
@@ -367,6 +406,18 @@ class SceneLevel extends GameScene {
                 this.#_SPV.flag = false;
             } */
         }
+
+        // msgbox test
+        {
+            //this.msgboxOk('OK', 'are  you ready?\r\n나의 이름은....', ()=>{alert('ok')});
+            //this.msgboxYesNo('Yes or No', 'are  you ready?\r\n나의 이름은....', ()=>alert('yes'), ()=>alert('no'));
+        }
         
+    }
+
+     // get msgbox x, y (상속하여 반환 필요)
+     getMsgBoxXY() {
+         const contentRc = this.ContentRc;
+         return { x: contentRc.CenterX, y: contentRc.CenterY };
     }
 }
