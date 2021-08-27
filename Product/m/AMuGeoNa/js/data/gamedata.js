@@ -151,4 +151,18 @@ class GameData extends ClsObject {
         return (level <= this.LastLevel + 1) ? true : false;
     }
 
+    ///////////////////////////////
+    ////// <!-- 진행 게임 레벨 정보
+
+    get EntryGameLevelInfo() {
+        return this.#_PV.entryGameLevelInfo;
+    }
+
+    set EntryGameLevelInfo(levelInfo) {
+        this.#_PV.entryGameLevelInfo = levelInfo;
+    }
+
+    ////// 진행 게임 레벨 정보 -->
+    ///////////////////////////////
+
 }

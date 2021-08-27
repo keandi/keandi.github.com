@@ -142,6 +142,10 @@ class SceneLevel extends GameScene {
         }
     }
 
+    onCompleteSerialLoadAllAssetsAfter() {
+        // nothing. 구현하여 게임 접근 체크를 하지 않도록 한다.
+    }
+
     // make level objects
     #makeLevelObjects() {
         try {
@@ -356,6 +360,7 @@ class SceneLevel extends GameScene {
 
             // 게임 진입
             let entryGame = function(li) {
+                _gameData.EntryGameLevelInfo = li;
                 _gameHost.switchScene(li.sceneKey);
             };
 
