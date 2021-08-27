@@ -37,7 +37,8 @@ class GameLevelTable extends ClsObject {
                 limitgold: limitgold,
                 enable: true,
                 texture: {
-                    1: 'STAR'       // GameKind.SHOOTTHESTARS.value == 1
+                    1: 'STAR',       // GameKind.SHOOTTHESTARS.value == 1
+                    2: 'DICE',       // GameKind.ROLLDICE.value == 2
                 }[gamekind.value]
             };
             
@@ -63,7 +64,7 @@ class GameLevelTable extends ClsObject {
         try {
             switch (level) {
                 case 1:
-                    return this.#getEnableInfo(level, 1, 0, 20, GameKind.SHOOTTHESTARS);
+                    return this.#getEnableInfo(level, 1, 0, 20, GameKind.ROLLDICE);
 
                 case 2:
                     return this.#getEnableInfo(level, 1, 3, 35, GameKind.SHOOTTHESTARS);
