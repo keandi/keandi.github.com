@@ -2,9 +2,9 @@ class SceneIntro extends BaseScene {
     #_SPV = {};
 
     // ctor
-    constructor(name, gameHost) {
+    constructor(fps, gameHost) {
         try {
-            super(name, gameHost);
+            super(fps, gameHost);
 
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);

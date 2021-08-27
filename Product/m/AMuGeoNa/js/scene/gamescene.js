@@ -2,15 +2,21 @@ class GameScene extends BaseScene {
     #_PV = {};
 
     // ctor
-    constructor(name, gameHost) {
+    constructor(fps, gameHost) {
         try {
-            super(name, gameHost);
+            super(fps, gameHost);
 
+            this.#_PV.isNeedExitButton = true;
         } catch (e) {
             var errMsg = this.getKey() + ".ctor.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // exit 버튼 필요여부 설정. 
+    set IsNeedExitButton(value) {
+        this.#_PV.isNeedExitButton = value;
     }
 
     onSerialLoadAssets() {
@@ -126,11 +132,45 @@ class GameScene extends BaseScene {
             g.fillStyle(color1, 1);
             g.fillRect(menuRc.Left, menuRc.Bottom - lineDepth, menuRc.Width, lineDepth); */
 
+            //
+            if (this.#_PV.isNeedExitButton === true) {
+                this.#createExitButton();
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".createTopMenu.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    #createExitButton() {
+        try {
+
+            let selfIt = this;
+
+            // exit button
+            const topMenuRc = this.TopMenuRc;
+            const exit_button_x = topMenuRc.Right - 32;
+            const exit_button_y = topMenuRc.CenterY;
+            let exit_button = this.addDestroyableObject( new GOImageButton("exit_button", this, exit_button_x, exit_button_y, 
+                'exit_button', 'BTN_UP', 'exit_button', 'BTN_DOWN',
+                () => {
+                    selfIt.onExitTry( ()=>_gameHost.switchScene(KEY_LEVEL) );
+                })
+            );
+            exit_button.setDepth(DEPTH_MENU_BUTTON);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".createExitButton.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // exit 발생 시 exit 진행 및 후처리를 결정한다. (상속후 사용)
+    onExitTry(cb) {
+        cb();
     }
 
     // 하단 메뉴 설정

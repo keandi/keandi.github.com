@@ -2,10 +2,11 @@ class SceneLevel extends GameScene {
     #_SPV = {};
 
     // ctor
-    constructor(name, gameHost) {
+    constructor(fps, gameHost) {
         try {
-            super(name, gameHost);
+            super(fps, gameHost);
 
+            this.IsNeedExitButton = false;
         } catch (e) {
             var errMsg = this.getKey() + ".ctor.catched: " + e;
             console.log(errMsg);

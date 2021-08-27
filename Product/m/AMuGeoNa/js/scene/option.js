@@ -2,9 +2,9 @@ class SceneOption extends GameScene {
     #_SPV = {};
 
     // ctor
-    constructor(name, gameHost) {
+    constructor(fps, gameHost) {
         try {
-            super(name, gameHost);
+            super(fps, gameHost);
 
         } catch (e) {
             var errMsg = this.getKey() + ".ctor.catched: " + e;
@@ -69,21 +69,6 @@ class SceneOption extends GameScene {
     onCompleteSerialLoadAllAssets() {
         try {
             super.onCompleteSerialLoadAllAssets();
-
-            let selfIt = this;
-
-            //
-            // exit button
-            const topMenuRc = this.TopMenuRc;
-            const exit_button_x = topMenuRc.Right - 32;
-            const exit_button_y = topMenuRc.CenterY;
-            let exit_button = this.addDestroyableObject( new GOImageButton("exit_button", this, exit_button_x, exit_button_y, 
-                'exit_button', 'BTN_UP', 'exit_button', 'BTN_DOWN',
-                () => {
-                    _gameHost.switchScene(KEY_LEVEL);
-                })
-            );
-            exit_button.setDepth(DEPTH_MENU_BUTTON);
 
             //
             this.#createIcon();
