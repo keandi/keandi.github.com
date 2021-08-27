@@ -97,7 +97,7 @@ class ResourcePool extends ClsObject {
                 case 'option_button':
                 case 'level_entry_characters':
                 case 'dice_sprite':
-                    this.#addAtlas(key, 3);
+                    this.#addAtlas(key, 1);
                     break;
 
                 case 'arrow':
