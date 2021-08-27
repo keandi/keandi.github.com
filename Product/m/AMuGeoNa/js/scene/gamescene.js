@@ -257,12 +257,16 @@ class GameScene extends BaseScene {
     }
 
     // print title
-    printTitle() {
+    printTitle(title) {
         try {
             let menuRc = this.#_PV.topMenuRc;
 
+            if (title == undefined) {
+                title = _gameOption.selectText("아.무.거.나", "A.Mu.Geo.Na");
+            }
+
             this.addDestroyableObject( addText(this, menuRc.CenterX, menuRc.CenterY, 
-                _gameOption.selectText("아.무.거.나", "A.Mu.Geo.Na"), 22, COLOR_MENUTITLE) ).setDepth(DEPTH_MENU_GAMETITLE);
+                title, 22, COLOR_MENUTITLE) ).setDepth(DEPTH_MENU_GAMETITLE);
 
         } catch(e) {
             var errMsg = this.getKey() + ".printTitle.catched: " + e;

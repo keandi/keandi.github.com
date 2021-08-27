@@ -71,6 +71,9 @@ class SceneOption extends GameScene {
             super.onCompleteSerialLoadAllAssets();
 
             //
+            this.printTitle(_gameOption.selectText('옵션', 'Option'));
+
+            //
             this.#createIcon();
             this.#createOptionMenus();
             

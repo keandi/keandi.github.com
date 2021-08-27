@@ -100,7 +100,7 @@ class SceneLevel extends GameScene {
             _gameData.LastLevel = 2;
 
             //
-            //this.printTitle();
+            this.printTitle(_gameOption.selectText('게임 선택', 'Game selection'));
 
             // option button
             const topMenuRc = this.TopMenuRc;
