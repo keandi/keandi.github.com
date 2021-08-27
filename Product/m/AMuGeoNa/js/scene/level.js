@@ -48,6 +48,10 @@ class SceneLevel extends GameScene {
     onSerialLoadAssets() {
         super.onSerialLoadAssets();
 
+        _resourcePool.setScene(this)
+            .addArgs('arrow', 'option_button', 'ad_button', 'level_entry_characters', 'twink');
+
+        /*
         this.addSerialLoadAsset( 'arrow',
         () => {
             this.load.image(
@@ -84,6 +88,7 @@ class SceneLevel extends GameScene {
         }, 2 );
 
         this.addSerialLoadAsset( 'twink', () => this.load.audio('twink', 'assets/audio/twink.ogg'), 1 );
+        */
     };    
     
     onCompleteSerialLoadAllAssets() {
@@ -114,8 +119,8 @@ class SceneLevel extends GameScene {
             let ad_button = this.addDestroyableObject( new GOImageButton("ad_button", this, ad_button_x, ad_button_y, 
                 'ad_button', 'BTN_UP', 'ad_button', 'BTN_DOWN',
                 () => {
-                    _browserComm.goAd();
-                    //this.test();
+                    //_browserComm.goAd();
+                    this.test();
                 }, false)
             );
             ad_button.setDepth(DEPTH_MENU_BUTTON);
@@ -411,6 +416,22 @@ class SceneLevel extends GameScene {
         {
             //this.msgboxOk('OK', 'are  you ready?\r\n나의 이름은....', ()=>{alert('ok')});
             //this.msgboxYesNo('Yes or No', 'are  you ready?\r\n나의 이름은....', ()=>alert('yes'), ()=>alert('no'));
+        }
+
+        // gold sound test
+        {
+            //this.playCoinSound();
+        }
+
+        // gold test
+        {
+            if (this.#_SPV.isGoldTest === true) {
+                this.addGold(100);
+                this.#_SPV.isGoldTest = false;
+            } else {
+                this.useGold(100);
+                this.#_SPV.isGoldTest = true;
+            }
         }
         
     }

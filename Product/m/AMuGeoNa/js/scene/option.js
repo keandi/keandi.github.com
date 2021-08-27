@@ -51,7 +51,7 @@ class SceneOption extends GameScene {
         () => {
             this.load.atlas(
                 'exit_button',
-                'assets/image/exit_button.png',
+                'assets/image/exit_button.png?v=1',
                 'assets/atlas/exit_button.json'
             );
         }, 2 );

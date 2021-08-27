@@ -14,26 +14,29 @@ class GameScene extends BaseScene {
     }
 
     onSerialLoadAssets() {
-        this.addSerialLoadAsset( 'coins',
+        /*this.addSerialLoadAsset( 'coins',
         () => {
             this.load.atlas(
                 'coins',
                 'assets/image/coins.png',
                 'assets/atlas/coins.json'
             );
-        }, 2 );
+        }, 2 ); */
 
-        this.addSerialLoadAsset( 'msgbox_buttons',
+        /*this.addSerialLoadAsset( 'msgbox_buttons',
         () => {
             this.load.atlas(
                 'msgbox_buttons',
                 'assets/image/msgbox_buttons.png',
                 'assets/atlas/msgbox_buttons.json'
             );
-        }, 2 );
+        }, 2 );*/
 
-        this.addSerialLoadAsset( 'coin_drop',
-            () => this.load.audio('coin_drop', 'assets/audio/coin_drop.mp3'), 1 );
+        /*this.addSerialLoadAsset( 'coin_drop',
+            () => this.load.audio('coin_drop', 'assets/audio/coin_drop.mp3'), 1 ); */
+
+        _resourcePool.setScene(this)
+            .addArgs('coins', 'msgbox_buttons', 'coin_add', 'coin_use');
     };    
     
     onCompleteSerialLoadAllAssets() {
@@ -62,7 +65,6 @@ class GameScene extends BaseScene {
             
             this.#createTopMenu();
             this.#createBottomMenu();
-            this.#addCoinSound();
             this.refreshGold();
 
         } catch (e) {
@@ -169,7 +171,7 @@ class GameScene extends BaseScene {
     useGold(v) {
         try {
             _gameData.useGold(v);
-            this.playCoinSound();
+            this.playCoinSound(false);
             this.refreshGold();
         } catch(e) {
             var errMsg = this.getKey() + ".refreshGold.catched: " + e;
@@ -181,7 +183,7 @@ class GameScene extends BaseScene {
     addGold(v) {
         try {
             _gameData.addGold(v);
-            this.playCoinSound();
+            this.playCoinSound(true);
             this.refreshGold();
         } catch(e) {
             var errMsg = this.getKey() + ".addGold.catched: " + e;
@@ -190,21 +192,9 @@ class GameScene extends BaseScene {
         }
     }
 
-    // add coin sound
-    #addCoinSound() {
+    playCoinSound(isAdd) {
         try {
-            var coin_sound = this.addDestroyableObject( new SoundSpooler("coin_sound_spooler", this, 'coin_drop', 5) );
-            this.#_PV.coinSound = coin_sound;
-        } catch(e) {
-            var errMsg = this.getKey() + ".addCoinSound.catched: " + e;
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    playCoinSound() {
-        try {
-            this.#_PV.coinSound.play();
+            this.playSound( (isAdd === true) ? 'coin_add' : 'coin_use' );
         } catch(e) {
             var errMsg = this.getKey() + ".playCoinSound.catched: " + e;
             console.log(errMsg);
