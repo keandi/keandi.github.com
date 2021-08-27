@@ -70,6 +70,15 @@ class Loader extends ClsObject {
                         }
                         return _scenes.shootthestars;
                     }
+                },
+                {
+                    key: KEY_GAME_ROLLDICE,
+                    getScene: function() {
+                        if (_scenes.rolldice == undefined) {
+                            _scenes.rolldice = new SceneRollDice(60, _gameHost);
+                        }
+                        return _scenes.rolldice;
+                    }
                 }
             ];
 

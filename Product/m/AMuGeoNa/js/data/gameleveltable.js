@@ -39,7 +39,11 @@ class GameLevelTable extends ClsObject {
                 texture: {
                     1: 'STAR',       // GameKind.SHOOTTHESTARS.value == 1
                     2: 'DICE',       // GameKind.ROLLDICE.value == 2
-                }[gamekind.value]
+                }[gamekind.value],
+                sceneKey: {
+                    1: KEY_GAME_SHOOTTHESTARS,       // GameKind.SHOOTTHESTARS.value == 1
+                    2: KEY_GAME_ROLLDICE,       // GameKind.ROLLDICE.value == 2
+                }[gamekind.value],
             };
             
         } catch (e) {

@@ -355,8 +355,8 @@ class SceneLevel extends GameScene {
             }
 
             // 게임 진입
-            let entryGame = function() {
-                _gameHost.switchScene(KEY_GAME_SHOOTTHESTARS);
+            let entryGame = function(li) {
+                _gameHost.switchScene(li.sceneKey);
             };
 
             if (levelInfo.needgold > 0) {
@@ -367,12 +367,12 @@ class SceneLevel extends GameScene {
                     () => { 
                         this.useGold(levelInfo.needgold);
                         this._gameData.save();
-                        entryGame();
+                        entryGame(levelInfo);
                     },
                     () => {}
                 );
             } else {
-                entryGame();
+                entryGame(levelInfo);
             }
             
         } catch(e) {

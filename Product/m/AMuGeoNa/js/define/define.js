@@ -6,6 +6,7 @@ const KEY_INTRO = "intro";
 const KEY_LEVEL = "level";
 const KEY_OPTION = "option";
 const KEY_GAME_SHOOTTHESTARS = "shootthestars";
+const KEY_GAME_ROLLDICE = "rolldice";
 
 // depth
 const DEPTH_MENU = 500;
