@@ -63,9 +63,22 @@ class GameScene extends BaseScene {
                 this.msgboxOk(_gameOption.selectText("경고", "Warning"), 
                 _gameOption.selectText("잘못된 접근입니다.", "The wrong approach."), 
                 ()=>this._gameHost.switchScene(KEY_LEVEL));
+                return false;
             }
+            return true;
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssetsAfter.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // game start
+    onGameStart() {
+        try {
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }

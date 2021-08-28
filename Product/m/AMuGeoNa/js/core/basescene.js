@@ -198,7 +198,8 @@ BaseScene.prototype.loadAssets = function() {
             this.onSerialLoadAssets();          // 상속된 함수에서 add 를 한다.
             if (this._serialLoader == undefined || this._serialLoader.count == 0) {
                 this.onCompleteSerialLoadAllAssets();
-                this.onCompleteSerialLoadAllAssetsAfter();
+                if (this.onCompleteSerialLoadAllAssetsAfter() === false) {return;}
+                this.onGameStart();
                 return;
             }
 
@@ -317,7 +318,8 @@ BaseScene.prototype.onCompleteSerialLoadAsset = function(isAllFinished)
         this.destroySerialLoaderProgress();
         this._assetLoadCompleted = true;
         this.onCompleteSerialLoadAllAssets();
-        this.onCompleteSerialLoadAllAssetsAfter();
+        if (this.onCompleteSerialLoadAllAssetsAfter() === false) {return;}
+        this.onGameStart();
     }
     else
     { // 진행 중  
@@ -334,6 +336,11 @@ BaseScene.prototype.onCompleteSerialLoadAllAssets = function() {
 
 // asset 로딩이 완료되어 다 처리 후 추가 발생 (상속하여 사용)
 BaseScene.prototype.onCompleteSerialLoadAllAssetsAfter = function() {
+    return true;
+}
+
+// 게임의 실제 시작은 여기서 부터 작업하세요 (상속하여 사용)
+BaseScene.prototype.onGameStart = function() {
 
 }
 
