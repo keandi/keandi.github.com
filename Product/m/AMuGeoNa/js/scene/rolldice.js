@@ -56,7 +56,7 @@ class SceneRollDice extends GameScene {
         }, 2 ); */
 
         _resourcePool.setScene(this)
-            .addArgs('dice_sprite');
+            .addArgs('dice_sprite', 'exit_button');
     };    
     
     onCompleteSerialLoadAllAssets() {

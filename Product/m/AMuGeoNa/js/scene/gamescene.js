@@ -306,18 +306,31 @@ class GameScene extends BaseScene {
         }
     }
 
+    // run messagebox callback
+    #callMsgBoxCallback(cb) {
+        try {
+            if (cb != undefined) {
+                this._timerPool.setTimeout(cb, 200);
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".callMsgBoxCallback.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // show msgbox - ok
     msgboxOk(title, message, cb) {
         try {
             let xy = this.getMsgBoxXY();
             if (xy == undefined) { return; }
+
+            let selfIt = this;
             this.#createMsgBox();
 
             this.#_PV.msgbox.showOk(title, message, xy.x, xy.y, ()=>{
-                this.resume();
-                if (cb != undefined) {
-                    this._timerPool.setTimeout(cb, 200);
-                }
+                selfIt.resume();
+                selfIt.#callMsgBoxCallback(cb);
             });
             this.pause();
         } catch(e) {
@@ -332,18 +345,16 @@ class GameScene extends BaseScene {
         try {
             let xy = this.getMsgBoxXY();
             if (xy == undefined) { return; }
+
+            let selfIt = this;
             this.#createMsgBox();
 
             this.#_PV.msgbox.showYesNo(title, message, xy.x, xy.y, ()=>{
-                this.resume();
-                if (cbYes != undefined) {
-                    this._timerPool.setTimeout(cbYes, 200);
-                }
+                selfIt.resume();
+                selfIt.#callMsgBoxCallback(cbYes);
             }, ()=>{
-                this.resume();
-                if (cbNo != undefined) {
-                    this._timerPool.setTimeout(cbNo, 200);
-                }
+                selfIt.resume();
+                selfIt.#callMsgBoxCallback(cbNo);
             });
             this.pause();
         } catch(e) {
