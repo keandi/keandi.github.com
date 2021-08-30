@@ -66,4 +66,9 @@ class DiceSelect extends ClsObject {
             alert(errMsg);
         }
     }
+
+    // visible
+    set Visible(value) {
+        this.#_PV.diceSelect.Visible = value;
+    }
 }

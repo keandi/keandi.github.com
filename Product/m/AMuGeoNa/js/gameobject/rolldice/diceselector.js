@@ -84,4 +84,11 @@ class DiceSelector extends ClsObject {
         }
     }
 
+    // show/hide
+    set Visible(value) {
+        this.#_PV.dices.forEach(element => {
+            element.Visible = value;
+        });
+    }
+
 }

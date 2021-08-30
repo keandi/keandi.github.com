@@ -56,7 +56,7 @@ class SceneRollDice extends GameScene {
         }, 2 ); */
 
         _resourcePool.setScene(this)
-            .addArgs('dice_sprite');
+            .addArgs('dice_sprite', 'dice-1', 'dice-8', 'dice-18', 'dice-24');
     };    
     
     onCompleteSerialLoadAllAssets() {
@@ -115,6 +115,7 @@ class SceneRollDice extends GameScene {
                 this.createHelpButton(_gameOption.selectText(kor, eng), 32 + 16 + 5);
             }
 
+            let selfIt = this;
             let v = this.#_SPV;
 
             // area predefine
@@ -135,11 +136,22 @@ class SceneRollDice extends GameScene {
             // area predefine - dice
             const diceCenterX = buttonCenterX;
             const diceSize = parseInt(contentRc.Width / 5);
-            const diceCenterY = buttonCenterY - buttonHeight - diceSize;
+            const diceCenterY = buttonCenterY - buttonHeight - parseInt(diceSize * 1.5);
 
             // dice
             v.dice = new Dice("dice", this, diceCenterX, diceCenterY, diceCenterX, COORD_ROLLDICE_ROLL_TOP, diceSize, (diceNumber)=>{
-                console.log("end: " + diceNumber);
+                //console.log("end: " + diceNumber);
+
+                let rd = Phaser.Math.Between(1, 4);
+                if (rd === 1) { selfIt.playSound('dice-1'); }
+                else if (rd === 2) { selfIt.playSound('dice-8'); }
+                else if (rd === 3) { selfIt.playSound('dice-18'); }
+                else if (rd === 4) { selfIt.playSound('dice-24'); }
+                
+                v.diceSelector.unselectAll();
+                selfIt.getTimerPool().setTimeout(()=>{ 
+                    v.diceSelector.Visible = true
+                } , 1500);
             });
 
             // cup
@@ -148,7 +160,10 @@ class SceneRollDice extends GameScene {
             v.rollButton = new GOImageButton("rollbutton", this, buttonCenterX, buttonCenterY, 'dice_sprite', 'ROLL_UP', 
                 'dice_sprite', 'ROLL_DOWN', 
                 ()=>{
-                    console.log('roll click');
+                    //console.log('roll click');
+                    v.rollButton.Visible = false;
+                    v.diceSelector.unselectAll();
+                    v.diceSelector.Visible = false;
                     v.dice.roll();
                 }
             );
@@ -158,7 +173,10 @@ class SceneRollDice extends GameScene {
             v.openButton = new GOImageButton("openbutton", this, buttonCenterX, buttonCenterY, 'dice_sprite', 'OPEN_UP', 
                 'dice_sprite', 'OPEN_DOWN', 
                 ()=>{
-                    console.log('open click');
+                    //console.log('open click=> ' + v.diceSelector.SelectedValue + ", dice: " + v.dice.Number);
+                     v.openButton.Visible = false;
+                     v.rollButton.Visible = true;
+                     selfIt.#coinCheck();
                 }
             );
             v.rollButton.setDepth(DEPTH_ROLLDICE_BUTTON);
@@ -166,13 +184,28 @@ class SceneRollDice extends GameScene {
 
             // select dices
             v.diceSelector = new DiceSelector("diceselector", this, selectDiceX, selectDiceY, selectDiceRealSize, selectDiceSize, (number)=>{
-                console.log("selected: " + number);
-                if (number === 1) {
-                    v.diceSelector.unselectAll();
-                }
+                //console.log("selected: " + number);
+                v.openButton.Visible = true;
             });
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // coin check
+    #coinCheck() {
+        try {
+            let v = this.#_SPV;
+
+            if (v.diceSelector.SelectedValue === v.dice.Number) {
+                this.addGold(6);
+            } else {
+                this.useGold(1);
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".coinCheck.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }

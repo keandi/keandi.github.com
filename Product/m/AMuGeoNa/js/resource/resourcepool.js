@@ -87,6 +87,24 @@ class ResourcePool extends ClsObject {
         }
     }
 
+    // load wav
+    #addWav(key, ver) {
+        try {
+            if (ver == undefined) {
+                ver = "";
+            } else {
+                ver = "?v=" + ver;
+            }
+            let audioPath = 'assets/audio/' + key + '.wav' + ver;
+
+            this.#_PV.scene.addSerialLoadAsset( key, () => this.#_PV.scene.load.audio(key, audioPath), 1 );
+        } catch (e) {
+            var errMsg = this.getExpMsg("addAtlas", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // add load
     add(key) {
         try {
@@ -117,6 +135,13 @@ class ResourcePool extends ClsObject {
                 case 'coin_add':
                 case 'coin_use':
                     this.#addOgg(key);
+                    break;
+
+                case 'dice-1':
+                case 'dice-8':
+                case 'dice-18':
+                case 'dice-24':
+                    this.#addWav(key);
                     break;
             }
         } catch (e) {

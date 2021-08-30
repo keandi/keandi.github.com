@@ -131,6 +131,6 @@ class GOSelectImageButton extends DestroyableObject {
 
     // set visible
     set Visible(value) {
-        this.#_PV.image.Visible = value;
+        this.#_PV.image.visible = value;
     }
 }
