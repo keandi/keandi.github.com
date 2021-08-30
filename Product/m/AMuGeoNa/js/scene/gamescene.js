@@ -42,7 +42,7 @@ class GameScene extends BaseScene {
             () => this.load.audio('coin_drop', 'assets/audio/coin_drop.mp3'), 1 ); */
 
         _resourcePool.setScene(this)
-            .addArgs('coins', 'msgbox_buttons', 'coin_add', 'coin_use');
+            .addArgs('coins', 'msgbox_buttons', 'coin_add', 'coin_use', 'exit_button', 'help_button');
     };    
     
     onCompleteSerialLoadAllAssets() {
@@ -173,6 +173,31 @@ class GameScene extends BaseScene {
                 })
             );
             exit_button.setDepth(DEPTH_MENU_BUTTON);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".createExitButton.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // create help button
+    createHelpButton(content, beginX) {
+        try {
+
+            let selfIt = this;
+
+            // button
+            const topMenuRc = this.TopMenuRc;
+            const button_x = beginX + 16; // 16 = 아이콘 사이즈 / 2
+            const button_y = topMenuRc.CenterY;
+            let button = this.addDestroyableObject( new GOImageButton("help_button", this, button_x, button_y, 
+                'help_button', 'BTN_UP', 'help_button', 'BTN_DOWN',
+                () => {
+                    selfIt.msgboxOk( 'HELP', content );
+                })
+            );
+            button.setDepth(DEPTH_MENU_BUTTON);
 
         } catch(e) {
             var errMsg = this.getKey() + ".createExitButton.catched: " + e;

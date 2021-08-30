@@ -98,6 +98,7 @@ class ResourcePool extends ClsObject {
                 case 'level_entry_characters':
                 case 'dice_sprite':
                 case 'exit_button':
+                case 'help_button':
                     this.#addAtlas(key, 1);
                     break;
 

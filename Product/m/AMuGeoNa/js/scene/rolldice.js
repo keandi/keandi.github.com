@@ -56,7 +56,7 @@ class SceneRollDice extends GameScene {
         }, 2 ); */
 
         _resourcePool.setScene(this)
-            .addArgs('dice_sprite', 'exit_button');
+            .addArgs('dice_sprite');
     };    
     
     onCompleteSerialLoadAllAssets() {
@@ -103,5 +103,21 @@ class SceneRollDice extends GameScene {
     // exit 발생 시 exit 진행 및 후처리를 결정한다. 
     onExitTry(cb) {
         this.msgboxYesNo("h", 'really?', ()=>cb());
+    }
+
+     // game start
+     onGameStart() {
+        try {
+            // help button
+            {
+                let kor = "- 주사위 - \r\n맞추면? +6G\r\n틀리면? -1G";
+                let eng = "- Dice - \r\nif it fits? +6G\r\nwrong? -1G";
+                this.createHelpButton(_gameOption.selectText(kor, eng), 32 + 16 + 5);
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".onGameStart.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

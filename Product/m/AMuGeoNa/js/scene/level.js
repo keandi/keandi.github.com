@@ -97,7 +97,6 @@ class SceneLevel extends GameScene {
             super.onCompleteSerialLoadAllAssets();
 
             let selfIt = this;
-            _gameData.LastLevel = 2;
 
             //
             this.printTitle(_gameOption.selectText('게임 선택', 'Game selection'));
