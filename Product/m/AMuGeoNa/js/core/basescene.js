@@ -1055,3 +1055,8 @@ BaseScene.prototype.playSound = function(resource) {
 
 //// sound pool -->
 ///////////////////////////////
+
+// get timer pool
+BaseScene.prototype.getTimerPool = function() {
+    return this._timerPool;
+}

@@ -119,18 +119,50 @@ class SceneRollDice extends GameScene {
 
             // area predefine
             const contentRc = this.ContentRc;
+
+            // area predefine - dice selector
             const selectDiceSize = parseInt(contentRc.Width / 8);
             const selectDiceRealSize = selectDiceSize - 8;
             const selectDiceX = parseInt(selectDiceSize + (selectDiceSize / 2));
             const selectDiceY = parseInt(contentRc.Bottom - (selectDiceSize / 2));
 
+            // area predefine - button
+            const buttonCenterX = contentRc.CenterX;
+            const buttonHeight = 69; // 실제 버튼 이미지 높이
+            const buttonBottom = parseInt(contentRc.Bottom - selectDiceSize) - 5;
+            const buttonCenterY = parseInt( buttonBottom - (buttonHeight / 2) );
+
+            // area predefine - dice
+            const diceCenterX = buttonCenterX;
+            const diceSize = parseInt(contentRc.Width / 5);
+            const diceCenterY = buttonCenterY - buttonHeight - diceSize;
+
             // dice
+            v.dice = new Dice("dice", this, diceCenterX, diceCenterY, diceCenterX, COORD_ROLLDICE_ROLL_TOP, diceSize, (diceNumber)=>{
+                console.log("end: " + diceNumber);
+            });
 
             // cup
 
             // roll button
+            v.rollButton = new GOImageButton("rollbutton", this, buttonCenterX, buttonCenterY, 'dice_sprite', 'ROLL_UP', 
+                'dice_sprite', 'ROLL_DOWN', 
+                ()=>{
+                    console.log('roll click');
+                    v.dice.roll();
+                }
+            );
+            v.rollButton.setDepth(DEPTH_ROLLDICE_BUTTON);
 
             // open button
+            v.openButton = new GOImageButton("openbutton", this, buttonCenterX, buttonCenterY, 'dice_sprite', 'OPEN_UP', 
+                'dice_sprite', 'OPEN_DOWN', 
+                ()=>{
+                    console.log('open click');
+                }
+            );
+            v.rollButton.setDepth(DEPTH_ROLLDICE_BUTTON);
+            v.openButton.Visible = false;
 
             // select dices
             v.diceSelector = new DiceSelector("diceselector", this, selectDiceX, selectDiceY, selectDiceRealSize, selectDiceSize, (number)=>{

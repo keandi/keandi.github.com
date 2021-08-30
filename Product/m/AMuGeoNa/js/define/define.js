@@ -63,6 +63,7 @@ const COORD_OPTIONMENU_YGAP = 10;   // 옵션내 제목과 선택 메뉴간의 �
 const COORD_OPTIONMENU_XGAP = 10;   // 옵션내 선택 메뉴간의 높이
 const COORD_OPTION_YGAP = 20;        // 옵션간의 높이
 const COORD_OPTION_BEGIN_TOP = 100; // 옵션 시작 Y
+const COORD_ROLLDICE_ROLL_TOP = -50;    // 주사위 굴리기 모션 상위 지점
 
 // size
 const SIZE_MSGBOX_MAX_WIDTH = 300;
@@ -79,3 +80,6 @@ const OPACITY_LEVELBLOCK_BODY = 0.4;
 
 // max
 const SOUNDPOOL_MAX = 5;
+
+// interval
+const INTERVAL_ROLLDICE_MOVE = 60;
