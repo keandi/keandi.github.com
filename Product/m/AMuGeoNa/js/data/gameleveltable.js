@@ -25,7 +25,8 @@ class GameLevelTable extends ClsObject {
                     needgold: 0,
                     limitgold: 0,
                     enable: false,
-                    texture: 'QUESTION'
+                    arg: {texture: 'QUESTION', sceneKey: ''}
+                    //texture: 'QUESTION'
                 };
             }
             
@@ -36,14 +37,18 @@ class GameLevelTable extends ClsObject {
                 needgold: needgold,
                 limitgold: limitgold,
                 enable: true,
-                texture: {
+                arg: {
+                    1: {texture: 'STAR', sceneKey: KEY_GAME_SHOOTTHESTARS}, // GameKind.SHOOTTHESTARS.value == 1
+                    2: {texture: 'DICE', sceneKey: KEY_GAME_ROLLDICE}, // GameKind.ROLLDICE.value == 1
+                }[gamekind.value],
+                /*texture: {
                     1: 'STAR',       // GameKind.SHOOTTHESTARS.value == 1
                     2: 'DICE',       // GameKind.ROLLDICE.value == 2
                 }[gamekind.value],
                 sceneKey: {
                     1: KEY_GAME_SHOOTTHESTARS,       // GameKind.SHOOTTHESTARS.value == 1
                     2: KEY_GAME_ROLLDICE,       // GameKind.ROLLDICE.value == 2
-                }[gamekind.value],
+                }[gamekind.value], */
             };
             
         } catch (e) {
@@ -59,7 +64,8 @@ class GameLevelTable extends ClsObject {
             needgold: 0,
             limitgold: 0,
             enable: false,
-            texture: 'QUESTION'
+            arg: {texture: 'QUESTION', sceneKey: ''}
+            //texture: 'QUESTION'
         };
     }
 

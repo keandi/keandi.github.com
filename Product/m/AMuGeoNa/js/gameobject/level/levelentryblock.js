@@ -147,7 +147,7 @@ class LevelEntryBlock extends DestroyableObject {
             let v = this.#_PV;
 
             v.levelInfo = _gameLevelTable.getInfo(level);
-            let imageInfo = v.representationImage.getImage(v.levelInfo.texture, v.rpImg.imgInfo);
+            let imageInfo = v.representationImage.getImage(v.levelInfo.arg.texture, v.rpImg.imgInfo);
 
             setPixelScaleXorY(imageInfo.obj, v.rpImg.smallerSize);
             setPosition(imageInfo.obj, v.rpImg.rect.CenterX, v.rpImg.rect.CenterY);

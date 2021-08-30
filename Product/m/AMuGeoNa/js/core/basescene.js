@@ -103,11 +103,11 @@ BaseScene.prototype.update = function(time, delta) {
     //console.log("upate time: " + time + ", delta: " + delta);
     this._gameHost.Time += delta;
     this._fps.frameTime += delta;
-    this.publishUpdate();
     
     //console.log("mielscene update" + this._fps.frameTime + " / " + this._fps._frameTimeLimit);
     if (this._fps.frameTime > this._fps.frameTimeLimit) {
         this._fps.frameTime = 0;
+        this.publishUpdate(); // 프레임 수준에 맞게 전달
         this.onUpdate();
     }
 }

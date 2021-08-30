@@ -114,6 +114,31 @@ class SceneRollDice extends GameScene {
                 let eng = "- Dice - \r\nif it fits? +6G\r\nwrong? -1G";
                 this.createHelpButton(_gameOption.selectText(kor, eng), 32 + 16 + 5);
             }
+
+            let v = this.#_SPV;
+
+            // area predefine
+            const contentRc = this.ContentRc;
+            const selectDiceSize = parseInt(contentRc.Width / 8);
+            const selectDiceRealSize = selectDiceSize - 8;
+            const selectDiceX = parseInt(selectDiceSize + (selectDiceSize / 2));
+            const selectDiceY = parseInt(contentRc.Bottom - (selectDiceSize / 2));
+
+            // dice
+
+            // cup
+
+            // roll button
+
+            // open button
+
+            // select dices
+            v.diceSelector = new DiceSelector("diceselector", this, selectDiceX, selectDiceY, selectDiceRealSize, selectDiceSize, (number)=>{
+                console.log("selected: " + number);
+                if (number === 1) {
+                    v.diceSelector.unselectAll();
+                }
+            });
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);

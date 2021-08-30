@@ -361,7 +361,7 @@ class SceneLevel extends GameScene {
             // 게임 진입
             let entryGame = function(li) {
                 _gameData.EntryGameLevelInfo = li;
-                _gameHost.switchScene(li.sceneKey);
+                _gameHost.switchScene(li.arg.sceneKey);
             };
 
             if (levelInfo.needgold > 0) {
