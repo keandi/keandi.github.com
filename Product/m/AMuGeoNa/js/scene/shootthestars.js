@@ -72,6 +72,37 @@ class SceneShootTheStars extends GameScene {
         }
     }
 
+    // game object pool 이용시 생성 과정을 여기에서 구현
+    onRegisterObjectCreateCallback() {
+        try {
+            super.onRegisterObjectCreateCallback();
+        } catch(e) {
+            var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+     // game start
+     onGameStart() {
+        try {
+            // help button
+            {
+                /*let kor = "- 주사위 - \r\n맞추면? +6G\r\n틀리면? -1G";
+                let eng = "- Dice - \r\nif it fits? +6G\r\nwrong? -1G";
+                this.createHelpButton(_gameOption.selectText(kor, eng), 32 + 16 + 5); */
+            }
+
+            let selfIt = this;
+            let v = this.#_SPV;
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".onGameStart.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
 
      // get msgbox x, y (상속하여 반환 필요)
      getMsgBoxXY() {
