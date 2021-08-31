@@ -1,9 +1,9 @@
-class GameObject extends DestroyableObject {
+class GameObject extends ClsObject {
     #_PV = {};
 
     // ctor
     constructor(name, scene) {
-        super(name, scene);
+        super(name);
 
         try {
             this.#_PV.scene = scene;
