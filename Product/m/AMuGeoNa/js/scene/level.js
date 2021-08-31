@@ -152,6 +152,7 @@ class SceneLevel extends GameScene {
             //this.useGold(2000);
             //_gameData.LastLevel = 0;
             //_gameData.save();
+            //this.addGold(3);
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);
@@ -354,6 +355,7 @@ class SceneLevel extends GameScene {
     // 게임 진입 클릭
     onEntryTry(entryBlock) {
         try {
+            let selfIt = this;
             this.playSound('twink');
             let levelInfo = entryBlock.LevelInfo;
 
@@ -383,8 +385,8 @@ class SceneLevel extends GameScene {
                 var eng = stringFormat("Admission: {0}\r\nWould you like to pay?", entryFee);
                 this.msgboxYesNo(_gameOption.selectText("입장료", "Admission"), _gameOption.selectText(kor, eng),
                     () => { 
-                        this.useGold(levelInfo.needgold);
-                        this._gameData.save();
+                        selfIt.useGold(levelInfo.needgold);
+                        _gameData.save();
                         entryGame(levelInfo);
                     },
                     () => {}

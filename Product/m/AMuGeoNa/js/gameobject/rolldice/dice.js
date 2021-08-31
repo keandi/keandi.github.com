@@ -88,12 +88,14 @@ class Dice extends DestroyableObject {
     }
 
     //begin roll
-    roll() {
+    roll(downMiddleCallback) {
         try {
 
             let selfIt = this;
             let v = this.#_PV;
             let timerPool = v.scene.getTimerPool();
+            let downMiddleSignal = false;
+            let downMiddleY = parseInt(v.coords.stand.y / 2);
 
             //
             v.object.value.visible = false;
@@ -104,11 +106,11 @@ class Dice extends DestroyableObject {
             //
             let isToUp = true;
             let rollTop = v.coords.rollTop.y - Phaser.Math.Between(0, 150);
-            let upVelocity = 80 + Phaser.Math.Between(0, 80);
+            let upVelocity = Phaser.Math.Between(VELOCITY_DICE_MOVE_MIN, VELOCITY_DICE_MOVE_MAX);
 
             let toUp = function() {
                 if (isToUp === false) { return; }
-                if (objectMoveTowardsY(v.object.roll, rollTop, 80) === true) {
+                if (objectMoveTowardsY(v.object.roll, rollTop, upVelocity) === true) {
                     isToUp = false;
                     //console.log("up");
                     return false;
@@ -119,9 +121,14 @@ class Dice extends DestroyableObject {
 
             let toDown = function() {
                 if (isToUp === true) { return; }
-                if (objectMoveTowardsY(v.object.roll, v.coords.stand.y, 80) === true) {
+                if (objectMoveTowardsY(v.object.roll, v.coords.stand.y, upVelocity) === true) {
                     //console.log("down");
                     return false;
+                }
+
+                if (downMiddleSignal === false && v.object.roll.y >= downMiddleY) {
+                    downMiddleSignal = true;
+                    downMiddleCallback();
                 }
 
                 return true;

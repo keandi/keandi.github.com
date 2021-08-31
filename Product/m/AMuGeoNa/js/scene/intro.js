@@ -154,6 +154,28 @@ class SceneIntro extends BaseScene {
             this.#_SPV.firework.visible = true;
             firework.play('firework');
 
+            switch (Phaser.Math.Between(1, 5))
+            {
+                case 1:
+                    firework.setTint(0xFF0000);
+                    break;
+                
+                case 2:
+                    firework.setTint(0xFF00FF);
+                    break;
+
+                case 3:
+                    firework.setTint(0x00FF00);
+                    break;
+
+                case 4:
+                    firework.setTint(0x0000FF);
+                    break;
+
+                default:
+                    firework.setTint(0xFFFFFF);
+                    break;
+            }
 
         } catch(e) {
             var errMsg = this.getKey() + ".randomFireWork.catched: " + e;

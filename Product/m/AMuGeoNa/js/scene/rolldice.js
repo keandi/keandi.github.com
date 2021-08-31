@@ -142,11 +142,18 @@ class SceneRollDice extends GameScene {
             // area predefine - dice
             const diceCenterX = buttonCenterX;
             const diceSize = parseInt(contentRc.Width / 5);
-            const diceCenterY = buttonCenterY - buttonHeight - parseInt(diceSize * 1.5);
+            const diceCenterY = buttonCenterY - buttonHeight - diceSize;
+
+            // area predefine - dice cup
+            const diceCupCenterX = diceCenterX;
+            const diceCupSize = parseInt(contentRc.Height / 2);
+            const diceCupBottomY = diceCenterY + diceSize + 5;
 
             // dice
             v.dice = new Dice("dice", this, diceCenterX, diceCenterY, diceCenterX, COORD_ROLLDICE_ROLL_TOP, diceSize, (diceNumber)=>{
                 //console.log("end: " + diceNumber);
+
+                v.diceCup.forcedMoveToBottom(); 
 
                 let rd = Phaser.Math.Between(1, 4);
                 if (rd === 1) { selfIt.playSound('dice-1'); }
@@ -161,6 +168,7 @@ class SceneRollDice extends GameScene {
             });
 
             // cup
+            v.diceCup = new DiceCup("dicecup", this, diceCupCenterX, diceCupBottomY, COORD_ROLLDICE_CUP_HIDEBOTTOM, diceCupSize);
 
             // roll button
             v.rollButton = new GOImageButton("rollbutton", this, buttonCenterX, buttonCenterY, 'dice_sprite', 'ROLL_UP', 
@@ -170,7 +178,7 @@ class SceneRollDice extends GameScene {
                     v.rollButton.visible = false;
                     v.diceSelector.unselectAll();
                     v.diceSelector.visible = false;
-                    v.dice.roll();
+                    v.diceCup.moveToTop(()=>v.dice.roll( ()=>v.diceCup.moveToDown() ));
                 }
             );
             v.rollButton.setDepth(DEPTH_ROLLDICE_BUTTON);
@@ -182,16 +190,19 @@ class SceneRollDice extends GameScene {
                     //console.log('open click=> ' + v.diceSelector.SelectedValue + ", dice: " + v.dice.Number);
 
                     v.openButton.visible = false;
-                    selfIt.#coinCheck();
-                    if (v.tryCount.decrease() <= 0) { 
-                        v.diceSelector.unselectAll();
-                        v.diceSelector.visible = false;
-                        selfIt.#displayTryCount();
-                        return; 
-                    }
 
-                    v.rollButton.visible = true;
-                    selfIt.#displayTryCount();
+                    v.diceCup.moveToTop(()=>{
+                        selfIt.#coinCheck();
+                        if (v.tryCount.decrease() <= 0) { 
+                            v.diceSelector.unselectAll();
+                            v.diceSelector.visible = false;
+                            selfIt.#displayTryCount();
+                            return; 
+                        }
+    
+                        v.rollButton.visible = true;
+                        selfIt.#displayTryCount();
+                    });
                 }
             );
             v.rollButton.setDepth(DEPTH_ROLLDICE_BUTTON);
@@ -204,7 +215,7 @@ class SceneRollDice extends GameScene {
             });
 
             // 남은 횟수
-            v.tryCountText = this.addDestroyableObject( addText(this, this.ContentRc.Right + 5, this.ContentRc.Top + 5, "횟수를 계산 중...") ); 
+            v.tryCountText = this.addDestroyableObject( addText(this, this.ContentRc.Right, this.ContentRc.Top + 5, "횟수를 계산 중...") ); 
             v.tryCountText.setOrigin(1.1, 0);
             v.tryCountText.setDepth(DEPTH_ROLLDICE_BUTTON);
             v.tryCount = new CountZero("rolldice_zerocount", COUNTLIMIT_ROLLDICE_TRY, ()=>{
@@ -267,7 +278,12 @@ class SceneRollDice extends GameScene {
             let eng = stringFormat("- Complete the game -\r\nReward: {0}G", gold);
 
             this.addGold(3);
-            this.msgboxOk(_gameOption.selectText("완료", "Finish"), _gameOption.selectText(kor, eng), ()=>this.gameEnd(false));
+
+            let selfIt = this;
+            this.getTimerPool().setTimeout(()=>{
+                selfIt.msgboxOk(_gameOption.selectText("완료", "Finish"), _gameOption.selectText(kor, eng), ()=>selfIt.gameEnd(false));
+            }, 1500);
+            
         } catch(e) {
             var errMsg = this.getKey() + ".onGameFinished.catched: " + e;
             console.log(errMsg);

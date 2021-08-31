@@ -300,11 +300,13 @@ class GameScene extends BaseScene {
         }
     }
 
-    useGold(v) {
+    useGold(v, isNoText) {
         try {
             _gameData.useGold(v);
             this.playCoinSound(false);
-            this.getGameObject('useCoin').run(v);
+            if (isNoText !== true) {
+                this.getGameObject('useCoin').run(v);
+            }
             this.refreshGold();
         } catch(e) {
             var errMsg = this.getKey() + ".refreshGold.catched: " + e;
@@ -313,11 +315,13 @@ class GameScene extends BaseScene {
         }
     }
 
-    addGold(v) {
+    addGold(v, isNoText) {
         try {
             _gameData.addGold(v);
             this.playCoinSound(true);
-            this.getGameObject('addCoin').run(v);
+            if (isNoText !== true) {
+                this.getGameObject('addCoin').run(v);
+            }
             this.refreshGold();
         } catch(e) {
             var errMsg = this.getKey() + ".addGold.catched: " + e;

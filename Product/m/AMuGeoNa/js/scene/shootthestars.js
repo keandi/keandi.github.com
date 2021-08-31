@@ -78,4 +78,14 @@ class SceneShootTheStars extends GameScene {
          const contentRc = this.ContentRc;
          return { x: contentRc.CenterX, y: contentRc.CenterY };
     }
+
+    // 게임 강제종료 처리 (반드시 상속 구현 필요)
+    gameUserExit() {
+        this.gameEnd(true);
+    }
+
+    // 게임 정상종료 처리
+    gameFinished() {
+        this.gameEnd(false);
+    }
 }

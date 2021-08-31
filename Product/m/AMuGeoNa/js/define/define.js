@@ -67,6 +67,7 @@ const COORD_OPTIONMENU_XGAP = 10;   // 옵션내 선택 메뉴간의 높이
 const COORD_OPTION_YGAP = 20;        // 옵션간의 높이
 const COORD_OPTION_BEGIN_TOP = 100; // 옵션 시작 Y
 const COORD_ROLLDICE_ROLL_TOP = -50;    // 주사위 굴리기 모션 상위 지점
+const COORD_ROLLDICE_CUP_HIDEBOTTOM = -50;    // 주사위 컵 모션 상위 bottom 지점
 
 // size
 const SIZE_MSGBOX_MAX_WIDTH = 300;
@@ -89,12 +90,18 @@ const SOUNDPOOL_MAX = 5;
 // interval
 const INTERVAL_ROLLDICE_MOVE = 60;
 const INTERVAL_COINTEXT_MOVE = 60;
+const INTERVAL_DICECUP_UP_MOVE = 50;
+const INTERVAL_DICECUP_DOWN_MOVE = 50;
 
 // velocity
 const VELOCITY_COINTEXT = 5;
+const VELOCITY_DICE_MOVE_MIN = 65;
+const VELOCITY_DICE_MOVE_MAX = 110;
+const VELOCITY_DICECUP_UP = 80;
+const VELOCITY_DICECUP_DOWN = 160;
 
 // font size
 const FONTSIZE_COINACTIONTEXT = 14;
 
 // count limit
-const COUNTLIMIT_ROLLDICE_TRY = 3;
+const COUNTLIMIT_ROLLDICE_TRY = 10;
