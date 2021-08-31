@@ -44,7 +44,7 @@ class GameTimerPool extends DestroyableObject {
                 var id = this.#_PV.idIssue.Next;
 
                 if (this.#_PV.timers.has(id) === false) {
-                    return this.#_PV.idIssue;
+                    return id;
                 }
                 tryCount++;
 
@@ -67,14 +67,32 @@ class GameTimerPool extends DestroyableObject {
 
             //
             let timerObj = v.timers.get(id);
+
+            //console.log("timer-pool remove: " + id + ", objId: " + timerObj.id);
+
             timerObj.timer.destroy();
             v.timers.delete(id);
+
+            //this.#dbgPrint_existTimerIds();
              
          } catch (e) {
              var errMsg = this.getExpMsg("remove", e);
              console.log(errMsg);
              alert(errMsg);
          }
+    }
+
+    #dbgPrint_existTimerIds() {
+        let v = this.#_PV;
+        if (v.timers.size <= 0) {
+            console.log("no more timer id");
+        } else {
+            var ids = "";
+            v.timers.forEach(timerObj => {
+                ids += timerObj.id + ", ";
+            });
+            console.log("exist timers: " + ids);
+        }
     }
 
     // setTimeout
@@ -84,11 +102,14 @@ class GameTimerPool extends DestroyableObject {
             let v = this.#_PV;
 
             let timerObj = {};
-            timerObj.timer = new GameTimeout("pool_gametimeout", v.scene, interval, ()=>{
+            timerObj.id = this.#NewId;
+            timerObj.timer = new GameTimeout("pool_gametimeout_" + timerObj.id, v.scene, interval, ()=>{
+                //console.log("timer-pool timeout remove try: " + timerObj.id);
                 selfIt.remove(timerObj.id);
                 cb();
             }, true);
-            timerObj.id = this.#NewId;
+            
+            //console.log("timer-pool timeout set: " + timerObj.id);
             v.timers.set(timerObj.id, timerObj)
              
          } catch (e) {
@@ -104,11 +125,13 @@ class GameTimerPool extends DestroyableObject {
             let v = this.#_PV;
 
             let timerObj = {};
-            timerObj.timer = new GameInterval("pool_gametinterval", v.scene, interval, ()=>{
+            timerObj.id = this.#NewId;
+            timerObj.timer = new GameInterval("pool_gametinterval_" + timerObj.id, v.scene, interval, ()=>{
                 cb();
             }, true);
-            timerObj.id = this.#NewId;
             v.timers.set(timerObj.id, timerObj)
+
+            //console.log("timer-pool set: " + timerObj.id);
 
             return timerObj.id;
              

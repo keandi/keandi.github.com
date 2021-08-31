@@ -100,9 +100,15 @@ class SceneRollDice extends GameScene {
         }
     }
 
-    // exit 발생 시 exit 진행 및 후처리를 결정한다. 
-    onExitTry(cb) {
-        this.msgboxYesNo("h", 'really?', ()=>cb());
+    // game object pool 이용시 생성 과정을 여기에서 구현
+    onRegisterObjectCreateCallback() {
+        try {
+            super.onRegisterObjectCreateCallback();
+        } catch(e) {
+            var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
      // game start
@@ -150,7 +156,7 @@ class SceneRollDice extends GameScene {
                 
                 v.diceSelector.unselectAll();
                 selfIt.getTimerPool().setTimeout(()=>{ 
-                    v.diceSelector.Visible = true
+                    v.diceSelector.visible = true
                 } , 1500);
             });
 
@@ -161,9 +167,9 @@ class SceneRollDice extends GameScene {
                 'dice_sprite', 'ROLL_DOWN', 
                 ()=>{
                     //console.log('roll click');
-                    v.rollButton.Visible = false;
+                    v.rollButton.visible = false;
                     v.diceSelector.unselectAll();
-                    v.diceSelector.Visible = false;
+                    v.diceSelector.visible = false;
                     v.dice.roll();
                 }
             );
@@ -174,19 +180,37 @@ class SceneRollDice extends GameScene {
                 'dice_sprite', 'OPEN_DOWN', 
                 ()=>{
                     //console.log('open click=> ' + v.diceSelector.SelectedValue + ", dice: " + v.dice.Number);
-                     v.openButton.Visible = false;
-                     v.rollButton.Visible = true;
-                     selfIt.#coinCheck();
+
+                    v.openButton.visible = false;
+                    selfIt.#coinCheck();
+                    if (v.tryCount.decrease() <= 0) { 
+                        v.diceSelector.unselectAll();
+                        v.diceSelector.visible = false;
+                        selfIt.#displayTryCount();
+                        return; 
+                    }
+
+                    v.rollButton.visible = true;
+                    selfIt.#displayTryCount();
                 }
             );
             v.rollButton.setDepth(DEPTH_ROLLDICE_BUTTON);
-            v.openButton.Visible = false;
+            v.openButton.visible = false;
 
             // select dices
             v.diceSelector = new DiceSelector("diceselector", this, selectDiceX, selectDiceY, selectDiceRealSize, selectDiceSize, (number)=>{
                 //console.log("selected: " + number);
-                v.openButton.Visible = true;
+                v.openButton.visible = true;
             });
+
+            // 남은 횟수
+            v.tryCountText = this.addDestroyableObject( addText(this, this.ContentRc.Right + 5, this.ContentRc.Top + 5, "횟수를 계산 중...") ); 
+            v.tryCountText.setOrigin(1.1, 0);
+            v.tryCountText.setDepth(DEPTH_ROLLDICE_BUTTON);
+            v.tryCount = new CountZero("rolldice_zerocount", COUNTLIMIT_ROLLDICE_TRY, ()=>{
+                selfIt.gameFinished();
+            });
+            this.#displayTryCount();
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);
@@ -206,6 +230,46 @@ class SceneRollDice extends GameScene {
             }
         } catch(e) {
             var errMsg = this.getKey() + ".coinCheck.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // display try count
+    #displayTryCount() {
+        try {
+            let v = this.#_SPV;
+
+            v.tryCountText.setText( _gameOption.selectText("남은 횟수: ", "Remaining number: ") + v.tryCount.Count );
+        } catch(e) {
+            var errMsg = this.getKey() + ".displayTryCount.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 게임 강제종료 처리
+    gameUserExit() {
+        try {
+            this.gameEnd(true);
+        } catch(e) {
+            var errMsg = this.getKey() + ".gameUserExit.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 게임 정상종료 처리
+    gameFinished() {
+        try {
+            let gold = numberWithCommas(3);
+            let kor = stringFormat("- 게임 완료 -\r\n보상: {0}G", gold);
+            let eng = stringFormat("- Complete the game -\r\nReward: {0}G", gold);
+
+            this.addGold(3);
+            this.msgboxOk(_gameOption.selectText("완료", "Finish"), _gameOption.selectText(kor, eng), ()=>this.gameEnd(false));
+        } catch(e) {
+            var errMsg = this.getKey() + ".onGameFinished.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }

@@ -146,6 +146,19 @@ class SceneLevel extends GameScene {
         // nothing. 구현하여 게임 접근 체크를 하지 않도록 한다.
     }
 
+    // game start
+    onGameStart() {
+        try {
+            //this.useGold(2000);
+            //_gameData.LastLevel = 0;
+            //_gameData.save();
+        } catch(e) {
+            var errMsg = this.getKey() + ".onGameStart.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // make level objects
     #makeLevelObjects() {
         try {

@@ -7,6 +7,7 @@ class GameScene extends BaseScene {
             super(fps, gameHost);
 
             this.#_PV.isNeedExitButton = true;
+            this.#_PV.isNeedUserExitQuery = true;
         } catch (e) {
             var errMsg = this.getKey() + ".ctor.catched: " + e;
             console.log(errMsg);
@@ -17,6 +18,11 @@ class GameScene extends BaseScene {
     // exit 버튼 필요여부 설정. 
     set IsNeedExitButton(value) {
         this.#_PV.isNeedExitButton = value;
+    }
+
+    // value: true-사용자 질문 필요, false-정상 exit 처리
+    set IsNeedUserExitQuery(value) {
+        this.#_PV.isNeedUserExitQuery = value;
     }
 
     onSerialLoadAssets() {
@@ -68,6 +74,35 @@ class GameScene extends BaseScene {
             return true;
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssetsAfter.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // game object pool 이용시 생성 과정을 여기에서 구현
+    onRegisterObjectCreateCallback() {
+        try {
+            super.registerGameObjectCreateCallback();
+
+            //
+            let selfIt = this;
+            let coinXY = {
+               x: this.#_PV.coinText.x,
+               y: this.BottomMenuRc.Top
+            };
+            // this.#_PV.coinText
+
+            // add coin text
+            this.registerGameObjectCreateCallback('addCoin', ()=>{
+                return new CoinTextAction("cta_add", selfIt, coinXY.x, coinXY.y, true);
+            });
+
+            // use coin text
+            this.registerGameObjectCreateCallback('useCoin', ()=>{
+                return new CoinTextAction("cta_use", selfIt, coinXY.x, coinXY.y, false);
+            });
+        } catch(e) {
+            var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -169,7 +204,17 @@ class GameScene extends BaseScene {
             let exit_button = this.addDestroyableObject( new GOImageButton("exit_button", this, exit_button_x, exit_button_y, 
                 'exit_button', 'BTN_UP', 'exit_button', 'BTN_DOWN',
                 () => {
-                    selfIt.onExitTry( ()=>_gameHost.switchScene(KEY_LEVEL) );
+                    if (selfIt.#_PV.isNeedUserExitQuery === false) {
+                        selfIt.gameEnd(); //param 을 비워서 scene만 바꿈
+                        return;
+                    }
+
+                    let kor = "게임을 종료하시겠습니까?";
+                    let eng = "Are you sure\r\nyou want to quit the game?";
+                    selfIt.msgboxYesNo(_gameOption.selectText("질문", "Quetion"),
+                        _gameOption.selectText(kor, eng), ()=>{
+                            selfIt.gameUserExit();
+                        });
                 })
             );
             exit_button.setDepth(DEPTH_MENU_BUTTON);
@@ -204,11 +249,6 @@ class GameScene extends BaseScene {
             console.log(errMsg);
             alert(errMsg);
         }
-    }
-
-    // exit 발생 시 exit 진행 및 후처리를 결정한다. (상속후 사용)
-    onExitTry(cb) {
-        cb();
     }
 
     // 하단 메뉴 설정
@@ -264,6 +304,7 @@ class GameScene extends BaseScene {
         try {
             _gameData.useGold(v);
             this.playCoinSound(false);
+            this.getGameObject('useCoin').run(v);
             this.refreshGold();
         } catch(e) {
             var errMsg = this.getKey() + ".refreshGold.catched: " + e;
@@ -276,6 +317,7 @@ class GameScene extends BaseScene {
         try {
             _gameData.addGold(v);
             this.playCoinSound(true);
+            this.getGameObject('addCoin').run(v);
             this.refreshGold();
         } catch(e) {
             var errMsg = this.getKey() + ".addGold.catched: " + e;
@@ -410,5 +452,35 @@ class GameScene extends BaseScene {
     }
 
     //// msgbox -->
+    ////////////////////////////////////
+
+    ////////////////////////////////////
+    //// <!-- game end
+    //
+    gameEnd(isGiveup) {
+        if (isGiveup != undefined) {
+            if (isGiveup === false) {
+                _gameData.setLastLevel(_gameData.EntryGameLevelInfo.level);
+            }
+    
+            // 현재 정보 저장
+            _gameData.save();
+        }
+
+        // go level
+        this._gameHost.switchScene(KEY_LEVEL);
+    }
+
+    // 게임 강제종료 처리 (반드시 상속 구현 필요)
+    gameUserExit() {
+        alert("'gameUserExit' is not implemented.");
+    }
+
+    // 게임 정상종료 처리
+    gameFinished() {
+        alert("'gameFinished' is not implemented.");
+    }
+
+    //// game end -->
     ////////////////////////////////////
 }

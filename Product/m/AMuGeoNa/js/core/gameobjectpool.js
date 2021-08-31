@@ -2,13 +2,12 @@ class GameObjectPool extends DestroyableObject {
     #_PV = {};
 
     //ctor
-    constructor(name, scene, max) {
+    constructor(name, scene) {
         try {
             super(name, scene);
 
             this.#_PV.scene = scene;
             this.#_PV.gameObjects = new Map(); //[name, {createCb, [object, use]}], name=texture_frame
-            this.#_PV.max = max;
             this.#_PV.objectRef = new Map(); // [object, [object, use]] 
             
         } catch (e) {
@@ -27,11 +26,9 @@ class GameObjectPool extends DestroyableObject {
             this.#_PV.gameObjects.forEach(element => {
                 if (element.objects != undefined) {
                     element.objects.forEach(o => {
-                        o.destroy();
+                        o.object.destroy();
                     });
                 }
-                
-                element.object.objects = undefined;
             });
             this.#_PV.gameObjects.clear();
 
@@ -44,16 +41,10 @@ class GameObjectPool extends DestroyableObject {
         }
     }
 
-    // name 만들기
-    #getName(texture, frame) {
-        return texture + "_" + frame;
-    }
-
     // 생성 callback 등록
-    registerCreateCallback(texture, frame, cb) {
+    registerCreateCallback(name, cb) {
         try {
             let o = this.#_PV.gameObjects;
-            let name = this.#getName(texture, frame);
 
             if (o.has(name) === true) {
                 //기존 콜백 수정
@@ -70,11 +61,10 @@ class GameObjectPool extends DestroyableObject {
     }
 
     // get object
-    get(texture, frame) {
+    get(name) {
         try {
             let v = this.#_PV;
             let o = v.gameObjects;
-            let name = this.#getName(texture, frame);
 
             if (o.has(name) === false) {
                 return undefined;
@@ -86,15 +76,17 @@ class GameObjectPool extends DestroyableObject {
                     objectInfo.objects[i].object.visible = true;
                     objectInfo.objects[i].use = true;
                     v.objectRef.set(objectInfo.objects[i].object, objectInfo.objects[i]);
-                    return objectInfo.objects.object;
+                    return objectInfo.objects[i].object;
                 }
             }
 
             // new
-            let obj = objectInfo.createCb(texture, frame, ...arguments);
+            let obj = objectInfo.createCb();
             if (obj == undefined) { return undefined; }
 
-            objectInfo.objects.push( {object: obj, use: true} );
+            var ob = {object: obj, use: true};
+            objectInfo.objects.push( ob );
+            v.objectRef.set(ob.object, ob);
             return obj;
         } catch (e) {
             var errMsg = this.getExpMsg("get", e);

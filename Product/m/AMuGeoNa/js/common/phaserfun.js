@@ -75,7 +75,7 @@ function objectMoveTowardsY(object, dstY, velocity) {
         alert(errMsg);
     }
 
-    return [srcX, srcY, false];
+    return false;
 }
 
 // add text (for font)

@@ -48,6 +48,9 @@ var BaseScene = function(fps, gameHost, config) {
 
     //
     this._gameTimerPool = new GameTimerPool("gametimerpool", this);
+
+    // create game object pool
+    this.createGameObjectPool();
 }
 
 BaseScene.prototype = Object.create(Phaser.Scene.prototype);
@@ -199,7 +202,7 @@ BaseScene.prototype.loadAssets = function() {
             if (this._serialLoader == undefined || this._serialLoader.count == 0) {
                 this.onCompleteSerialLoadAllAssets();
                 if (this.onCompleteSerialLoadAllAssetsAfter() === false) {return;}
-                this.onGameStart();
+                this.startGame();
                 return;
             }
 
@@ -319,7 +322,7 @@ BaseScene.prototype.onCompleteSerialLoadAsset = function(isAllFinished)
         this._assetLoadCompleted = true;
         this.onCompleteSerialLoadAllAssets();
         if (this.onCompleteSerialLoadAllAssetsAfter() === false) {return;}
-        this.onGameStart();
+        this.startGame();
     }
     else
     { // 진행 중  
@@ -337,6 +340,12 @@ BaseScene.prototype.onCompleteSerialLoadAllAssets = function() {
 // asset 로딩이 완료되어 다 처리 후 추가 발생 (상속하여 사용)
 BaseScene.prototype.onCompleteSerialLoadAllAssetsAfter = function() {
     return true;
+}
+
+// 게임 시작 프로세스
+BaseScene.prototype.startGame = function() {
+    this.onRegisterObjectCreateCallback();
+    this.onGameStart();
 }
 
 // 게임의 실제 시작은 여기서 부터 작업하세요 (상속하여 사용)
@@ -650,16 +659,22 @@ BaseScene.prototype.subscribeUpdate = function(obj) {
     }
 
     this._updateReceivers.push(obj);
+
+    //console.log("subscribeUpdate name: " + obj.Name + ", count: " + this._updateReceivers.length);
 }
 
 // unsubscribe
 BaseScene.prototype.unsubscribeUpdate = function(obj) {
     if (this._updateReceivers == undefined) { return; }
 
+    //console.log("pre unsubscribeUpdate name: " + obj.Name + ", count: " + this._updateReceivers.length);
+
     const idx = this._updateReceivers.indexOf(obj);
     if (idx > -1) {
-        this._updateReceivers.splice(idx);
+        this._updateReceivers.splice(idx, 1);
     }
+
+    //console.log("unsubscribeUpdate name: " + obj.Name + ", count: " + this._updateReceivers.length);
 }
 
 // remove all
@@ -1060,3 +1075,66 @@ BaseScene.prototype.playSound = function(resource) {
 BaseScene.prototype.getTimerPool = function() {
     return this._timerPool;
 }
+
+///////////////////////////////
+//// <!-- Game Object Pool
+
+// create
+BaseScene.prototype.createGameObjectPool = function() {
+    try {
+        if (this._gameObjectPool != undefined) { 
+            this._gameObjectPool.destroy();
+            this._gameObjectPool = undefined;
+        }
+
+        this._gameObjectPool = new GameObjectPool("gameobjectpool_" + this.getKey(), this);
+
+    } catch(e) {
+        var errMsg = this.getKey() + ".clearGameObjectPool.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// game object pool 이용시 생성 과정을 여기에서 구현 (상속하여 사용)
+BaseScene.prototype.onRegisterObjectCreateCallback = function() {
+
+}
+
+// register callback
+BaseScene.prototype.registerGameObjectCreateCallback = function(name, cb) {
+    try {
+        if (this._gameObjectPool == undefined) { this.createGameObjectPool(); }
+        this._gameObjectPool.registerCreateCallback(name, cb);
+    } catch(e) {
+        var errMsg = this.getKey() + ".registerGameObjectCreateCallback.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// get game object
+BaseScene.prototype.getGameObject = function(name) {
+    try {
+        if (this._gameObjectPool == undefined) { return; }
+        return this._gameObjectPool.get(name);
+    } catch(e) {
+        var errMsg = this.getKey() + ".getGameObject.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// release game object
+BaseScene.prototype.releaseGameObject = function(name) {
+    try {
+        if (this._gameObjectPool == undefined) { return; }
+        return this._gameObjectPool.release(name);
+    } catch(e) {
+        var errMsg = this.getKey() + ".releaseGameObject.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+//// Game Object Pool -->
+///////////////////////////////

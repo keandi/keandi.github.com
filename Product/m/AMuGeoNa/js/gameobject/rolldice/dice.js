@@ -110,6 +110,7 @@ class Dice extends DestroyableObject {
                 if (isToUp === false) { return; }
                 if (objectMoveTowardsY(v.object.roll, rollTop, 80) === true) {
                     isToUp = false;
+                    //console.log("up");
                     return false;
                 }
 
@@ -119,6 +120,7 @@ class Dice extends DestroyableObject {
             let toDown = function() {
                 if (isToUp === true) { return; }
                 if (objectMoveTowardsY(v.object.roll, v.coords.stand.y, 80) === true) {
+                    //console.log("down");
                     return false;
                 }
 
@@ -130,6 +132,7 @@ class Dice extends DestroyableObject {
                     toUp();
                 } else {
                     if (toDown() === false) {
+                        //console.log("dice timer ended. timer-id: " + v.rollTimerId);
                         timerPool.remove(v.rollTimerId);
 
                         v.object.roll.stop();
@@ -142,6 +145,7 @@ class Dice extends DestroyableObject {
                     }
                 }
             }, INTERVAL_ROLLDICE_MOVE);
+            //console.log("dice roll started. timer id: " + v.rollTimerId);
 
         } catch (e) {
             var errMsg = this.getExpMsg("roll", e);

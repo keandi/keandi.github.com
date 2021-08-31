@@ -184,7 +184,7 @@ class GOImageButton extends DestroyableObject {
     }
 
     // set visible
-    set Visible(value) {
+    set visible(value) {
         this.#_PV.image.visible = value;
     }
 }

@@ -103,19 +103,31 @@ class GameData extends ClsObject {
     }
 
     ////////////////////////////////
-    //// <!-- last leve
+    //// <!-- last level
 
     // get
     get LastLevel() {
-        if (this.#_PV.lastLevel == undefined) {
-            this.#_PV.lastLevel = 0;
+        if (this.#_PV.data.lastLevel == undefined) {
+            this.#_PV.data.lastLevel = 0;
         }
-        return this.#_PV.lastLevel;
+        return this.#_PV.data.lastLevel;
     }
 
     // set
     set LastLevel(value) {
-        this.#_PV.lastLevel = value;
+        this.#_PV.data.lastLevel = value;
+    }
+
+    //max last level
+    setLastLevel(value) {
+        if (this.#_PV.data.lastLevel == undefined) {
+            this.#_PV.data.lastLevel = 0;
+        }
+
+        if (value > this.#_PV.data.lastLevel) {
+            this.#_PV.data.lastLevel = value;
+            console.log("set last level: " + this.#_PV.data.lastLevel);
+        }
     }
 
     //// last level -->
