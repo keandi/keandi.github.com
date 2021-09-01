@@ -126,7 +126,7 @@ class GameData extends ClsObject {
 
         if (value > this.#_PV.data.lastLevel) {
             this.#_PV.data.lastLevel = value;
-            console.log("set last level: " + this.#_PV.data.lastLevel);
+            //console.log("set last level: " + this.#_PV.data.lastLevel);
         }
     }
 

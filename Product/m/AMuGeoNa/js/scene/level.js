@@ -445,13 +445,32 @@ class SceneLevel extends GameScene {
 
         // gold test
         {
-            if (this.#_SPV.isGoldTest === true) {
+            /*if (this.#_SPV.isGoldTest === true) {
                 this.addGold(100);
                 this.#_SPV.isGoldTest = false;
             } else {
                 this.useGold(100);
                 this.#_SPV.isGoldTest = true;
-            }
+            }*/
+        }
+
+        // timer-pool
+        {
+            let v = this.#_SPV;
+            let timerPool = this.getTimerPool();
+
+            if (v.timerId == undefined) {
+                v.timerId = timerPool.setTimeout(()=>{
+                    //console.log("timer-id: " + v.timerId + ", tick: " + _gameHost.Time);
+                    console.log("tick: " + _gameHost.Time);
+
+                    //timerPool.remove(v.timerId);
+                    //v.timerId = undefined;
+                }, 500);
+            } /*else {
+                timerPool.remove(v.timerId);
+                v.timerId = undefined;
+            }*/
         }
         
     }

@@ -34,6 +34,18 @@ class Loader extends ClsObject {
             _serialLoadHistory = new SerialLoadHistory("global_serial_asset_load_history");
             _gameHost = new GameHost("gamehost", this.#_PV.sceneSize.w, this.#_PV.sceneSize.h, COLOR_BACKGROUND, 0);
 
+            // 임시 디버깅
+            {
+                let url = window.location.href;
+                let pos = url.indexOf("#reset");
+                if (pos > 0) {
+                    _gameData.LastLevel = 0;
+                    _gameData.useGold(10000);
+                    _gameData.save();
+                    alert("게임 데이터를 초기화 하였습니다.");
+                }
+            }
+
             _sceneData = [
                 {
                     key: KEY_INTRO,

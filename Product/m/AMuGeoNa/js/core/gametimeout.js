@@ -4,16 +4,23 @@ class GameTimeout extends GameInterval {
     //ctor
     constructor(name, scene, interval, callback, runImmidately) {
         try {
-            super(name, scene, interval, callback, runImmidately);
+            super(name, scene, interval, callback, runImmidately, false);
 
-            this.#_PV.interval = interval;
-            this.#_PV.callback = callback;
+            this.subcribeUpdate(callback, interval);
 
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    //subscribeUpdate
+    subcribeUpdate(cb, interval) {
+        this.#_PV.interval = interval;
+        this.#_PV.callback = cb;
+
+        super.subcribeUpdate(cb, interval);
     }
 
     // update
@@ -44,6 +51,11 @@ class GameTimeout extends GameInterval {
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get type
+    get Type() {
+        return TimerType.TIMEOUT;
     }
 }
 

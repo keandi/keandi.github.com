@@ -656,6 +656,8 @@ BaseScene.prototype.destroyDestroyCB = function(cb) {
 BaseScene.prototype.subscribeUpdate = function(obj) {
     if (this._updateReceivers == undefined) {
         this._updateReceivers = [];
+    } else {
+        if (this._updateReceivers.indexOf(obj) >= 0) { return; } // 이미 존재
     }
 
     this._updateReceivers.push(obj);
