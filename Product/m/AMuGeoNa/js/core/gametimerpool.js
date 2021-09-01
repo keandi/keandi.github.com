@@ -121,7 +121,7 @@ class GameTimerPool extends DestroyableObject {
                     }, interval);
                     timerObj.timer.IsRun = true;
                     v.timers.set(timerObj.id, timerObj)
-                    return; 
+                    return timerObj.id; 
                 }
             }
 
@@ -135,6 +135,8 @@ class GameTimerPool extends DestroyableObject {
             
             //console.log("timer-pool timeout set: " + timerObj.id);
             v.timers.set(timerObj.id, timerObj)
+
+            return timerObj.id;
              
          } catch (e) {
              var errMsg = this.getExpMsg("setTimeout", e);

@@ -465,7 +465,7 @@ class SceneLevel extends GameScene {
                     console.log("tick: " + _gameHost.Time);
 
                     //timerPool.remove(v.timerId);
-                    //v.timerId = undefined;
+                    v.timerId = undefined;
                 }, 500);
             } /*else {
                 timerPool.remove(v.timerId);
