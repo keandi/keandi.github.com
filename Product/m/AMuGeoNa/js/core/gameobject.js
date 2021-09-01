@@ -2,11 +2,16 @@ class GameObject extends ClsObject {
     #_PV = {};
 
     // ctor
-    constructor(name, scene) {
+    constructor(name, scene, isSelfDestroy) {
         super(name);
 
         try {
             this.#_PV.scene = scene;
+
+            //
+            if (isSelfDestroy === true) {
+                scene.addDestroyableObject( this );
+            }
 
             // 
             this.#create();
