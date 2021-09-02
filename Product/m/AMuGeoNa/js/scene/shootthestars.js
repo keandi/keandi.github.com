@@ -49,22 +49,6 @@ class SceneShootTheStars extends GameScene {
         _resourcePool.setScene(this)
             .addArgs('shootthestars_sprite' );
     };    
-    
-    onCompleteSerialLoadAllAssets() {
-        try {
-            super.onCompleteSerialLoadAllAssets();
-
-            let selfIt = this;
-
-            //
-            
-            
-        } catch(e) {
-            var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
 
     // game object pool 이용시 생성 과정을 여기에서 구현
     onRegisterObjectCreateCallback() {
@@ -99,7 +83,12 @@ class SceneShootTheStars extends GameScene {
             let selfIt = this;
             let v = this.#_SPV;
 
-            
+            // json data
+            v.frameInfo = _resourcePool.getJsonFrameMap('shootthestars_sprite');
+            //const maxCanonWidth = v.frameInfo.get('ROCKET').sourceSize.w;
+
+            // background
+            this.setBackgroundColor( COLOR_SHOOTTHESTARS_BACKGROUND );
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
