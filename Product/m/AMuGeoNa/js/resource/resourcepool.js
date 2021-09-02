@@ -23,7 +23,7 @@ class ResourcePool extends ClsObject {
                 ver = "?v=" + ver;
             }
             let imgPath = 'assets/image/' + key + '.png' + ver;
-            let jsonPath = 'assets/atlas/' + key + '.json';
+            let jsonPath = 'assets/atlas/' + key + '.json' + ver;
 
             this.#_PV.scene.addSerialLoadAsset( key, () => this.#_PV.scene.load.atlas( key, imgPath, jsonPath), 2 );
         } catch (e) {

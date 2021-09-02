@@ -227,6 +227,20 @@ class GameScene extends BaseScene {
         }
     }
 
+    // 상단 게임 아이콘 생성
+    createTopIcon(sprite, texture) {
+        try {
+            let topMenuRc = this.TopMenuRc;
+
+            let icon = this.addDestroyableObject( this.add.image(32, topMenuRc.CenterY, sprite, texture) ).setDepth(DEPTH_MENU_BUTTON);
+            setPixelScaleXorY(icon, 32);
+        } catch(e) {
+            var errMsg = this.getKey() + ".createTopIcon.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // create help button
     createHelpButton(content, beginX) {
         try {

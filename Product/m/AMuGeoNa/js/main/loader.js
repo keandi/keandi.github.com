@@ -7,6 +7,13 @@ class Loader extends ClsObject {
             super(name);
 
             this.#setCanas();
+
+            // canvas 확인
+            if (this.#_PV.sceneSize.w < 400 || this.#_PV.sceneSize.h < 600) {
+                alert("Too small game screen!!!!");
+                return;
+            }
+
             this.#createGlobalData();
             if (this.#createGame() !== true) {
                 alert(_gameOption.selectText("게임 생성에 실패하였습니다.", "Failed to create game."));
@@ -134,6 +141,8 @@ class Loader extends ClsObject {
                 sceneDiv.style.height = h + 'px';
                 sceneDiv.style.marginLeft = '-' + (parseInt(w / 2)) + 'px';
                 sceneDiv.style.marginTop = '-' + (parseInt(h / 2)) + 'px';
+
+                console.log( stringFormat("canvas size w: {0} px, h: {1} px", w, h));
             }
 
             //

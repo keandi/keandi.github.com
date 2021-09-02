@@ -46,14 +46,8 @@ class SceneShootTheStars extends GameScene {
     onSerialLoadAssets() {
         super.onSerialLoadAssets();
 
-        this.addSerialLoadAsset( 'brozone_canon',
-        () => {
-            this.load.atlas(
-                'brozone_canon',
-                'assets/image/brozone_canon.png',
-                'assets/atlas/brozone_canon.json'
-            );
-        }, 2 );
+        _resourcePool.setScene(this)
+            .addArgs('shootthestars_sprite' );
     };    
     
     onCompleteSerialLoadAllAssets() {
@@ -86,15 +80,26 @@ class SceneShootTheStars extends GameScene {
      // game start
      onGameStart() {
         try {
-            // help button
+            // 메뉴 설정
             {
-                /*let kor = "- 주사위 - \r\n맞추면? +6G\r\n틀리면? -1G";
-                let eng = "- Dice - \r\nif it fits? +6G\r\nwrong? -1G";
-                this.createHelpButton(_gameOption.selectText(kor, eng), 32 + 16 + 5); */
-            }
+                // title
+                this.printTitle(_gameOption.selectText('별을 쏘다', 'ShootTheStars'));
+
+                // icon
+                this.createTopIcon('shootthestars_sprite', 'STAR');
+
+                // help button
+                {
+                    /*let kor = "- 주사위 - \r\n맞추면? +6G\r\n틀리면? -1G";
+                    let eng = "- Dice - \r\nif it fits? +6G\r\nwrong? -1G";
+                    this.createHelpButton(_gameOption.selectText(kor, eng), 32 + 16 + 5); */
+                }
+            }            
 
             let selfIt = this;
             let v = this.#_SPV;
+
+            
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;

@@ -211,4 +211,16 @@ class GameTimerPool extends DestroyableObject {
              alert(errMsg);
          }
     }
+
+    // async call (timeout)
+    asyncCall(cb, interval) {
+        try {
+            interval = parseInt(interval);
+            this.setTimeout(cb, (interval >= 1) ? interval : 10);
+        } catch (e) {
+             var errMsg = this.getExpMsg("asyncCall", e);
+             console.log(errMsg);
+             alert(errMsg);
+         }
+    }
 }

@@ -445,6 +445,7 @@ class SceneLevel extends GameScene {
 
         // gold test
         {
+            this.addGold(3);
             /*if (this.#_SPV.isGoldTest === true) {
                 this.addGold(100);
                 this.#_SPV.isGoldTest = false;
@@ -478,8 +479,25 @@ class SceneLevel extends GameScene {
         // atlas json
         {
             //console.log(_resourcePool.getJsonObject('level_entry_characters'));
-            let frameMap = _resourcePool.getJsonFrameMap('level_entry_characters');
-            console.log( frameMap );
+            /*let frameMap = _resourcePool.getJsonFrameMap('level_entry_characters');
+            console.log( frameMap );*/
+        }
+
+        // progressbar test
+        {
+            let timerPool = this.getTimerPool();
+            const contentRc = this.ContentRc;
+            let pb = new ProgressBar('progressbar_test', this, contentRc.Left + 10, contentRc.Top + 10, contentRc.Width - 20, 8,
+                0, 25, 0xff0000, 0xffffff, 0, 0.2, 0.5);
+            let timer = timerPool.setInterval(()=>{
+                pb.increase();
+                if (pb.IsMax === true)                 {
+                    timerPool.remove(timer);
+                    timerPool.asyncCall(()=>{
+                        pb.destroy();
+                    }, 1500);
+                }
+            }, 100);
         }
         
     }
