@@ -73,6 +73,14 @@ class SceneIntro extends BaseScene {
                 'assets/atlas/firework_yellow.json'
             );
         }, 2 );
+
+        /*this.addSerialLoadAsset( 'aaaa',
+        () => {
+            this.load.json(
+                'aaaa',
+                'assets/atlas/firework_yellow.json'
+            );
+        }, 1 ); */
     };
     
     
@@ -90,6 +98,10 @@ class SceneIntro extends BaseScene {
             this.addPointerEvent('down', (pointer)=>{
                 _gameHost.switchScene(KEY_LEVEL);
             });
+
+
+            /*var aaaa = this.cache.json.get('aaaa');
+            console.log(aaaa.frames[0].filename); */
 
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;

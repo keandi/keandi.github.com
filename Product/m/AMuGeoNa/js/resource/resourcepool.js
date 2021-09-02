@@ -45,7 +45,7 @@ class ResourcePool extends ClsObject {
 
             this.#_PV.scene.addSerialLoadAsset( key, () => this.#_PV.scene.load.image(key, imagePath), 1 );
         } catch (e) {
-            var errMsg = this.getExpMsg("addAtlas", e);
+            var errMsg = this.getExpMsg("addImage", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -63,7 +63,7 @@ class ResourcePool extends ClsObject {
 
             this.#_PV.scene.addSerialLoadAsset( key, () => this.#_PV.scene.load.audio(key, audioPath), 1 );
         } catch (e) {
-            var errMsg = this.getExpMsg("addAtlas", e);
+            var errMsg = this.getExpMsg("addMp3", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -81,7 +81,7 @@ class ResourcePool extends ClsObject {
 
             this.#_PV.scene.addSerialLoadAsset( key, () => this.#_PV.scene.load.audio(key, audioPath), 1 );
         } catch (e) {
-            var errMsg = this.getExpMsg("addAtlas", e);
+            var errMsg = this.getExpMsg("addOgg", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -99,10 +99,34 @@ class ResourcePool extends ClsObject {
 
             this.#_PV.scene.addSerialLoadAsset( key, () => this.#_PV.scene.load.audio(key, audioPath), 1 );
         } catch (e) {
-            var errMsg = this.getExpMsg("addAtlas", e);
+            var errMsg = this.getExpMsg("addWav", e);
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // load json
+    #addJson(key, ver) {
+        try {
+            if (ver == undefined) {
+                ver = "";
+            } else {
+                ver = "?v=" + ver;
+            }
+            let jsonPath = 'assets/atlas/' + key + '.json' + ver;
+
+            key = this.#jsonKey(key);
+            this.#_PV.scene.addSerialLoadAsset( key, () => this.#_PV.scene.load.json(key, jsonPath), 1 );
+        } catch (e) {
+            var errMsg = this.getExpMsg("addJson", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // load josn key
+    #jsonKey(key) {
+        return key + "_json";
     }
 
     // add load
@@ -117,7 +141,9 @@ class ResourcePool extends ClsObject {
                 case 'dice_sprite':
                 case 'exit_button':
                 case 'help_button':
+                case 'shootthestars_sprite':
                     this.#addAtlas(key, 1);
+                    this.#addJson(key); // atlas json 도 같이 load
                     break;
 
                 case 'arrow':
@@ -170,5 +196,23 @@ class ResourcePool extends ClsObject {
     setScene(scene) {
         this.#_PV.scene = scene;
         return this;
+    }
+
+    // get json object
+    getJsonObject(key) {
+        return this.#_PV.scene.cache.json.get(this.#jsonKey(key));
+    }
+
+    // get json frame map { [filename, frame] ... }
+    getJsonFrameMap(key) {
+        let jsonData = this.getJsonObject(key);
+        if (jsonData == undefined) { return undefined; }
+
+        let map = new Map();
+        jsonData.frames.forEach(frame => {
+            map.set(frame.filename, frame);            
+        });
+
+        return map;
     }
 }

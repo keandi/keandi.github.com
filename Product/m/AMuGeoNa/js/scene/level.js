@@ -456,7 +456,7 @@ class SceneLevel extends GameScene {
 
         // timer-pool
         {
-            let v = this.#_SPV;
+            /*let v = this.#_SPV;
             let timerPool = this.getTimerPool();
 
             if (v.timerId == undefined) {
@@ -467,10 +467,19 @@ class SceneLevel extends GameScene {
                     //timerPool.remove(v.timerId);
                     v.timerId = undefined;
                 }, 500);
-            } /*else {
-                timerPool.remove(v.timerId);
-                v.timerId = undefined;
-            }*/
+            } 
+            //else {
+               // timerPool.remove(v.timerId);
+              //  v.timerId = undefined;
+            //}
+            */
+        }
+
+        // atlas json
+        {
+            //console.log(_resourcePool.getJsonObject('level_entry_characters'));
+            let frameMap = _resourcePool.getJsonFrameMap('level_entry_characters');
+            console.log( frameMap );
         }
         
     }
