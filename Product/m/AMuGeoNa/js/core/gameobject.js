@@ -73,4 +73,46 @@ class GameObject extends ClsObject {
     onGoldChanged(gold) {
 
     }
+
+    //////////////////////////////////
+    //// <!-- object drag
+
+    // unregister
+    registerDrag(object) {
+        try {
+            this.unregisterDrag(object);
+
+            this.#_PV.scene.addObjectDrag(object, (pointer, gameObject)=>this.onDragStart(pointer, gameObject), (pointer, gameObject, dragX, dragY)=>this.onDrag(pointer, gameObject, dragX, dragY), (pointer, gameObject)=>this.onDragEnd(pointer, gameObject));            
+        } catch (e) {
+            var errMsg = this.getExpMsg("registerDrag", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // register
+    unregisterDrag(object) {
+        try {
+            this.#_PV.scene.removeObjectDrag(object);
+        } catch (e) {
+            var errMsg = this.getExpMsg("unregisterDrag", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // on drag start (상속 사용)
+    onDragStart(pointer, gameObject) {
+    }
+
+    // on drag (상속 사용)
+    onDrag(pointer, gameObject, dragX, dragY) {
+    }
+
+    // on drag end (상속 사용)
+    onDragEnd(pointer, gameObject) {
+    }
+
+    //// object drag -->
+    //////////////////////////////////
 }

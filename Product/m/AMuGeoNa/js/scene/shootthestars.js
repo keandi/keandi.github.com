@@ -77,14 +77,148 @@ class SceneShootTheStars extends GameScene {
 
             if (contentRc.Width < minMenuWidth) {
                 menuIconSize.w = menuIconSize.h = parseInt((contentRc.Width - menuIconGapTotal) / menuIconCount);
+                minMenuWidth = (menuIconSize.w * menuIconCount) + menuIconGapTotal;
+            }
+
+            // coords - menu
+            {
+                v.coords = {
+                    gameRect: contentRc.copyFromThis(),
+                    menuIconBegin: {x: 0, y: 0},
+                    menuIconGap: menuIconSize.w + COORD_SHOOTTHESTARS_MENUICON_GAP,
+                };
+                let c = v.coords;
+                c.gameRect.Bottom = contentRc.Bottom - menuIconSize.w;
+                c.menuRect = new Rect(v.coords.gameRect.Left, v.coords.gameRect.Bottom + 1, v.coords.gameRect.Width, menuIconSize.h);
+                const restGap = c.gameRect.Width - minMenuWidth;
+                c.menuIconBegin.x = (restGap > 0) ? (restGap / 2) + (menuIconSize.w / 2) : 0;
+                c.menuIconBegin.y = c.menuRect.CenterY;
+            }
+
+            // menu pan
+            {
+                this.registerGameObjectCreateCallback('menuPan', ()=>{
+                    let g = selfIt.add.graphics();
+                    g.fillStyle(COLOR_SHOOTTHESTARS_MENU_BACKGROUND, 1);
+                    g.fillRect(v.coords.menuRect.Left, v.coords.menuRect.Top, v.coords.menuRect.Width, v.coords.menuRect.Height);
+                    g.setDepth(DEPTH_GAMEMENU);
+
+                    return g;
+                });
+            }
+
+            // drag fake image
+            {
+                let createDragImage = function(texture) {
+                    let image = selfIt.add.image(0, 0, 'shootthestars_sprite', texture);
+                    image.setDepth(DEPTH_GAMEMENU);
+                    image.setOrigin(0.5);
+                    image.alpha = 0.4;
+                    setPixelScaleXorY(image, menuIconSize.w);
+                    return image;
+                };
+
+                this.registerGameObjectCreateCallback('dragIcon_base2', ()=>{
+                    return createDragImage('CANON2_0000');
+                });
+
+                this.registerGameObjectCreateCallback('dragIcon_base3', ()=>{
+                    return createDragImage('CANON3_0000');
+                });
+
+                this.registerGameObjectCreateCallback('dragIcon_continous_canon', ()=>{
+                    return createDragImage('CONTINOUS_CANON_0000');
+                });
+
+                this.registerGameObjectCreateCallback('dragIcon_laser_vertical', ()=>{
+                    return createDragImage('LASER1_0000');
+                });
+
+                this.registerGameObjectCreateCallback('dragIcon_laser_horizontal', ()=>{
+                    return createDragImage('LASER2_0000');
+                });
+
+                this.registerGameObjectCreateCallback('dragIcon_rocket', ()=>{
+                    return createDragImage('ROCKET');
+                });
+
+                this.registerGameObjectCreateCallback('dragIcon_hp_up', ()=>{
+                    return createDragImage('MENU_HP_UP');
+                });
             }
 
             // menu canon icon - base 2
             {
+                let dragFakeImage = undefined;
+
+                let dragFakeImageControl = function(x, y, dragprocess, texture) {
+                    if (dragprocess.value === DragProcess.START.value) {
+                        dragFakeImage = selfIt.getGameObject(texture);
+                    }
+                    setPosition(dragFakeImage, x, y);
+
+                    if (dragprocess.value === DragProcess.END.value) {
+                        selfIt.releaseGameObject(dragFakeImage);
+                        dragFakeImage = undefined;
+                    }
+                };
+
                 this.registerGameObjectCreateCallback('canonIcon_base2', ()=>{
-                    return new CanonMenuIcon('icon_base2', selfIt, ShootTheStarsCanonIconType.BASE_2, menuIconSize.w, (who, x, y, isFinished)=>{
+                    return new CanonMenuIcon('icon_base2', selfIt, ShootTheStarsCanonIconType.BASE_2, menuIconSize.w, (who, x, y, dragprocess)=>{
+                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        console.log( stringFormat('drag x: {0}, y: {1}, isFinished: {2}', x, y, isFinished) );
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base2');
+                    });
+                });
+
+                this.registerGameObjectCreateCallback('canonIcon_base3', ()=>{
+                    return new CanonMenuIcon('icon_base3', selfIt, ShootTheStarsCanonIconType.BASE_3, menuIconSize.w, (who, x, y, dragprocess)=>{
+                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        // drag 구현 필요
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base3');
+                    });
+                });
+
+                this.registerGameObjectCreateCallback('canonIcon_coutinouse_canon', ()=>{
+                    return new CanonMenuIcon('icon_continouse_canon', selfIt, ShootTheStarsCanonIconType.CONTINOUSE_CANON, menuIconSize.w, (who, x, y, dragprocess)=>{
+                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        // drag 구현 필요
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_continous_canon');
+                    });
+                });
+
+                this.registerGameObjectCreateCallback('canonIcon_laser_vertical', ()=>{
+                    return new CanonMenuIcon('icon_laser_vertical', selfIt, ShootTheStarsCanonIconType.LASER_VERTICAL, menuIconSize.w, (who, x, y, dragprocess)=>{
+                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        // drag 구현 필요
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_vertical');
+                    });
+                });
+
+                this.registerGameObjectCreateCallback('canonIcon_laser_horizontal', ()=>{
+                    return new CanonMenuIcon('icon_laser_horizontal', selfIt, ShootTheStarsCanonIconType.LASER_HORIZONTAL, menuIconSize.w, (who, x, y, dragprocess)=>{
+                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        // drag 구현 필요
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_horizontal');
+                    });
+                });
+
+                this.registerGameObjectCreateCallback('canonIcon_rocket', ()=>{
+                    return new CanonMenuIcon('icon_rocket', selfIt, ShootTheStarsCanonIconType.ROCKET, menuIconSize.w, (who, x, y, dragprocess)=>{
+                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        // drag 구현 필요
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_rocket');
+                    });
+                });
+
+                this.registerGameObjectCreateCallback('canonIcon_hp_up', ()=>{
+                    return new CanonMenuIcon('icon_hp_up', selfIt, ShootTheStarsCanonIconType.HP_UP, menuIconSize.w, (who, x, y, dragprocess)=>{
+                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        // drag 구현 필요
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_hp_up');
+                    }, (who)=>{
+                        console.log( stringFormat('touch who: {0}', who.Name) );
+                        selfIt.useGold(5);
                     });
                 });
             }
@@ -124,10 +258,25 @@ class SceneShootTheStars extends GameScene {
             // menu 
             {
                 v.menus = {
-                    base2: this.getGameObject('canonIcon_base2')
+                    pan: this.getGameObject('menuPan'),
+                    base2: this.getGameObject('canonIcon_base2'),
+                    base3: this.getGameObject('canonIcon_base3'),
+                    continousCanon: this.getGameObject('canonIcon_coutinouse_canon'),
+                    laser_vertical: this.getGameObject('canonIcon_laser_vertical'),
+                    laser_horizontal: this.getGameObject('canonIcon_laser_horizontal'),
+                    rocket: this.getGameObject('canonIcon_rocket'),
+                    hp_up: this.getGameObject('canonIcon_hp_up'),
                 };
                 
-                v.menus.base2.setPosition(100, 100);
+                let c = v.coords;
+                let beginX = c.menuIconBegin.x;
+                v.menus.base2.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
+                v.menus.base3.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
+                v.menus.continousCanon.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
+                v.menus.laser_vertical.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
+                v.menus.laser_horizontal.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
+                v.menus.rocket.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
+                v.menus.hp_up.setPosition(beginX, c.menuIconBegin.y); 
             }
 
         } catch(e) {

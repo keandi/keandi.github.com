@@ -117,6 +117,12 @@ function setScale(obj, scale) {
     obj.scaleY = scale;
 }
 
+// set x, y scale
+function setScaleXY(obj, scaleX, scaleY) {
+    obj.scaleX = scaleX;
+    obj.scaleY = scaleY;
+}
+
 // width, height 중 큰 쪽을 사이즈를 우선 맞추고 그 비율에 맞게 나머지 하나를 맞추기
 function setPixelScaleXorY(obj, pixel) {
     if (obj.width > obj.height) {

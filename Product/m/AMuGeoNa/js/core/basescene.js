@@ -166,7 +166,8 @@ BaseScene.prototype.stop = function() {
 
 // scene stop event. (상속하여 사용)
 BaseScene.prototype.onStop = function() {
-    //nothing
+    this.clearGameObjectPool();
+    this.clearObjectDrag();
 }
 
 // asset load
@@ -1082,6 +1083,20 @@ BaseScene.prototype.getTimerPool = function() {
 //// <!-- Game Object Pool
 
 // create
+BaseScene.prototype.clearGameObjectPool = function() {
+    try {
+        if (this._gameObjectPool == undefined) { return; } 
+        this._gameObjectPool.destroy();
+        this._gameObjectPool = undefined;
+
+    } catch(e) {
+        var errMsg = this.getKey() + ".clearGameObjectPool.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// create
 BaseScene.prototype.createGameObjectPool = function() {
     try {
         if (this._gameObjectPool != undefined) { 
@@ -1128,10 +1143,10 @@ BaseScene.prototype.getGameObject = function(name) {
 }
 
 // release game object
-BaseScene.prototype.releaseGameObject = function(name) {
+BaseScene.prototype.releaseGameObject = function(object) {
     try {
         if (this._gameObjectPool == undefined) { return; }
-        return this._gameObjectPool.release(name);
+        return this._gameObjectPool.release(object);
     } catch(e) {
         var errMsg = this.getKey() + ".releaseGameObject.catched: " + e;
         console.log(errMsg);
@@ -1139,4 +1154,156 @@ BaseScene.prototype.releaseGameObject = function(name) {
     }
 }
 //// Game Object Pool -->
+///////////////////////////////
+
+///////////////////////////////
+//// <!-- game object drag
+
+// event on
+BaseScene.prototype.objectDragOn = function() {
+    try {
+        this.objectDragOff();
+
+        let selfIt = this;
+
+        this.input.on('dragstart', function(pointer, gameObject) {
+            selfIt.onObjectDragStart(pointer, gameObject);
+        });
+
+        this.input.on('drag', function(pointer, gameObject, dragX, dragY) {
+            selfIt.onObjectDrag(pointer, gameObject, dragX, dragY);
+        });
+
+        this.input.on('dragend', function(pointer, gameObject) {
+            selfIt.onObjectDragEnd(pointer, gameObject);
+        });
+    } catch(e) {
+        var errMsg = this.getKey() + ".objectDragOn.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// event off
+BaseScene.prototype.objectDragOff = function() {
+    try {
+        this.input.off('dragstart');
+        this.input.off('drag');
+        this.input.off('dragend');
+    } catch(e) {
+        var errMsg = this.getKey() + ".objectDragOff.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// clear
+BaseScene.prototype.clearObjectDrag = function() {
+    try {
+        this.objectDragOff();
+        
+        if (this._objectDragMap == undefined) {return;}
+        this._objectDragMap.clear();
+        this._objectDragMap = undefined;
+    } catch(e) {
+        var errMsg = this.getKey() + ".objectDragOff.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// remove
+BaseScene.prototype.removeObjectDrag = function(object) {
+    try {
+        if (this._objectDragMap == undefined) { return; }
+        else if (this._objectDragMap.has(object) === false) { return ;}
+
+        //
+        this._objectDragMap.delete(object);
+
+        //
+        if (this._objectDragMap.size <= 0) {
+            this.objectDragOff();
+        }
+    } catch(e) {
+        var errMsg = this.getKey() + ".removeObjectDrag.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// add
+BaseScene.prototype.addObjectDrag = function(object, cbDragStart, cbDrag, cbDragEnd) {
+    try {
+        if (this._objectDragMap == undefined) {
+            this._objectDragMap = new Map();
+        }
+
+        //
+        if (this._objectDragMap.has(object) === true) { return ;}
+
+        //
+        object.setInteractive();
+        this.input.setDraggable(object);
+
+        //
+        this._objectDragMap.set(object, {cbDragStart: cbDragStart, cbDrag: cbDrag, cbDragEnd: cbDragEnd});
+
+        //
+        if (this._objectDragMap.size === 1) {
+            this.objectDragOn();
+        }
+    } catch(e) {
+        var errMsg = this.getKey() + ".addObjectDrag.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// on drag start
+BaseScene.prototype.onObjectDragStart = function(pointer, gameObject) {
+    try {
+        if (this._objectDragMap == undefined) { return; }
+        else if (this._objectDragMap.size <= 0) { return; }
+        else if (this._objectDragMap.has(gameObject) === false) { return; }
+
+        this._objectDragMap.get(gameObject).cbDragStart(pointer, gameObject);
+    } catch(e) {
+        var errMsg = this.getKey() + ".onObjectDragStart.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// on drag
+BaseScene.prototype.onObjectDrag = function(pointer, gameObject, dragX, dragY) {
+    try {
+        if (this._objectDragMap == undefined) { return; }
+        else if (this._objectDragMap.size <= 0) { return; }
+        else if (this._objectDragMap.has(gameObject) === false) { return; }
+
+        this._objectDragMap.get(gameObject).cbDrag(pointer, gameObject, dragX, dragY);
+    } catch(e) {
+        var errMsg = this.getKey() + ".onObjectDrag.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// on drag end
+BaseScene.prototype.onObjectDragEnd = function(pointer, gameObject) {
+    try {
+        if (this._objectDragMap == undefined) { return; }
+        else if (this._objectDragMap.size <= 0) { return; }
+        else if (this._objectDragMap.has(gameObject) === false) { return; }
+
+        this._objectDragMap.get(gameObject).cbDragEnd(pointer, gameObject); 
+    } catch(e) {
+        var errMsg = this.getKey() + ".onObjectDragEnd.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+//// game object drag -->
 ///////////////////////////////
