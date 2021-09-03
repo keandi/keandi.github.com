@@ -54,6 +54,41 @@ class SceneShootTheStars extends GameScene {
     onRegisterObjectCreateCallback() {
         try {
             super.onRegisterObjectCreateCallback();
+
+            let selfIt = this;
+            let v = this.#_SPV;
+
+            const contentRc = this.ContentRc;
+
+            // json data
+            v.frameInfo = {
+                frames: _resourcePool.getJsonFrameMap('shootthestars_sprite'),
+            };
+
+            // menu icon coords
+            const menuIconCount = 7;
+            const menuIconGapTotal = COORD_SHOOTTHESTARS_MENUICON_GAP * (menuIconCount - 1);
+            let menuIconSize = {
+                original: v.frameInfo.frames.get('MENU_HP_UP').sourceSize
+            };
+            let minMenuWidth = (menuIconSize.original.w * menuIconCount) + menuIconGapTotal;
+            menuIconSize.w = menuIconSize.original.w;
+            menuIconSize.h = menuIconSize.original.h;
+
+            if (contentRc.Width < minMenuWidth) {
+                menuIconSize.w = menuIconSize.h = parseInt((contentRc.Width - menuIconGapTotal) / menuIconCount);
+            }
+
+            // menu canon icon - base 2
+            {
+                this.registerGameObjectCreateCallback('canonIcon_base2', ()=>{
+                    return new CanonMenuIcon('icon_base2', selfIt, ShootTheStarsCanonIconType.BASE_2, menuIconSize.w, (who, x, y, isFinished)=>{
+                        // drag 구현 필요
+                        console.log( stringFormat('drag x: {0}, y: {1}, isFinished: {2}', x, y, isFinished) );
+                    });
+                });
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
@@ -83,12 +118,17 @@ class SceneShootTheStars extends GameScene {
             let selfIt = this;
             let v = this.#_SPV;
 
-            // json data
-            v.frameInfo = _resourcePool.getJsonFrameMap('shootthestars_sprite');
-            //const maxCanonWidth = v.frameInfo.get('ROCKET').sourceSize.w;
-
             // background
             this.setBackgroundColor( COLOR_SHOOTTHESTARS_BACKGROUND );
+
+            // menu 
+            {
+                v.menus = {
+                    base2: this.getGameObject('canonIcon_base2')
+                };
+                
+                v.menus.base2.setPosition(100, 100);
+            }
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;

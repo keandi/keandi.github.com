@@ -485,6 +485,7 @@ class SceneLevel extends GameScene {
 
         // progressbar test
         {
+            /*
             let timerPool = this.getTimerPool();
             const contentRc = this.ContentRc;
             let pb = new ProgressBar('progressbar_test', this, contentRc.Left + 10, contentRc.Top + 10, contentRc.Width - 20, 8,
@@ -498,6 +499,20 @@ class SceneLevel extends GameScene {
                     }, 1500);
                 }
             }, 100);
+            */
+        }
+
+        // gold changed notify
+        {
+            /*
+            let v = this.#_SPV;
+            if (v.gcn == undefined) {
+                this.registerGoldNotify((gold)=>{
+                    console.log('current gold: ' + gold);
+                });
+                v.gcn = true;
+            }
+            */
         }
         
     }

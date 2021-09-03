@@ -69,37 +69,44 @@ class GameData extends ClsObject {
     useGold(v) {
         try {
             if (v <= 0) { return; }
-            this.#goldApply(-v);
+            return this.#goldApply(-v);
         } catch (e) {
             var errMsg = this.getExpMsg("useGold", e);
             console.log(errMsg);
             alert(errMsg);
         }
+        return false;
     }
 
     // add gold
     addGold(v) {
         try {
             if (v <= 0) { return; }
-            this.#goldApply(v);
+            return this.#goldApply(v);
         } catch (e) {
             var errMsg = this.getExpMsg("addGold", e);
             console.log(errMsg);
             alert(errMsg);
         }
+        return false;
     }
 
+    // gold 적용. true: 골드 변경됨
     #goldApply(v) {
         try {
+            const oldGold = this.#_PV.data.gold;
             this.#_PV.data.gold += v;
             if (this.#_PV.data.gold < 0) {
                 this.#_PV.data.gold = 0;
             }
+
+            return (oldGold != this.#_PV.data.gold) ? true : false;
         } catch (e) {
             var errMsg = this.getExpMsg("goldApply", e);
             console.log(errMsg);
             alert(errMsg);
         }
+        return false;
     }
 
     ////////////////////////////////

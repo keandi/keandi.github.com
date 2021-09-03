@@ -15,6 +15,18 @@ class GameScene extends BaseScene {
         }
     }
 
+    onStop() {
+        try {
+            super.onStop();
+            
+            this.#destroyGoldNotify();
+        } catch(e) {
+            var errMsg = this.getKey() + ".onStop.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // exit 버튼 필요여부 설정. 
     set IsNeedExitButton(value) {
         this.#_PV.isNeedExitButton = value;
@@ -317,12 +329,13 @@ class GameScene extends BaseScene {
 
     useGold(v, isNoText) {
         try {
-            _gameData.useGold(v);
+            const goldChanged = _gameData.useGold(v);
             this.playCoinSound(false);
             if (isNoText !== true) {
                 this.getGameObject('useCoin').run(v);
             }
             this.refreshGold();
+            if (goldChanged === true) { this.#notifyGoldChanged(); }
         } catch(e) {
             var errMsg = this.getKey() + ".refreshGold.catched: " + e;
             console.log(errMsg);
@@ -332,12 +345,13 @@ class GameScene extends BaseScene {
 
     addGold(v, isNoText) {
         try {
-            _gameData.addGold(v);
+            const goldChanged = _gameData.addGold(v);
             this.playCoinSound(true);
             if (isNoText !== true) {
                 this.getGameObject('addCoin').run(v);
             }
             this.refreshGold();
+            if (goldChanged === true) { this.#notifyGoldChanged(); }
         } catch(e) {
             var errMsg = this.getKey() + ".addGold.catched: " + e;
             console.log(errMsg);
@@ -501,5 +515,72 @@ class GameScene extends BaseScene {
     }
 
     //// game end -->
+    ////////////////////////////////////
+
+    ////////////////////////////////////
+    //// <!-- gold 변경 알림 서비스
+
+    // destroy
+    #destroyGoldNotify() {
+        try {
+            destroyObject( this.#_PV.goldChangedNotifier );
+        } catch(e) {
+            var errMsg = this.getKey() + ".destroyGoldNotify.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // register
+    registerGoldNotify(cb) {
+        try {
+            let v = this.#_PV;
+
+            if (v.goldChangedNotifier == undefined) {
+                v.goldChangedNotifier = new CallbackMap("gold_chaged_notifier");
+            }
+
+            v.goldChangedNotifier.add(cb);
+        } catch(e) {
+            var errMsg = this.getKey() + ".registerGoldNotify.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // unregister
+    unregisterGoldNotify(cb) {
+        try {
+            let v = this.#_PV;
+
+            if (v.goldChangedNotifier == undefined) { return; }
+
+            v.goldChangedNotifier.remove(cb);
+        } catch(e) {
+            var errMsg = this.getKey() + ".unregisterGoldNotify.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // notify gold changed event
+    #notifyGoldChanged() {
+        try {
+            let v = this.#_PV;
+            if (v.goldChangedNotifier == undefined) { return; }
+
+            const gold = _gameData.Gold;
+            v.goldChangedNotifier.forEach((callback)=>{
+                callback(gold);
+            });
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".notifyGoldChanged.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    //// gold 변경 알림 서비스 -->
     ////////////////////////////////////
 }
