@@ -115,4 +115,16 @@ class GameObject extends ClsObject {
 
     //// object drag -->
     //////////////////////////////////
+
+    //////////////////////////////////
+    //// <!-- visible (상속 구현 필요)
+    set visible(value) {
+        alert("need implement - set visible");
+    }
+
+    get visible() {
+        alert("need implement - get visible");
+    }
+    //// visible -->
+    //////////////////////////////////
 }
