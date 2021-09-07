@@ -165,7 +165,7 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('canonIcon_base2', ()=>{
                     return new CanonMenuIcon('icon_base2', selfIt, ShootTheStarsCanonIconType.BASE_2, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_base2');
                     });
@@ -173,7 +173,7 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('canonIcon_base3', ()=>{
                     return new CanonMenuIcon('icon_base3', selfIt, ShootTheStarsCanonIconType.BASE_3, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_base3');
                     });
@@ -181,7 +181,7 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('canonIcon_coutinouse_canon', ()=>{
                     return new CanonMenuIcon('icon_continouse_canon', selfIt, ShootTheStarsCanonIconType.CONTINOUSE_CANON, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_continous_canon');
                     });
