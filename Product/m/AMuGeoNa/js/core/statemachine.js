@@ -1,10 +1,10 @@
-class StateMachine extends DestroyableObject {
+class StateMachine extends ClsObject {
     #_PV = {}
 
     // ctor
-    constructor(name, scene) {
+    constructor(name) {
         try {
-            super(name, scene);
+            super(name);
 
             //
             let v = this.#_PV;

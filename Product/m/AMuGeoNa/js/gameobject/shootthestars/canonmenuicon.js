@@ -1,9 +1,9 @@
-class CanonMenuIcon extends GameObject {
+class CanonMenuIcon extends GoldNotifyGameObject {
     #_PV = {};
 
     // ctor
     constructor(name, scene, canonType, size, dragCallback, touchCallback) {
-        super(name, scene, false, true);
+        super(name, scene, false);
 
         try {
             let v = this.#_PV;

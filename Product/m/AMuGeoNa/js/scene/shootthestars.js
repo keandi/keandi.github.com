@@ -189,7 +189,7 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('canonIcon_laser_vertical', ()=>{
                     return new CanonMenuIcon('icon_laser_vertical', selfIt, ShootTheStarsCanonIconType.LASER_VERTICAL, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_vertical');
                     });
@@ -197,7 +197,7 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('canonIcon_laser_horizontal', ()=>{
                     return new CanonMenuIcon('icon_laser_horizontal', selfIt, ShootTheStarsCanonIconType.LASER_HORIZONTAL, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_horizontal');
                     });
