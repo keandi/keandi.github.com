@@ -77,6 +77,7 @@ class StateMachine extends DestroyableObject {
             let entry = v.states.get(state);
             if (entry.map.has(state) === false) { return false; }
 
+            v.current = state;
             entry.map.get(state)();
             return true;
         } catch (e) {
