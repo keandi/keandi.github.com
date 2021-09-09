@@ -58,6 +58,7 @@ class StateMachine extends ClsObject {
 
             if (isDefault === true) {
                 v.current = state;
+                v.default = state;
             }
             return entry;
         } catch (e) {
@@ -87,5 +88,15 @@ class StateMachine extends ClsObject {
         }
 
         return false;
+    }
+
+    // get state
+    get Current() {
+        return this.#_PV.current;
+    }
+
+    // reset state
+    reset() {
+        this.#_PV.current = this.#_PV.default;
     }
 }

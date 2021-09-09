@@ -98,6 +98,18 @@ class GameSprite extends GameObject {
         }
     }
 
+    // frame changed event
+    onFrameChanged(frameIndex, frameName) {
+        // 상속 구현 필요
+        console.log( stringFormat('not implement - onFrameChanged - idx[{0}], name[{1}]', frameIndex, frameName) );
+    }
+
+    // end animation
+    onAnimationEnd() {
+        // 상속 구현 필요
+        console.log( 'not implement - onAnimationEnd' );
+    }
+
     //// animator manager -->
     ////////////////////////////////////
 
@@ -108,7 +120,7 @@ class GameSprite extends GameObject {
     getStateMachine() {
         try {
             let v = this.#_PV;
-            if (v.stateMachine != undefined) {
+            if (v.stateMachine == undefined) {
                 v.stateMachine = new StateMachine("stateMachine_" + this.Name);
             }
 
@@ -136,7 +148,31 @@ class GameSprite extends GameObject {
         return false;
     }
 
+    // rest
+    resetState() {
+        try {
+            let v = this.#_PV;
+            if (v.stateMachine != undefined) { return; }
+
+            v.stateMachine.reset();
+        } catch (e) {
+            var errMsg = this.getExpMsg("resetState", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     //// state machine -->
     ////////////////////////////////////
 
+    // onInitialize
+    onInitialize() {
+        this.onRegisterStateMachine();
+    }
+
+    // state machine 등록
+    onRegisterStateMachine() {
+       // 상속 사용
+    }
+    
 }

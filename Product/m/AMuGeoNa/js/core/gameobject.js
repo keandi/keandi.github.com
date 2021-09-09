@@ -31,6 +31,26 @@ class GameObject extends ClsObject {
 
     }
 
+    // initialize
+    initialize() {
+        this.onInitialize();
+    }
+
+    // onInitialize
+    onInitialize() {
+        // 상속 후 사용
+    }
+
+    // reset
+    reset() {
+        this.onReset();
+    }
+
+    // onReset
+    onReset() {
+        // 상속 구현 필요
+    }
+
     //////////////////////////////////
     //// <!-- object drag
 
@@ -83,5 +103,51 @@ class GameObject extends ClsObject {
         alert("need implement - get visible");
     }
     //// visible -->
+    //////////////////////////////////
+
+    //////////////////////////////////
+    //// <!-- set position
+
+    setPosition(x, y) {
+        this.X = x;
+        this.Y = y;
+    }
+
+    // set x
+    set X(value) {
+        // 상속 구현 필요
+    }
+
+    // get x
+    get X() {
+        // 상속 구현 필요
+    }
+
+    // set y
+    set Y(value) {
+        // 상속 구현 필요
+    }
+
+    // get y
+    get Y() {
+        // 상속 구현 필요
+    }
+
+    //// set position -->
+    //////////////////////////////////
+
+    //////////////////////////////////
+    //// <!-- alpha
+
+    // set
+    set alpha(value) {
+        console.log("need implement - set alpha");
+    }
+
+    // get
+    get alpha() {
+        console.log("need implement - get alpha");
+    }
+    //// alpha -->
     //////////////////////////////////
 }

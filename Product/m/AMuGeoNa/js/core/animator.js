@@ -156,7 +156,7 @@ class Animator extends DestroyableObject {
                             v.repeatCount++; 
                             if (v.repeatCount >= c.repeat) {
                                 selfIt.stop();
-                                c.endCallback();
+                                if (c.endCallback != undefined) { c.endCallback(); }
                                 return;
                             }
                         }
@@ -167,7 +167,7 @@ class Animator extends DestroyableObject {
                 v.sprite.setTexture(v.textures[v.textureIndex]);
 
                 //
-                c.frameCallback(v.textureIndex, v.textures[v.textureIndex]);                
+                if (c.frameCallback != undefined) { c.frameCallback(v.textureIndex, v.textures[v.textureIndex]); }
             }
 
             playing(false);

@@ -223,6 +223,13 @@ class SceneShootTheStars extends GameScene {
                 });
             }
 
+            // canon 
+            {
+                this.registerGameObjectCreateCallback('canon_1', ()=>{
+                    return new STSCanon1('canon1', selfIt, v.frameInfo);
+                });
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
@@ -277,6 +284,14 @@ class SceneShootTheStars extends GameScene {
                 v.menus.laser_horizontal.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
                 v.menus.rocket.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
                 v.menus.hp_up.setPosition(beginX, c.menuIconBegin.y); 
+            }
+
+            // canon
+            {
+                var canon = this.getGameObject('canon_1');
+                canon.reset();
+                canon.setPosition(100, 200);
+                canon.alpha = 1;
             }
 
         } catch(e) {
