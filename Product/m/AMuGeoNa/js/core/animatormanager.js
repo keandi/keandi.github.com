@@ -56,7 +56,7 @@ class AnimatorManager extends DestroyableObject {
             this.stop();
 
             let v = this.#_PV;
-            if (v.animators.has(key) === true) { return; }
+            if (v.animators.has(key) === false) { return; }
 
             v.current = v.animators.get(key);
             v.current.play();

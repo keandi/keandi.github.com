@@ -114,7 +114,7 @@ class SceneShootTheStars extends GameScene {
                     image.setDepth(DEPTH_GAMEMENU);
                     image.setOrigin(0.5);
                     image.alpha = 0.4;
-                    setPixelScaleXorY(image, menuIconSize.w);
+                    //setPixelScaleXorY(image, menuIconSize.w);
                     return image;
                 };
 
@@ -151,11 +151,27 @@ class SceneShootTheStars extends GameScene {
             {
                 let dragFakeImage = undefined;
 
+                let isCanonArea = function(x, y) {
+                    for (var i = 0; i < v.canonData.canon.length; i++) {
+                        if (v.canonData.canon[i].enable === false) { continue; }
+                        if (v.canonData.canon[i].rect.ptInRect(x, y) === true) { return v.canonData.canon[i].rect; }
+                    }
+                    return undefined;
+                };
+
                 let dragFakeImageControl = function(x, y, dragprocess, texture) {
                     if (dragprocess.value === DragProcess.START.value) {
                         dragFakeImage = selfIt.getGameObject(texture);
                     }
-                    setPosition(dragFakeImage, x, y);
+
+                    var canonRect = isCanonArea(x, y);
+                    if (canonRect == undefined) {
+                        dragFakeImage.alpha = 0.4;
+                        setPosition(dragFakeImage, x, y);
+                    } else {
+                        dragFakeImage.alpha = 1;    
+                        setPosition(dragFakeImage, canonRect.CenterX, canonRect.CenterY);
+                    }
 
                     if (dragprocess.value === DragProcess.END.value) {
                         selfIt.releaseGameObject(dragFakeImage);
@@ -223,6 +239,39 @@ class SceneShootTheStars extends GameScene {
                 });
             }
 
+            // coords - canon
+            {
+                let c = v.coords;
+                const canonMaxCX = v.frameInfo.frames.get('ROCKET').sourceSize.w; // 가장 큰 canon
+                const canonMaxCY = v.frameInfo.frames.get('ROCKET').sourceSize.h;
+
+                c.canonBottom = c.menuRect.Top - 1;
+                const canonMax = parseInt(c.gameRect.Width / (canonMaxCX + 10));
+                let canonRect = new Rect(0, 0, canonMaxCX, canonMaxCY);
+                canonRect.Top = c.canonBottom - canonMaxCY;
+                canonRect.Bottom = c.canonBottom;
+                canonRect.Left = (c.gameRect.Width - (canonMax * canonRect.Width) - ((canonMax - 1) * 10)) / 2;
+                v.canonData = {
+                    canon: []
+                };
+                
+                for (var i = 0; i < canonMax; i++) {
+                    v.canonData.canon.push({
+                        object: undefined,
+                        enable: true,
+                        rect: canonRect.copyFromThis()
+                    });
+
+                    canonRect.X += (canonMaxCX + 10);
+                }
+
+                /* let g = this.add.graphics();
+                v.canonData.canon.forEach(canon => {
+                    g.fillStyle(0x9F2576, 1);
+                    g.fillRect(canon.rect.X, canon.rect.Y, canon.rect.Width, canon.rect.Height);
+                }); */
+            }
+
             // canon 
             {
                 this.registerGameObjectCreateCallback('canon_1', ()=>{
@@ -288,10 +337,12 @@ class SceneShootTheStars extends GameScene {
 
             // canon
             {
-                var canon = this.getGameObject('canon_1');
-                canon.reset();
-                canon.setPosition(100, 200);
-                canon.alpha = 1;
+                v.canonData.canon.forEach(element => {
+                    var canon = this.getGameObject('canon_1');
+                    canon.reset();
+                    canon.setPosition(element.rect.CenterX, element.rect.CenterY);
+                    canon.alpha = 1;
+                });
             }
 
         } catch(e) {

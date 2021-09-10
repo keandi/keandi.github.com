@@ -102,16 +102,7 @@ class Animator extends DestroyableObject {
         try {
             this.reset();
 
-            let v = this.#_PV;
-            let c = v.config;
-
-            let playing = function() {
-                v.sprite.setTexture(v.textures[v.textureIndex]);
-            }
-
-            playing();
-            let timerPool = v.scene.getTimerPool();
-            v.timerId = timerPool.setInterval(()=>playing(), v.config.duration);
+            this.resume();
         } catch (e) {
             var errMsg = this.getExpMsg("play", e);
             console.log(errMsg);
@@ -164,7 +155,7 @@ class Animator extends DestroyableObject {
                     }
                 }
 
-                v.sprite.setTexture(v.textures[v.textureIndex]);
+                v.sprite.setTexture(c.asset, v.textures[v.textureIndex]);
 
                 //
                 if (c.frameCallback != undefined) { c.frameCallback(v.textureIndex, v.textures[v.textureIndex]); }

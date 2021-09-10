@@ -53,18 +53,19 @@ class STSCanon1 extends STSBaseCanon {
        try {
            let v = this.#_PV;
            let selfIt = this;
+           const fps = 24 / 1000;
 
             animatorManager.add('ready', {
                     asset: 'shootthestars_sprite',
                     textures: ['CANON1_0000'],
-                    duration: (60/1000),
+                    duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 })
                 .add('fire', {
                     asset: 'shootthestars_sprite',
                     textures: ['CANON1_0000','CANON1_0001','CANON1_0002','CANON1_0003','CANON1_0000',],
-                    duration: (60/1000),
+                    duration: fps,
                     repeat: 1,
                     frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
                     endCallback: ()=>selfIt.onAnimationEnd()
@@ -72,7 +73,7 @@ class STSCanon1 extends STSBaseCanon {
                 .add('wait', {
                     asset: 'shootthestars_sprite',
                     textures: ['CANON1_0000'],
-                    duration: (60/1000),
+                    duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 });
@@ -83,5 +84,8 @@ class STSCanon1 extends STSBaseCanon {
         }
     }
 
-    
+    // 대기 시간 설정. 상속 구현하여 canon 별로 처리
+    get WaitTime() {
+        return 4000;
+    }
 }

@@ -136,7 +136,7 @@ class GameSprite extends GameObject {
     enter(state) {
         try {
             let v = this.#_PV;
-            if (v.stateMachine != undefined) { return false; }
+            if (v.stateMachine == undefined) { return false; }
 
             return v.stateMachine.enter(state);
         } catch (e) {

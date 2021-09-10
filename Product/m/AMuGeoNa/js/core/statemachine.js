@@ -75,7 +75,7 @@ class StateMachine extends ClsObject {
 
             if (v.states.get(v.current) === false) { throw 'please set current state!!!'; }
 
-            let entry = v.states.get(state);
+            let entry = v.states.get(v.current);
             if (entry.map.has(state) === false) { return false; }
 
             v.current = state;
