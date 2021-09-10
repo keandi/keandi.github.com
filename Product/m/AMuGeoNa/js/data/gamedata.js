@@ -69,53 +69,72 @@ class GameData extends ClsObject {
     useGold(v) {
         try {
             if (v <= 0) { return; }
-            this.#goldApply(-v);
+            return this.#goldApply(-v);
         } catch (e) {
             var errMsg = this.getExpMsg("useGold", e);
             console.log(errMsg);
             alert(errMsg);
         }
+        return false;
     }
 
     // add gold
     addGold(v) {
         try {
             if (v <= 0) { return; }
-            this.#goldApply(v);
+            return this.#goldApply(v);
         } catch (e) {
             var errMsg = this.getExpMsg("addGold", e);
             console.log(errMsg);
             alert(errMsg);
         }
+        return false;
     }
 
+    // gold 적용. true: 골드 변경됨
     #goldApply(v) {
         try {
+            const oldGold = this.#_PV.data.gold;
             this.#_PV.data.gold += v;
             if (this.#_PV.data.gold < 0) {
                 this.#_PV.data.gold = 0;
             }
+
+            return (oldGold != this.#_PV.data.gold) ? true : false;
         } catch (e) {
             var errMsg = this.getExpMsg("goldApply", e);
             console.log(errMsg);
             alert(errMsg);
         }
+        return false;
     }
 
     ////////////////////////////////
-    //// <!-- last leve
+    //// <!-- last level
 
     // get
     get LastLevel() {
-        if (this.#_PV.lastLevel == undefined) {
-            this.#_PV.lastLevel = 0;
+        if (this.#_PV.data.lastLevel == undefined) {
+            this.#_PV.data.lastLevel = 0;
         }
-        return this.#_PV.lastLevel;
+        return this.#_PV.data.lastLevel;
     }
 
     // set
     set LastLevel(value) {
-        this.#_PV.lastLevel = value;
+        this.#_PV.data.lastLevel = value;
+    }
+
+    //max last level
+    setLastLevel(value) {
+        if (this.#_PV.data.lastLevel == undefined) {
+            this.#_PV.data.lastLevel = 0;
+        }
+
+        if (value > this.#_PV.data.lastLevel) {
+            this.#_PV.data.lastLevel = value;
+            //console.log("set last level: " + this.#_PV.data.lastLevel);
+        }
     }
 
     //// last level -->

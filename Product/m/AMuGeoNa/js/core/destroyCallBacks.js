@@ -47,6 +47,7 @@ class DestroyCallbacks {
         try {
             if (cb == undefined) { return; }
             
+            if (this.#_map.has(cb) === true) { return; } // 이미 있어서 등록 안함s
             this.#_map.set(cb, cb);
 
         } catch(e) {

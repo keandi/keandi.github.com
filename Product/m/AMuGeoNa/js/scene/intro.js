@@ -73,6 +73,14 @@ class SceneIntro extends BaseScene {
                 'assets/atlas/firework_yellow.json'
             );
         }, 2 );
+
+        /*this.addSerialLoadAsset( 'aaaa',
+        () => {
+            this.load.json(
+                'aaaa',
+                'assets/atlas/firework_yellow.json'
+            );
+        }, 1 ); */
     };
     
     
@@ -90,6 +98,10 @@ class SceneIntro extends BaseScene {
             this.addPointerEvent('down', (pointer)=>{
                 _gameHost.switchScene(KEY_LEVEL);
             });
+
+
+            /*var aaaa = this.cache.json.get('aaaa');
+            console.log(aaaa.frames[0].filename); */
 
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
@@ -154,6 +166,28 @@ class SceneIntro extends BaseScene {
             this.#_SPV.firework.visible = true;
             firework.play('firework');
 
+            switch (Phaser.Math.Between(1, 5))
+            {
+                case 1:
+                    firework.setTint(0xFF0000);
+                    break;
+                
+                case 2:
+                    firework.setTint(0xFF00FF);
+                    break;
+
+                case 3:
+                    firework.setTint(0x00FF00);
+                    break;
+
+                case 4:
+                    firework.setTint(0x0000FF);
+                    break;
+
+                default:
+                    firework.setTint(0xFFFFFF);
+                    break;
+            }
 
         } catch(e) {
             var errMsg = this.getKey() + ".randomFireWork.catched: " + e;

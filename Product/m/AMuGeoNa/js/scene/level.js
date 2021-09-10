@@ -97,7 +97,6 @@ class SceneLevel extends GameScene {
             super.onCompleteSerialLoadAllAssets();
 
             let selfIt = this;
-            _gameData.LastLevel = 2;
 
             //
             this.printTitle(_gameOption.selectText('게임 선택', 'Game selection'));
@@ -145,6 +144,20 @@ class SceneLevel extends GameScene {
 
     onCompleteSerialLoadAllAssetsAfter() {
         // nothing. 구현하여 게임 접근 체크를 하지 않도록 한다.
+    }
+
+    // game start
+    onGameStart() {
+        try {
+            //this.useGold(2000);
+            //_gameData.LastLevel = 0;
+            //_gameData.save();
+            //this.addGold(3);
+        } catch(e) {
+            var errMsg = this.getKey() + ".onGameStart.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
     // make level objects
@@ -342,6 +355,7 @@ class SceneLevel extends GameScene {
     // 게임 진입 클릭
     onEntryTry(entryBlock) {
         try {
+            let selfIt = this;
             this.playSound('twink');
             let levelInfo = entryBlock.LevelInfo;
 
@@ -351,7 +365,7 @@ class SceneLevel extends GameScene {
                     _gameOption.selectText( stringFormat("입장료({0})가 부족합니다.", entryFee), 
                         stringFormat("Insufficient entrance fee ({0})", entryFee)));
                 return;
-            } else if (_gameData.Gold >= levelInfo.limitgold) {
+            } else if (_gameData.Gold >= levelInfo.limitgold && levelInfo.limitgold != 0) {
                 var limitFee = stringFormat("{0}G", levelInfo.limitgold);
                 this.msgboxOk(_gameOption.selectText("알림", "Notice"),
                     _gameOption.selectText( stringFormat("입장 제한 ({0})", limitFee), 
@@ -362,7 +376,7 @@ class SceneLevel extends GameScene {
             // 게임 진입
             let entryGame = function(li) {
                 _gameData.EntryGameLevelInfo = li;
-                _gameHost.switchScene(li.sceneKey);
+                _gameHost.switchScene(li.arg.sceneKey);
             };
 
             if (levelInfo.needgold > 0) {
@@ -371,8 +385,8 @@ class SceneLevel extends GameScene {
                 var eng = stringFormat("Admission: {0}\r\nWould you like to pay?", entryFee);
                 this.msgboxYesNo(_gameOption.selectText("입장료", "Admission"), _gameOption.selectText(kor, eng),
                     () => { 
-                        this.useGold(levelInfo.needgold);
-                        this._gameData.save();
+                        selfIt.useGold(levelInfo.needgold);
+                        _gameData.save();
                         entryGame(levelInfo);
                     },
                     () => {}
@@ -431,13 +445,74 @@ class SceneLevel extends GameScene {
 
         // gold test
         {
-            if (this.#_SPV.isGoldTest === true) {
+            this.addGold(3);
+            /*if (this.#_SPV.isGoldTest === true) {
                 this.addGold(100);
                 this.#_SPV.isGoldTest = false;
             } else {
                 this.useGold(100);
                 this.#_SPV.isGoldTest = true;
+            }*/
+        }
+
+        // timer-pool
+        {
+            /*let v = this.#_SPV;
+            let timerPool = this.getTimerPool();
+
+            if (v.timerId == undefined) {
+                v.timerId = timerPool.setTimeout(()=>{
+                    //console.log("timer-id: " + v.timerId + ", tick: " + _gameHost.Time);
+                    console.log("tick: " + _gameHost.Time);
+
+                    //timerPool.remove(v.timerId);
+                    v.timerId = undefined;
+                }, 500);
+            } 
+            //else {
+               // timerPool.remove(v.timerId);
+              //  v.timerId = undefined;
+            //}
+            */
+        }
+
+        // atlas json
+        {
+            //console.log(_resourcePool.getJsonObject('level_entry_characters'));
+            /*let frameMap = _resourcePool.getJsonFrameMap('level_entry_characters');
+            console.log( frameMap );*/
+        }
+
+        // progressbar test
+        {
+            /*
+            let timerPool = this.getTimerPool();
+            const contentRc = this.ContentRc;
+            let pb = new ProgressBar('progressbar_test', this, contentRc.Left + 10, contentRc.Top + 10, contentRc.Width - 20, 8,
+                0, 25, 0xff0000, 0xffffff, 0, 0.2, 0.5);
+            let timer = timerPool.setInterval(()=>{
+                pb.increase();
+                if (pb.IsMax === true)                 {
+                    timerPool.remove(timer);
+                    timerPool.asyncCall(()=>{
+                        pb.destroy();
+                    }, 1500);
+                }
+            }, 100);
+            */
+        }
+
+        // gold changed notify
+        {
+            /*
+            let v = this.#_SPV;
+            if (v.gcn == undefined) {
+                this.registerGoldNotify((gold)=>{
+                    console.log('current gold: ' + gold);
+                });
+                v.gcn = true;
             }
+            */
         }
         
     }

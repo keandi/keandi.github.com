@@ -6,6 +6,7 @@ class SceneOption extends GameScene {
         try {
             super(fps, gameHost);
 
+            this.IsNeedUserExitQuery = false;
         } catch (e) {
             var errMsg = this.getKey() + ".ctor.catched: " + e;
             console.log(errMsg);

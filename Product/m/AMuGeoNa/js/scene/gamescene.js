@@ -7,8 +7,21 @@ class GameScene extends BaseScene {
             super(fps, gameHost);
 
             this.#_PV.isNeedExitButton = true;
+            this.#_PV.isNeedUserExitQuery = true;
         } catch (e) {
             var errMsg = this.getKey() + ".ctor.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    onStop() {
+        try {
+            super.onStop();
+            
+            this.#destroyGoldNotify();
+        } catch(e) {
+            var errMsg = this.getKey() + ".onStop.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -17,6 +30,11 @@ class GameScene extends BaseScene {
     // exit 버튼 필요여부 설정. 
     set IsNeedExitButton(value) {
         this.#_PV.isNeedExitButton = value;
+    }
+
+    // value: true-사용자 질문 필요, false-정상 exit 처리
+    set IsNeedUserExitQuery(value) {
+        this.#_PV.isNeedUserExitQuery = value;
     }
 
     onSerialLoadAssets() {
@@ -42,7 +60,7 @@ class GameScene extends BaseScene {
             () => this.load.audio('coin_drop', 'assets/audio/coin_drop.mp3'), 1 ); */
 
         _resourcePool.setScene(this)
-            .addArgs('coins', 'msgbox_buttons', 'coin_add', 'coin_use');
+            .addArgs('coins', 'msgbox_buttons', 'coin_add', 'coin_use', 'exit_button', 'help_button');
     };    
     
     onCompleteSerialLoadAllAssets() {
@@ -59,7 +77,8 @@ class GameScene extends BaseScene {
 
     onCompleteSerialLoadAllAssetsAfter() {
         try {
-            if (_gameData.EntryGameLevelInfo.sceneKey != this.getKey()) {
+            //console.log("entry info: " + JSON.stringify(_gameData.EntryGameLevelInfo));
+            if (_gameData.EntryGameLevelInfo.arg.sceneKey != this.getKey()) {
                 this.msgboxOk(_gameOption.selectText("경고", "Warning"), 
                 _gameOption.selectText("잘못된 접근입니다.", "The wrong approach."), 
                 ()=>this._gameHost.switchScene(KEY_LEVEL));
@@ -68,6 +87,35 @@ class GameScene extends BaseScene {
             return true;
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssetsAfter.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // game object pool 이용시 생성 과정을 여기에서 구현
+    onRegisterObjectCreateCallback() {
+        try {
+            super.registerGameObjectCreateCallback();
+
+            //
+            let selfIt = this;
+            let coinXY = {
+               x: this.#_PV.coinText.x,
+               y: this.BottomMenuRc.Top
+            };
+            // this.#_PV.coinText
+
+            // add coin text
+            this.registerGameObjectCreateCallback('addCoin', ()=>{
+                return new CoinTextAction("cta_add", selfIt, coinXY.x, coinXY.y, true);
+            });
+
+            // use coin text
+            this.registerGameObjectCreateCallback('useCoin', ()=>{
+                return new CoinTextAction("cta_use", selfIt, coinXY.x, coinXY.y, false);
+            });
+        } catch(e) {
+            var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -169,7 +217,17 @@ class GameScene extends BaseScene {
             let exit_button = this.addDestroyableObject( new GOImageButton("exit_button", this, exit_button_x, exit_button_y, 
                 'exit_button', 'BTN_UP', 'exit_button', 'BTN_DOWN',
                 () => {
-                    selfIt.onExitTry( ()=>_gameHost.switchScene(KEY_LEVEL) );
+                    if (selfIt.#_PV.isNeedUserExitQuery === false) {
+                        selfIt.gameEnd(); //param 을 비워서 scene만 바꿈
+                        return;
+                    }
+
+                    let kor = "게임을 종료하시겠습니까?";
+                    let eng = "Are you sure\r\nyou want to quit the game?";
+                    selfIt.msgboxYesNo(_gameOption.selectText("질문", "Quetion"),
+                        _gameOption.selectText(kor, eng), ()=>{
+                            selfIt.gameUserExit();
+                        });
                 })
             );
             exit_button.setDepth(DEPTH_MENU_BUTTON);
@@ -181,9 +239,43 @@ class GameScene extends BaseScene {
         }
     }
 
-    // exit 발생 시 exit 진행 및 후처리를 결정한다. (상속후 사용)
-    onExitTry(cb) {
-        cb();
+    // 상단 게임 아이콘 생성
+    createTopIcon(sprite, texture) {
+        try {
+            let topMenuRc = this.TopMenuRc;
+
+            let icon = this.addDestroyableObject( this.add.image(32, topMenuRc.CenterY, sprite, texture) ).setDepth(DEPTH_MENU_BUTTON);
+            setPixelScaleXorY(icon, 32);
+        } catch(e) {
+            var errMsg = this.getKey() + ".createTopIcon.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // create help button
+    createHelpButton(content, beginX) {
+        try {
+
+            let selfIt = this;
+
+            // button
+            const topMenuRc = this.TopMenuRc;
+            const button_x = beginX + 16; // 16 = 아이콘 사이즈 / 2
+            const button_y = topMenuRc.CenterY;
+            let button = this.addDestroyableObject( new GOImageButton("help_button", this, button_x, button_y, 
+                'help_button', 'BTN_UP', 'help_button', 'BTN_DOWN',
+                () => {
+                    selfIt.msgboxOk( 'HELP', content );
+                })
+            );
+            button.setDepth(DEPTH_MENU_BUTTON);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".createExitButton.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
     // 하단 메뉴 설정
@@ -235,11 +327,15 @@ class GameScene extends BaseScene {
         }
     }
 
-    useGold(v) {
+    useGold(v, isNoText) {
         try {
-            _gameData.useGold(v);
+            const goldChanged = _gameData.useGold(v);
             this.playCoinSound(false);
+            if (isNoText !== true) {
+                this.getGameObject('useCoin').run(v);
+            }
             this.refreshGold();
+            if (goldChanged === true) { this.#notifyGoldChanged(); }
         } catch(e) {
             var errMsg = this.getKey() + ".refreshGold.catched: " + e;
             console.log(errMsg);
@@ -247,11 +343,15 @@ class GameScene extends BaseScene {
         }
     }
 
-    addGold(v) {
+    addGold(v, isNoText) {
         try {
-            _gameData.addGold(v);
+            const goldChanged = _gameData.addGold(v);
             this.playCoinSound(true);
+            if (isNoText !== true) {
+                this.getGameObject('addCoin').run(v);
+            }
             this.refreshGold();
+            if (goldChanged === true) { this.#notifyGoldChanged(); }
         } catch(e) {
             var errMsg = this.getKey() + ".addGold.catched: " + e;
             console.log(errMsg);
@@ -385,5 +485,102 @@ class GameScene extends BaseScene {
     }
 
     //// msgbox -->
+    ////////////////////////////////////
+
+    ////////////////////////////////////
+    //// <!-- game end
+    //
+    gameEnd(isGiveup) {
+        if (isGiveup != undefined) {
+            if (isGiveup === false) {
+                _gameData.setLastLevel(_gameData.EntryGameLevelInfo.level);
+            }
+    
+            // 현재 정보 저장
+            _gameData.save();
+        }
+
+        // go level
+        this._gameHost.switchScene(KEY_LEVEL);
+    }
+
+    // 게임 강제종료 처리 (반드시 상속 구현 필요)
+    gameUserExit() {
+        alert("'gameUserExit' is not implemented.");
+    }
+
+    // 게임 정상종료 처리
+    gameFinished() {
+        alert("'gameFinished' is not implemented.");
+    }
+
+    //// game end -->
+    ////////////////////////////////////
+
+    ////////////////////////////////////
+    //// <!-- gold 변경 알림 서비스
+
+    // destroy
+    #destroyGoldNotify() {
+        try {
+            destroyObject( this.#_PV.goldChangedNotifier );
+        } catch(e) {
+            var errMsg = this.getKey() + ".destroyGoldNotify.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // register
+    registerGoldNotify(cb) {
+        try {
+            let v = this.#_PV;
+
+            if (v.goldChangedNotifier == undefined) {
+                v.goldChangedNotifier = new CallbackMap("gold_chaged_notifier");
+            }
+
+            v.goldChangedNotifier.add(cb);
+        } catch(e) {
+            var errMsg = this.getKey() + ".registerGoldNotify.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // unregister
+    unregisterGoldNotify(cb) {
+        try {
+            let v = this.#_PV;
+
+            if (v.goldChangedNotifier == undefined) { return; }
+
+            v.goldChangedNotifier.remove(cb);
+        } catch(e) {
+            var errMsg = this.getKey() + ".unregisterGoldNotify.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // notify gold changed event
+    #notifyGoldChanged() {
+        try {
+            let v = this.#_PV;
+            if (v.goldChangedNotifier == undefined) { return; }
+
+            const gold = _gameData.Gold;
+            v.goldChangedNotifier.forEach((callback)=>{
+                callback(gold);
+            });
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".notifyGoldChanged.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    //// gold 변경 알림 서비스 -->
     ////////////////////////////////////
 }

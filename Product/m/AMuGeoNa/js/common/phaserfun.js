@@ -75,7 +75,7 @@ function objectMoveTowardsY(object, dstY, velocity) {
         alert(errMsg);
     }
 
-    return [srcX, srcY, false];
+    return false;
 }
 
 // add text (for font)
@@ -109,6 +109,18 @@ function setPixelScaleY(obj, pixel, autoXScale) {
     if (autoXScale === true) {
         obj.scaleX = obj.scaleY;
     }
+}
+
+// set x, y scale
+function setScale(obj, scale) {
+    obj.scaleX = scale;
+    obj.scaleY = scale;
+}
+
+// set x, y scale
+function setScaleXY(obj, scaleX, scaleY) {
+    obj.scaleX = scaleX;
+    obj.scaleY = scaleY;
 }
 
 // width, height 중 큰 쪽을 사이즈를 우선 맞추고 그 비율에 맞게 나머지 하나를 맞추기

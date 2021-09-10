@@ -7,6 +7,13 @@ class Loader extends ClsObject {
             super(name);
 
             this.#setCanas();
+
+            // canvas 확인
+            if (this.#_PV.sceneSize.w < 400 || this.#_PV.sceneSize.h < 600) {
+                alert("Too small game screen!!!!");
+                return;
+            }
+
             this.#createGlobalData();
             if (this.#createGame() !== true) {
                 alert(_gameOption.selectText("게임 생성에 실패하였습니다.", "Failed to create game."));
@@ -33,6 +40,18 @@ class Loader extends ClsObject {
             _resourcePool = new ResourcePool("resourcePool");
             _serialLoadHistory = new SerialLoadHistory("global_serial_asset_load_history");
             _gameHost = new GameHost("gamehost", this.#_PV.sceneSize.w, this.#_PV.sceneSize.h, COLOR_BACKGROUND, 0);
+
+            // 임시 디버깅
+            {
+                let url = window.location.href;
+                let pos = url.indexOf("#reset");
+                if (pos > 0) {
+                    _gameData.LastLevel = 0;
+                    _gameData.useGold(10000);
+                    _gameData.save();
+                    alert("게임 데이터를 초기화 하였습니다.");
+                }
+            }
 
             _sceneData = [
                 {
@@ -122,6 +141,8 @@ class Loader extends ClsObject {
                 sceneDiv.style.height = h + 'px';
                 sceneDiv.style.marginLeft = '-' + (parseInt(w / 2)) + 'px';
                 sceneDiv.style.marginTop = '-' + (parseInt(h / 2)) + 'px';
+
+                console.log( stringFormat("canvas size w: {0} px, h: {1} px", w, h));
             }
 
             //

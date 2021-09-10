@@ -48,6 +48,9 @@ var BaseScene = function(fps, gameHost, config) {
 
     //
     this._gameTimerPool = new GameTimerPool("gametimerpool", this);
+
+    // create game object pool
+    this.createGameObjectPool();
 }
 
 BaseScene.prototype = Object.create(Phaser.Scene.prototype);
@@ -103,11 +106,11 @@ BaseScene.prototype.update = function(time, delta) {
     //console.log("upate time: " + time + ", delta: " + delta);
     this._gameHost.Time += delta;
     this._fps.frameTime += delta;
-    this.publishUpdate();
     
     //console.log("mielscene update" + this._fps.frameTime + " / " + this._fps._frameTimeLimit);
     if (this._fps.frameTime > this._fps.frameTimeLimit) {
         this._fps.frameTime = 0;
+        this.publishUpdate(); // 프레임 수준에 맞게 전달
         this.onUpdate();
     }
 }
@@ -163,7 +166,8 @@ BaseScene.prototype.stop = function() {
 
 // scene stop event. (상속하여 사용)
 BaseScene.prototype.onStop = function() {
-    //nothing
+    this.clearGameObjectPool();
+    this.clearObjectDrag();
 }
 
 // asset load
@@ -199,7 +203,7 @@ BaseScene.prototype.loadAssets = function() {
             if (this._serialLoader == undefined || this._serialLoader.count == 0) {
                 this.onCompleteSerialLoadAllAssets();
                 if (this.onCompleteSerialLoadAllAssetsAfter() === false) {return;}
-                this.onGameStart();
+                this.startGame();
                 return;
             }
 
@@ -319,7 +323,7 @@ BaseScene.prototype.onCompleteSerialLoadAsset = function(isAllFinished)
         this._assetLoadCompleted = true;
         this.onCompleteSerialLoadAllAssets();
         if (this.onCompleteSerialLoadAllAssetsAfter() === false) {return;}
-        this.onGameStart();
+        this.startGame();
     }
     else
     { // 진행 중  
@@ -337,6 +341,12 @@ BaseScene.prototype.onCompleteSerialLoadAllAssets = function() {
 // asset 로딩이 완료되어 다 처리 후 추가 발생 (상속하여 사용)
 BaseScene.prototype.onCompleteSerialLoadAllAssetsAfter = function() {
     return true;
+}
+
+// 게임 시작 프로세스
+BaseScene.prototype.startGame = function() {
+    this.onRegisterObjectCreateCallback();
+    this.onGameStart();
 }
 
 // 게임의 실제 시작은 여기서 부터 작업하세요 (상속하여 사용)
@@ -647,19 +657,27 @@ BaseScene.prototype.destroyDestroyCB = function(cb) {
 BaseScene.prototype.subscribeUpdate = function(obj) {
     if (this._updateReceivers == undefined) {
         this._updateReceivers = [];
+    } else {
+        if (this._updateReceivers.indexOf(obj) >= 0) { return; } // 이미 존재
     }
 
     this._updateReceivers.push(obj);
+
+    //console.log("subscribeUpdate name: " + obj.Name + ", count: " + this._updateReceivers.length);
 }
 
 // unsubscribe
 BaseScene.prototype.unsubscribeUpdate = function(obj) {
     if (this._updateReceivers == undefined) { return; }
 
+    //console.log("pre unsubscribeUpdate name: " + obj.Name + ", count: " + this._updateReceivers.length);
+
     const idx = this._updateReceivers.indexOf(obj);
     if (idx > -1) {
-        this._updateReceivers.splice(idx);
+        this._updateReceivers.splice(idx, 1);
     }
+
+    //console.log("unsubscribeUpdate name: " + obj.Name + ", count: " + this._updateReceivers.length);
 }
 
 // remove all
@@ -1054,4 +1072,238 @@ BaseScene.prototype.playSound = function(resource) {
 }
 
 //// sound pool -->
+///////////////////////////////
+
+// get timer pool
+BaseScene.prototype.getTimerPool = function() {
+    return this._timerPool;
+}
+
+///////////////////////////////
+//// <!-- Game Object Pool
+
+// create
+BaseScene.prototype.clearGameObjectPool = function() {
+    try {
+        if (this._gameObjectPool == undefined) { return; } 
+        this._gameObjectPool.destroy();
+        this._gameObjectPool = undefined;
+
+    } catch(e) {
+        var errMsg = this.getKey() + ".clearGameObjectPool.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// create
+BaseScene.prototype.createGameObjectPool = function() {
+    try {
+        if (this._gameObjectPool != undefined) { 
+            this._gameObjectPool.destroy();
+            this._gameObjectPool = undefined;
+        }
+
+        this._gameObjectPool = new GameObjectPool("gameobjectpool_" + this.getKey(), this);
+
+    } catch(e) {
+        var errMsg = this.getKey() + ".clearGameObjectPool.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// game object pool 이용시 생성 과정을 여기에서 구현 (상속하여 사용)
+BaseScene.prototype.onRegisterObjectCreateCallback = function() {
+
+}
+
+// register callback
+BaseScene.prototype.registerGameObjectCreateCallback = function(name, cb) {
+    try {
+        if (this._gameObjectPool == undefined) { this.createGameObjectPool(); }
+        this._gameObjectPool.registerCreateCallback(name, cb);
+    } catch(e) {
+        var errMsg = this.getKey() + ".registerGameObjectCreateCallback.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// get game object
+BaseScene.prototype.getGameObject = function(name) {
+    try {
+        if (this._gameObjectPool == undefined) { return; }
+        return this._gameObjectPool.get(name);
+    } catch(e) {
+        var errMsg = this.getKey() + ".getGameObject.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// release game object
+BaseScene.prototype.releaseGameObject = function(object) {
+    try {
+        if (this._gameObjectPool == undefined) { return; }
+        return this._gameObjectPool.release(object);
+    } catch(e) {
+        var errMsg = this.getKey() + ".releaseGameObject.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+//// Game Object Pool -->
+///////////////////////////////
+
+///////////////////////////////
+//// <!-- game object drag
+
+// event on
+BaseScene.prototype.objectDragOn = function() {
+    try {
+        this.objectDragOff();
+
+        let selfIt = this;
+
+        this.input.on('dragstart', function(pointer, gameObject) {
+            selfIt.onObjectDragStart(pointer, gameObject);
+        });
+
+        this.input.on('drag', function(pointer, gameObject, dragX, dragY) {
+            selfIt.onObjectDrag(pointer, gameObject, dragX, dragY);
+        });
+
+        this.input.on('dragend', function(pointer, gameObject) {
+            selfIt.onObjectDragEnd(pointer, gameObject);
+        });
+    } catch(e) {
+        var errMsg = this.getKey() + ".objectDragOn.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// event off
+BaseScene.prototype.objectDragOff = function() {
+    try {
+        this.input.off('dragstart');
+        this.input.off('drag');
+        this.input.off('dragend');
+    } catch(e) {
+        var errMsg = this.getKey() + ".objectDragOff.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// clear
+BaseScene.prototype.clearObjectDrag = function() {
+    try {
+        this.objectDragOff();
+        
+        if (this._objectDragMap == undefined) {return;}
+        this._objectDragMap.clear();
+        this._objectDragMap = undefined;
+    } catch(e) {
+        var errMsg = this.getKey() + ".objectDragOff.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// remove
+BaseScene.prototype.removeObjectDrag = function(object) {
+    try {
+        if (this._objectDragMap == undefined) { return; }
+        else if (this._objectDragMap.has(object) === false) { return ;}
+
+        //
+        this._objectDragMap.delete(object);
+
+        //
+        if (this._objectDragMap.size <= 0) {
+            this.objectDragOff();
+        }
+    } catch(e) {
+        var errMsg = this.getKey() + ".removeObjectDrag.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// add
+BaseScene.prototype.addObjectDrag = function(object, cbDragStart, cbDrag, cbDragEnd) {
+    try {
+        if (this._objectDragMap == undefined) {
+            this._objectDragMap = new Map();
+        }
+
+        //
+        if (this._objectDragMap.has(object) === true) { return ;}
+
+        //
+        object.setInteractive();
+        this.input.setDraggable(object);
+
+        //
+        this._objectDragMap.set(object, {cbDragStart: cbDragStart, cbDrag: cbDrag, cbDragEnd: cbDragEnd});
+
+        //
+        if (this._objectDragMap.size === 1) {
+            this.objectDragOn();
+        }
+    } catch(e) {
+        var errMsg = this.getKey() + ".addObjectDrag.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// on drag start
+BaseScene.prototype.onObjectDragStart = function(pointer, gameObject) {
+    try {
+        if (this._objectDragMap == undefined) { return; }
+        else if (this._objectDragMap.size <= 0) { return; }
+        else if (this._objectDragMap.has(gameObject) === false) { return; }
+
+        this._objectDragMap.get(gameObject).cbDragStart(pointer, gameObject);
+    } catch(e) {
+        var errMsg = this.getKey() + ".onObjectDragStart.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// on drag
+BaseScene.prototype.onObjectDrag = function(pointer, gameObject, dragX, dragY) {
+    try {
+        if (this._objectDragMap == undefined) { return; }
+        else if (this._objectDragMap.size <= 0) { return; }
+        else if (this._objectDragMap.has(gameObject) === false) { return; }
+
+        this._objectDragMap.get(gameObject).cbDrag(pointer, gameObject, dragX, dragY);
+    } catch(e) {
+        var errMsg = this.getKey() + ".onObjectDrag.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// on drag end
+BaseScene.prototype.onObjectDragEnd = function(pointer, gameObject) {
+    try {
+        if (this._objectDragMap == undefined) { return; }
+        else if (this._objectDragMap.size <= 0) { return; }
+        else if (this._objectDragMap.has(gameObject) === false) { return; }
+
+        this._objectDragMap.get(gameObject).cbDragEnd(pointer, gameObject); 
+    } catch(e) {
+        var errMsg = this.getKey() + ".onObjectDragEnd.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+//// game object drag -->
 ///////////////////////////////

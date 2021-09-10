@@ -182,4 +182,9 @@ class GOImageButton extends DestroyableObject {
     setDepth(value) {
         this.#_PV.image.setDepth(value);
     }
+
+    // set visible
+    set visible(value) {
+        this.#_PV.image.visible = value;
+    }
 }
