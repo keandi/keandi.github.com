@@ -90,7 +90,7 @@ class STSBaseCanon extends GameSprite {
                 .addEntry('explosion', ()=>this.explosion());
 
             v.stateMachine.add('wait')
-                .addEntry('ready', ()=>this.wait())
+                .addEntry('ready', ()=>this.ready())
                 .addEntry('explosion', ()=>this.explosion());
 
         } catch (e) {
@@ -254,6 +254,11 @@ class STSBaseCanon extends GameSprite {
         }
     }
 
+    // get sprite rect
+    get SpriteRect() {
+        return this.#_PV.spriteRect;
+    }
+
     ///////////////////////////////
     //// <!-- need collision rect recompute
 
@@ -389,7 +394,7 @@ class STSBaseCanon extends GameSprite {
             }
 
         } catch (e) {
-            var errMsg = this.getExpMsg("unregisterPointerDown", e);
+            var errMsg = this.getExpMsg("onAnimationEnd", e);
             console.log(errMsg);
             alert(errMsg);
         }

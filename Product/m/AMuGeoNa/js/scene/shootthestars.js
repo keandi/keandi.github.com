@@ -183,6 +183,8 @@ class SceneShootTheStars extends GameScene {
                                 objectKind = 'canon_3';
                             } else if (canonType.value === ShootTheStarsCanonIconType.CONTINOUS_CANON.value) {
                                 objectKind = 'continous_canon';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.LASER_VERTICAL.value) {
+                                objectKind = 'laser_v';
                             }
 
                             if (objectKind != undefined) {
@@ -316,6 +318,10 @@ class SceneShootTheStars extends GameScene {
                 this.registerGameObjectCreateCallback('continous_canon', ()=>{
                     return new STSContinousCanon('continousCanon', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y), (who)=>selfIt.exhaustedCanon(who));
                 });
+
+                this.registerGameObjectCreateCallback('laser_v', ()=>{
+                    return new STSLaserV('laserV', selfIt, v.frameInfo, (x, y)=>selfIt.fireVerticalLaser(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
             }
 
             // bullet
@@ -405,6 +411,20 @@ class SceneShootTheStars extends GameScene {
             let bullet = this.getGameObject('bullet_normal');
             bullet.reset();
             bullet.run(x, y);
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // fire normal bullet
+    fireVerticalLaser(x,  y) {
+        try {
+            console.log('fire laser v');
+            return ()=> {
+                console.log('fire laser v - ended');
+            };
         } catch(e) {
             var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
             console.log(errMsg);
