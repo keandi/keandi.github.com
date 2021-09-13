@@ -108,6 +108,7 @@ BaseScene.prototype.update = function(time, delta) {
     this._fps.frameTime += delta;
     
     //console.log("mielscene update" + this._fps.frameTime + " / " + this._fps._frameTimeLimit);
+    //this.publishUpdate();
     if (this._fps.frameTime > this._fps.frameTimeLimit) {
         this._fps.frameTime = 0;
         this.publishUpdate(); // 프레임 수준에 맞게 전달

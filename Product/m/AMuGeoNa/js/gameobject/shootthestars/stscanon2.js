@@ -1,9 +1,9 @@
-class STSCanon1 extends STSBaseCanon {
+class STSCanon2 extends STSBaseCanon {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, frameData, fireCallback) {
-        super(name, scene, frameData);
+    constructor(name, scene, frameData, fireCallback, exhaustedCallback) {
+        super(name, scene, frameData, exhaustedCallback);
 
         try {
             let v = this.#_PV;            
@@ -39,7 +39,7 @@ class STSCanon1 extends STSBaseCanon {
     getSprite() {
         try {
             let v = this.#_PV;
-            return v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'CANON1_0000');
+            return v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'CANON2_0000');
         } catch (e) {
             var errMsg = this.getExpMsg("getSprite", e);
             console.log(errMsg);
@@ -58,14 +58,14 @@ class STSCanon1 extends STSBaseCanon {
 
             animatorManager.add('ready', {
                     asset: 'shootthestars_sprite',
-                    textures: ['CANON1_0000'],
+                    textures: ['CANON2_0000'],
                     duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 })
                 .add('fire', {
                     asset: 'shootthestars_sprite',
-                    textures: ['CANON1_0000','CANON1_0001','CANON1_0002','CANON1_0003','CANON1_0000',],
+                    textures: ['CANON2_0000','CANON2_0001','CANON2_0002','CANON2_0003','CANON2_0000',],
                     duration: fps,
                     repeat: 1,
                     frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
@@ -73,7 +73,7 @@ class STSCanon1 extends STSBaseCanon {
                 })
                 .add('wait', {
                     asset: 'shootthestars_sprite',
-                    textures: ['CANON1_0000'],
+                    textures: ['CANON2_0000'],
                     duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
@@ -87,19 +87,20 @@ class STSCanon1 extends STSBaseCanon {
 
     // 대기 시간 설정. 상속 구현하여 canon 별로 처리
     get WaitTime() {
-        return 6000;
+        return 3500;
     }
 
     // frame changed event
     onFrameChanged(frameIndex, frameName) {
         try {
 
-            if (frameIndex === 1) { //fire
+            if (frameIndex === 1) {
                 let sprite = this.Sprite;
                 let v = this.#_PV;
 
                 v.fireCallback(sprite.x, sprite.y - (sprite.width / 2));
                 //console.log("fire~~~");
+                this.increaseFireCount();
                 return;
             }
         } catch (e) {
@@ -107,5 +108,10 @@ class STSCanon1 extends STSBaseCanon {
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // bullet limit
+    get BulletLimit() {
+        return 30;
     }
 }

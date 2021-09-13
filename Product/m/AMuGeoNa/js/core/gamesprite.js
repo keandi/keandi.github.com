@@ -152,7 +152,7 @@ class GameSprite extends GameObject {
     resetState() {
         try {
             let v = this.#_PV;
-            if (v.stateMachine != undefined) { return; }
+            if (v.stateMachine == undefined) { return; }
 
             v.stateMachine.reset();
         } catch (e) {

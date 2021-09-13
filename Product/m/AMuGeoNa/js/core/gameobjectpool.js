@@ -105,7 +105,7 @@ class GameObjectPool extends DestroyableObject {
             or.use = false;
             or.object.visible = false;
 
-            console.log("game object release - object count: " + v.objectRef.size);
+            //console.log("game object release - object count: " + v.objectRef.size);
         } catch (e) {
             var errMsg = this.getExpMsg("release", e);
             console.log(errMsg);

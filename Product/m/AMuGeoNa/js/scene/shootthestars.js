@@ -159,7 +159,7 @@ class SceneShootTheStars extends GameScene {
                     return undefined;
                 };
 
-                let dragFakeImageControl = function(x, y, dragprocess, texture) {
+                let dragFakeImageControl = function(x, y, dragprocess, texture, canonType) {
                     if (dragprocess.value === DragProcess.START.value) {
                         dragFakeImage = selfIt.getGameObject(texture);
                     }
@@ -174,6 +174,33 @@ class SceneShootTheStars extends GameScene {
                     }
 
                     if (dragprocess.value === DragProcess.END.value) {
+                        if (canonRect != undefined && canonType != undefined) {
+                            var newCanon = undefined;
+                            var objectKind = undefined;
+                            if (canonType.value === ShootTheStarsCanonIconType.BASE_2.value) {
+                                objectKind = 'canon_2';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.BASE_3.value) {
+                                objectKind = 'canon_3';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.CONTINOUS_CANON.value) {
+                                objectKind = 'continous_canon';
+                            }
+
+                            if (objectKind != undefined) {
+                                let oldCanonInfo = selfIt.getCanonOfArea(canonRect.CenterX, canonRect.CenterY);
+                                if (oldCanonInfo != undefined) {
+                                    oldCanonInfo.object.remove();
+                                    selfIt.releaseGameObject(oldCanonInfo.object);
+                                }                          
+                                
+                                var newCanon = selfIt.getGameObject(objectKind);
+                                newCanon.setPosition(canonRect.CenterX, canonRect.CenterY);
+                                newCanon.reset();
+
+                                oldCanonInfo.object = newCanon;
+                            }
+
+                            //console.log("change canon - " + canonType.name);
+                        }
                         selfIt.releaseGameObject(dragFakeImage);
                         dragFakeImage = undefined;
                     }
@@ -183,7 +210,7 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_base2', selfIt, ShootTheStarsCanonIconType.BASE_2, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base2');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base2', who.IconType);
                     });
                 });
 
@@ -191,15 +218,15 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_base3', selfIt, ShootTheStarsCanonIconType.BASE_3, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base3');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base3', who.IconType);
                     });
                 });
 
                 this.registerGameObjectCreateCallback('canonIcon_coutinouse_canon', ()=>{
-                    return new CanonMenuIcon('icon_continouse_canon', selfIt, ShootTheStarsCanonIconType.CONTINOUSE_CANON, menuIconSize.w, (who, x, y, dragprocess)=>{
+                    return new CanonMenuIcon('icon_continouse_canon', selfIt, ShootTheStarsCanonIconType.CONTINOUS_CANON, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_continous_canon');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_continous_canon', who.IconType);
                     });
                 });
 
@@ -207,7 +234,7 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_laser_vertical', selfIt, ShootTheStarsCanonIconType.LASER_VERTICAL, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_vertical');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_vertical', who.IconType);
                     });
                 });
 
@@ -215,7 +242,7 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_laser_horizontal', selfIt, ShootTheStarsCanonIconType.LASER_HORIZONTAL, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_horizontal');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_horizontal', who.IconType);
                     });
                 });
 
@@ -223,7 +250,7 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_rocket', selfIt, ShootTheStarsCanonIconType.ROCKET, menuIconSize.w, (who, x, y, dragprocess)=>{
                         console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_rocket');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_rocket', who.IconType);
                     });
                 });
 
@@ -276,6 +303,18 @@ class SceneShootTheStars extends GameScene {
             {
                 this.registerGameObjectCreateCallback('canon_1', ()=>{
                     return new STSCanon1('canon1', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y));
+                });
+
+                this.registerGameObjectCreateCallback('canon_2', ()=>{
+                    return new STSCanon2('canon2', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
+
+                this.registerGameObjectCreateCallback('canon_3', ()=>{
+                    return new STSCanon3('canon3', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
+
+                this.registerGameObjectCreateCallback('continous_canon', ()=>{
+                    return new STSContinousCanon('continousCanon', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y), (who)=>selfIt.exhaustedCanon(who));
                 });
             }
 
@@ -349,6 +388,7 @@ class SceneShootTheStars extends GameScene {
                     canon.reset();
                     canon.setPosition(element.rect.CenterX, element.rect.CenterY);
                     canon.alpha = 1;
+                    element.object = canon;
                 });
             }
 
@@ -387,5 +427,49 @@ class SceneShootTheStars extends GameScene {
     // 게임 정상종료 처리
     gameFinished() {
         this.gameEnd(false);
+    }
+
+    //
+    getCanonOfArea(x, y) {
+        try {
+            let v = this.#_SPV;
+
+            for (var i = 0; i < v.canonData.canon.length; i++) {
+                if (v.canonData.canon[i].rect.ptInRect(x, y) === true) {
+                    return v.canonData.canon[i];
+                }
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+
+        return undefined;
+    }
+
+    // 탄을 모두 소진함
+    exhaustedCanon(who) {
+        try {
+            let canonData = this.getCanonOfArea(who.X, who.Y);
+
+            if (canonData == undefined) {
+                throw 'exhaustedCanon - unknown canon data';
+            }
+
+            // remove
+            who.remove();
+            this.releaseGameObject(who);
+
+            // new
+            canonData.object = this.getGameObject('canon_1');
+            canonData.object.reset();
+            canonData.object.setPosition(canonData.rect.CenterX, canonData.rect.CenterY);
+            canonData.object.alpha = 1;
+        } catch(e) {
+            var errMsg = this.getKey() + ".exhaustedCanon.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

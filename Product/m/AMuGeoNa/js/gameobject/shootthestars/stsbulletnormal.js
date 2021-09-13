@@ -58,7 +58,7 @@ class STSBulletNormal extends STSBaseBullet {
             }
 
             let upBullet = function() {
-                selfIt.Y -= 15;
+                selfIt.Y -= 35;
                 return (selfIt.SpriteRect.Bottom <= selfIt.GameRect.Top) ? false : true;
             };
 
@@ -67,7 +67,7 @@ class STSBulletNormal extends STSBaseBullet {
                     v.moveTimer.stop();
                     v.scene.releaseGameObject(selfIt);
                 }
-            }, 60/1000);
+            }, 1000 / 60);
         } catch (e) {
             var errMsg = this.getExpMsg("run", e);
             console.log(errMsg);
