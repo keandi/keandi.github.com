@@ -188,3 +188,10 @@ function destroyObjects() {
         alert(errMsg);
     }  
 }
+
+//Rect 클래스를 이용한 rectangle drawing
+function drawRect(g, color, rc)
+{
+    g.fillStyle(color, 1);
+    g.fillRect(rc.Left, rc.Top, rc.Width, rc.Height);
+}

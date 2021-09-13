@@ -199,4 +199,36 @@ class Rect {
 
         this.set( x - halfWidth, y - halfHeight, width, height );
     }
+
+    //////////////////////////////////////////
+    //// <!-- collision
+
+    isBetweenX(x) {
+        return (x >= this.Left && x <= this.Right) ? true : false;
+    }
+
+    isBetweenY(y) {
+        return (y >= this.Top && y <= this.Bottom) ? true : false;
+    }
+
+    collisionCheckFrom(x1, y1, x2, y2) {
+        if (this.isBetweenX(x1) === true || this.isBetweenX(x2) === true) {
+            return (this.isBetweenY(y1) === true || this.isBetweenY(y2) === true)
+                ? true : false;
+        }
+
+        return false;
+    }
+
+    isCollision(targetRc) {
+        if (this.collisionCheckFrom(targetRc.Left, targetRc.Top, targetRc.Right, targetRc.Bottom) === true) { return true; }
+
+        if (targetRc.collisionCheckFrom(this.Left, this.Top, this.Right, this.Bottom) === true) { return true; }
+
+        return false;
+    }
+
+    //// collision -->
+    //////////////////////////////////////////
+
 }
