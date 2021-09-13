@@ -275,7 +275,14 @@ class SceneShootTheStars extends GameScene {
             // canon 
             {
                 this.registerGameObjectCreateCallback('canon_1', ()=>{
-                    return new STSCanon1('canon1', selfIt, v.frameInfo);
+                    return new STSCanon1('canon1', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y));
+                });
+            }
+
+            // bullet
+            {
+                this.registerGameObjectCreateCallback('bullet_normal', ()=>{
+                    return new STSBulletNormal('bullet_normal', selfIt, v.frameInfo, selfIt.ContentRc);
                 });
             }
 
@@ -347,6 +354,19 @@ class SceneShootTheStars extends GameScene {
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // fire normal bullet
+    fireBulletNormal(x,  y) {
+        try {
+            let bullet = this.getGameObject('bullet_normal');
+            bullet.reset();
+            bullet.run(x, y);
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }

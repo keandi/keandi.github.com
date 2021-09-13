@@ -2,13 +2,14 @@ class STSCanon1 extends STSBaseCanon {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, frameData) {
+    constructor(name, scene, frameData, fireCallback) {
         super(name, scene);
 
         try {
             let v = this.#_PV;            
             v.scene = scene;
             v.frameData = frameData;
+            v.fireCallback = fireCallback;
             
             //
             super.initialize(); // 구현의 가장 하층에서 호출되어야 된다.
@@ -87,5 +88,24 @@ class STSCanon1 extends STSBaseCanon {
     // 대기 시간 설정. 상속 구현하여 canon 별로 처리
     get WaitTime() {
         return 4000;
+    }
+
+    // frame changed event
+    onFrameChanged(frameIndex, frameName) {
+        try {
+
+            if (frameIndex === 1) {
+                let sprite = this.Sprite;
+                let v = this.#_PV;
+
+                v.fireCallback(sprite.x, sprite.y - (sprite.width / 2));
+                //console.log("fire~~~");
+                return;
+            }
+        } catch (e) {
+            var errMsg = this.getExpMsg("onFrameChanged", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

@@ -398,4 +398,9 @@ class STSBaseCanon extends GameSprite {
     get WaitTime() {
         return 6 * 1000;
     }
+
+    // get rect
+    get Sprite() {
+        return this.#_PV.sprite;
+    }
 }
