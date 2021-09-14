@@ -1,4 +1,4 @@
-class STSBulletLaserV extends STSBaseBullet {
+class STSBulletLaserV2 extends STSBaseBullet {
     #_PV = {};
 
     // ctor
@@ -28,7 +28,7 @@ class STSBulletLaserV extends STSBaseBullet {
     onInitialize() {
         try {
 
-            this.#_PV.frameName = 'LASER_V1';
+            this.#_PV.frameName = 'LASER_V2';
             super.onInitialize();
         
         } catch (e) {

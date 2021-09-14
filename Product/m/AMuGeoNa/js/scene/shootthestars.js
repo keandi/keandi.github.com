@@ -185,6 +185,8 @@ class SceneShootTheStars extends GameScene {
                                 objectKind = 'continous_canon';
                             } else if (canonType.value === ShootTheStarsCanonIconType.LASER_VERTICAL.value) {
                                 objectKind = 'laser_v';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.LASER_HORIZONTAL.value) {
+                                objectKind = 'laser_v2';
                             }
 
                             if (objectKind != undefined) {
@@ -322,6 +324,10 @@ class SceneShootTheStars extends GameScene {
                 this.registerGameObjectCreateCallback('laser_v', ()=>{
                     return new STSLaserV('laserV', selfIt, v.frameInfo, (x, y)=>selfIt.fireVerticalLaser(x, y), (who)=>selfIt.exhaustedCanon(who));
                 });
+
+                this.registerGameObjectCreateCallback('laser_v2', ()=>{
+                    return new STSLaserV2('laserV2', selfIt, v.frameInfo, (x, y)=>selfIt.fireVerticalLaser2(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
             }
 
             // bullet
@@ -332,6 +338,10 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('bullet_laser_v', ()=>{
                     return new STSBulletLaserV('bulletLaserV', selfIt, v.frameInfo, selfIt.ContentRc);
+                });
+
+                this.registerGameObjectCreateCallback('bullet_laser_v2', ()=>{
+                    return new STSBulletLaserV2('bulletLaserV2', selfIt, v.frameInfo, selfIt.ContentRc);
                 });
             }
 
@@ -424,26 +434,45 @@ class SceneShootTheStars extends GameScene {
         }
     }
 
-    // fire normal bullet
+    // fire vertical laser
     fireVerticalLaser(x,  y) {
         try {
-            console.log('fire laser v');
+            //console.log('fire laser v');
             let selfIt = this;
             let laser = this.getGameObject('bullet_laser_v');
             laser.reset();
             laser.run(x, y);
             return ()=> {
-                console.log('fire laser v - ended');
+                //console.log('fire laser v - ended');
                 laser.remove();
                 selfIt.releaseGameObject(laser);
             };
         } catch(e) {
-            var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
+            var errMsg = this.getKey() + ".fireVerticalLaser.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
     }
 
+    // fire vertical laser2
+    fireVerticalLaser2(x,  y) {
+        try {
+            console.log('fire laser v2');
+            let selfIt = this;
+            let laser = this.getGameObject('bullet_laser_v2');
+            laser.reset();
+            laser.run(x, y);
+            return ()=> {
+                console.log('fire laser v2 - ended');
+                laser.remove();
+                selfIt.releaseGameObject(laser);
+            };
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireVerticalLaser2.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 
      // get msgbox x, y (상속하여 반환 필요)
      getMsgBoxXY() {

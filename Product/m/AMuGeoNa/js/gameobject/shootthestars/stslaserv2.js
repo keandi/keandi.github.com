@@ -1,4 +1,4 @@
-class STSLaserV extends STSBaseCanon {
+class STSLaserV2 extends STSBaseCanon {
     #_PV = {};
 
     // ctor
@@ -39,7 +39,7 @@ class STSLaserV extends STSBaseCanon {
     getSprite() {
         try {
             let v = this.#_PV;
-            return v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'LASER1_0000');
+            return v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'LASER2_0000');
         } catch (e) {
             var errMsg = this.getExpMsg("getSprite", e);
             console.log(errMsg);
@@ -58,14 +58,14 @@ class STSLaserV extends STSBaseCanon {
 
             animatorManager.add('ready', {
                     asset: 'shootthestars_sprite',
-                    textures: ['LASER1_0000'],
+                    textures: ['LASER2_0000'],
                     duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 })
                 .add('fire', {
                     asset: 'shootthestars_sprite',
-                    textures: ['LASER1_0000','LASER1_0001','LASER1_0002','LASER1_0003','LASER1_0000',],
+                    textures: ['LASER2_0000','LASER2_0001','LASER2_0002','LASER2_0003','LASER2_0000',],
                     duration: fps,
                     repeat: 8,
                     frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
@@ -73,7 +73,7 @@ class STSLaserV extends STSBaseCanon {
                 })
                 .add('wait', {
                     asset: 'shootthestars_sprite',
-                    textures: ['LASER1_0000'],
+                    textures: ['LASER2_0000'],
                     duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
@@ -126,7 +126,7 @@ class STSLaserV extends STSBaseCanon {
             let spriteRect = this.SpriteRect;
             let v = this.#_PV;
 
-            v.fireEndCallback = v.fireCallback(spriteRect.CenterX - 2, spriteRect.Top);
+            v.fireEndCallback = v.fireCallback(spriteRect.CenterX - 1, spriteRect.Top);
             //console.log("fire~~~");
         } catch (e) {
             var errMsg = this.getExpMsg("fire", e);
