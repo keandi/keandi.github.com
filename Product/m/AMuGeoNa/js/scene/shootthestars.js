@@ -329,6 +329,10 @@ class SceneShootTheStars extends GameScene {
                 this.registerGameObjectCreateCallback('bullet_normal', ()=>{
                     return new STSBulletNormal('bullet_normal', selfIt, v.frameInfo, selfIt.ContentRc);
                 });
+
+                this.registerGameObjectCreateCallback('bullet_laser_v', ()=>{
+                    return new STSBulletLaserV('bulletLaserV', selfIt, v.frameInfo, selfIt.ContentRc);
+                });
             }
 
         } catch(e) {
@@ -424,8 +428,14 @@ class SceneShootTheStars extends GameScene {
     fireVerticalLaser(x,  y) {
         try {
             console.log('fire laser v');
+            let selfIt = this;
+            let laser = this.getGameObject('bullet_laser_v');
+            laser.reset();
+            laser.run(x, y);
             return ()=> {
                 console.log('fire laser v - ended');
+                laser.remove();
+                selfIt.releaseGameObject(laser);
             };
         } catch(e) {
             var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;

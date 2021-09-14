@@ -22,10 +22,6 @@ class STSBulletLaserV extends STSBaseBullet {
 
     destroy() {
         super.destroy();
-
-        let v = this.#_PV;
-        destroyObjects( v.moveTimer );
-        v.moveTimer = undefined;
     }
 
     // get sprite
@@ -34,7 +30,7 @@ class STSBulletLaserV extends STSBaseBullet {
             let v = this.#_PV;
 
             if (v.sprite == undefined) {
-                v.sprite = v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'BULLET');
+                v.sprite = v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'LASER_V1');
             }
 
             return v.sprite;
@@ -51,23 +47,23 @@ class STSBulletLaserV extends STSBaseBullet {
             let v = this.#_PV;
             let selfIt = this;
 
-            setPosition(v.sprite, x, y);
-
-            if (v.moveTimer == undefined) {
-                v.moveTimer = new TimerOnPool('timeronpool_' + this.Name, v.scene.getTimerPool());
+            if (v.fireRect == undefined) {
+                v.fireRect = new Rect();
             }
 
-            let upBullet = function() {
-                selfIt.Y -= 35;
-                return (selfIt.SpriteRect.Bottom <= selfIt.GameRect.Top) ? false : true;
-            };
+            const frame = v.frameData.frames.get('LASER_V1');
+            const gameRect = this.GameRect;
+            const spriteHalfWidth = frame.sourceSize.w / 2;
+            v.fireRect.Width = frame.sourceSize.w;
+            v.fireRect.Height = y - gameRect.Top + 80;
+            v.fireRect.X = x - spriteHalfWidth;
+            v.fireRect.Y = gameRect.Top - 20;
 
-            v.moveTimer.startInterval(()=>{
-                if (upBullet() === false) {
-                    v.moveTimer.stop();
-                    v.scene.releaseGameObject(selfIt);
-                }
-            }, 1000 / 60);
+            v.sprite.x = v.fireRect.CenterX;
+            v.sprite.y = v.fireRect.CenterY;
+
+            setPixelScaleY(v.sprite, v.fireRect.Height, false);
+            
         } catch (e) {
             var errMsg = this.getExpMsg("run", e);
             console.log(errMsg);
