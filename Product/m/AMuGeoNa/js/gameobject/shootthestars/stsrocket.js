@@ -1,4 +1,4 @@
-class STSLaserV extends STSBaseCanon {
+class STSRocket extends STSBaseCanon {
     #_PV = {};
 
     // ctor
@@ -21,7 +21,18 @@ class STSLaserV extends STSBaseCanon {
     }
 
     destroy() {
-        super.destroy();
+        try {
+            super.destroy();
+
+            let v = this.#_PV;
+
+            destoryObjects( v.missile );
+            v.missile = undefined;
+        } catch (e) {
+            var errMsg = this.getExpMsg("onInitialize", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
     // onInitialize
@@ -39,7 +50,15 @@ class STSLaserV extends STSBaseCanon {
     getSprite() {
         try {
             let v = this.#_PV;
-            return v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'LASER1_0000');
+            let canonSprite = v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'ROCKET');
+
+            // missile
+            v.missile = v.scene.add.sprite(0, 0, 'shootthestars_sprite', 'MISSILE');
+            v.missile.setOrigin(0.5);
+            v.missile.setDepth(DEPTH_SHOOTTHESTARS_CANON);
+            v.missile.visible = false;
+
+            return canonSprite;
         } catch (e) {
             var errMsg = this.getExpMsg("getSprite", e);
             console.log(errMsg);
@@ -58,14 +77,14 @@ class STSLaserV extends STSBaseCanon {
 
             animatorManager.add('ready', {
                     asset: 'shootthestars_sprite',
-                    textures: ['LASER1_0000'],
+                    textures: ['ROCKET'],
                     duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 })
                 .add('fire', {
                     asset: 'shootthestars_sprite',
-                    textures: ['LASER1_0000','LASER1_0001','LASER1_0002','LASER1_0003','LASER1_0000',],
+                    textures: ['ROCKET'],
                     duration: fps,
                     repeat: 8,
                     frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
@@ -73,7 +92,7 @@ class STSLaserV extends STSBaseCanon {
                 })
                 .add('wait', {
                     asset: 'shootthestars_sprite',
-                    textures: ['LASER1_0000'],
+                    textures: ['ROCKET'],
                     duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
@@ -92,29 +111,13 @@ class STSLaserV extends STSBaseCanon {
 
     // bullet limit
     get BulletLimit() {
-        return 3 + 1; //ready 시점에 증가시키므로 +1
+        return 4; //missile 의 경우 원하는 수치 +1로 해줘야 한다.
     }
 
-     // frame changed event
-     onFrameChanged(frameIndex, frameName) {
+    // frame changed event
+    onFrameChanged(frameIndex, frameName) {
         // 상속 구현 필요
         //console.log( stringFormat('not implement - onFrameChanged - idx[{0}], name[{1}]', frameIndex, frameName) );
-    }
-
-    // end animation
-    onAnimationEnd() {
-        try {
-            if (this.getStateMachine().Current === 'fire') {
-                this.#_PV.fireEndCallback();
-            }
-
-            super.onAnimationEnd();
-
-        } catch (e) {
-            var errMsg = this.getExpMsg("onAnimationEnd", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
     }
 
     // fire
@@ -125,24 +128,50 @@ class STSLaserV extends STSBaseCanon {
             let spriteRect = this.SpriteRect;
             let v = this.#_PV;
 
-            v.fireEndCallback = v.fireCallback(spriteRect.CenterX - 2, spriteRect.Top);
-            //console.log("fire~~~");
+            v.missile.visible = false;
+
+            v.fireCallback(v.missile.x, v.missile.y);
+            //console.log("rocket fire~~~");
         } catch (e) {
             var errMsg = this.getExpMsg("fire", e);
             console.log(errMsg);
             alert(errMsg);
         }
      }
-
+    
     // ready
     ready() {
         try {
             if (this.increaseFireCount() === true) { return; }
             this.play('ready');
+
+            let spriteRect = this.SpriteRect;
+            let v = this.#_PV;
+
+            setPosition(v.missile, spriteRect.CenterX - 3, spriteRect.CenterY + 4);
+
+            v.missile.visible = true;
+
+            //console.log("rocket ready~~~");
         } catch (e) {
             var errMsg = this.getExpMsg("ready", e);
             console.log(errMsg);
             alert(errMsg);
         }
      }
+
+    // visible
+    set visible(value) {
+        try {
+            super.visible = value;
+
+            if (value === false) {
+                this.#_PV.missile.visible = value;
+            }
+        } catch (e) {
+            var errMsg = this.getExpMsg("set_visible", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 }

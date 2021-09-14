@@ -471,10 +471,11 @@ class STSBaseCanon extends GameSprite {
                 //console.log(' fire ended !!!!');
                 if (v.exhaustedCallback != undefined) {
                     v.exhaustedCallback(this);
+                    return true;
                 } else {
                     v.fireCount.init();
                 }
-                return;
+                return false;
             }
 
         } catch (e) {
@@ -482,5 +483,7 @@ class STSBaseCanon extends GameSprite {
             console.log(errMsg);
             alert(errMsg);
         }
+
+        return false;
     }
 }

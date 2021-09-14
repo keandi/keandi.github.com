@@ -187,6 +187,8 @@ class SceneShootTheStars extends GameScene {
                                 objectKind = 'laser_v';
                             } else if (canonType.value === ShootTheStarsCanonIconType.LASER_HORIZONTAL.value) {
                                 objectKind = 'laser_v2';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.ROCKET.value) {
+                                objectKind = 'rocket';
                             }
 
                             if (objectKind != undefined) {
@@ -252,7 +254,7 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('canonIcon_rocket', ()=>{
                     return new CanonMenuIcon('icon_rocket', selfIt, ShootTheStarsCanonIconType.ROCKET, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_rocket', who.IconType);
                     });
@@ -260,7 +262,7 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('canonIcon_hp_up', ()=>{
                     return new CanonMenuIcon('icon_hp_up', selfIt, ShootTheStarsCanonIconType.HP_UP, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_hp_up');
                     }, (who)=>{
@@ -328,6 +330,10 @@ class SceneShootTheStars extends GameScene {
                 this.registerGameObjectCreateCallback('laser_v2', ()=>{
                     return new STSLaserV2('laserV2', selfIt, v.frameInfo, (x, y)=>selfIt.fireVerticalLaser2(x, y), (who)=>selfIt.exhaustedCanon(who));
                 });
+
+                this.registerGameObjectCreateCallback('rocket', ()=>{
+                    return new STSRocket('rocket', selfIt, v.frameInfo, (x, y)=>selfIt.fireMissile(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
             }
 
             // bullet
@@ -342,6 +348,10 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('bullet_laser_v2', ()=>{
                     return new STSBulletLaserV2('bulletLaserV2', selfIt, v.frameInfo, selfIt.ContentRc);
+                });
+
+                this.registerGameObjectCreateCallback('bullet_missile', ()=>{
+                    return new STSMissile('bulletMissile', selfIt, v.frameInfo, selfIt.ContentRc);
                 });
             }
 
@@ -457,18 +467,35 @@ class SceneShootTheStars extends GameScene {
     // fire vertical laser2
     fireVerticalLaser2(x,  y) {
         try {
-            console.log('fire laser v2');
+            //console.log('fire laser v2');
+            
             let selfIt = this;
             let laser = this.getGameObject('bullet_laser_v2');
             laser.reset();
             laser.run(x, y);
             return ()=> {
-                console.log('fire laser v2 - ended');
+                //console.log('fire laser v2 - ended');
                 laser.remove();
                 selfIt.releaseGameObject(laser);
             };
         } catch(e) {
             var errMsg = this.getKey() + ".fireVerticalLaser2.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // fire missile
+    fireMissile(x,  y) {
+        try {
+            //console.log('fire missile');
+            
+            let bullet = this.getGameObject('bullet_missile');
+            bullet.reset();
+            bullet.run(x, y);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireVerticfireMissilealLaser2.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }

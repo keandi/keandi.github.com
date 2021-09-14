@@ -92,7 +92,7 @@ class STSLaserV2 extends STSBaseCanon {
 
     // bullet limit
     get BulletLimit() {
-        return 3;
+        return 3 + 1; //ready 시점에 증가시키므로 +1
     }
 
      // frame changed event
@@ -106,7 +106,6 @@ class STSLaserV2 extends STSBaseCanon {
         try {
             if (this.getStateMachine().Current === 'fire') {
                 this.#_PV.fireEndCallback();
-                this.increaseFireCount();
             }
 
             super.onAnimationEnd();
@@ -130,6 +129,18 @@ class STSLaserV2 extends STSBaseCanon {
             //console.log("fire~~~");
         } catch (e) {
             var errMsg = this.getExpMsg("fire", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+     }
+
+    // ready
+    ready() {
+        try {
+            if (this.increaseFireCount() === true) { return; }
+            this.play('ready');
+        } catch (e) {
+            var errMsg = this.getExpMsg("ready", e);
             console.log(errMsg);
             alert(errMsg);
         }
