@@ -18,7 +18,7 @@ var BaseScene = function(fps, gameHost, config) {
     this._assetLoadCompleted = false;
     this._destroyMap = new DestroyMap();
     this._destroyCB = new DestroyCallbacks();
-
+    this._sleepCounter = new SleepCounter('sleep_counter_' + this.getKey());
     this._pointerEventManager = new PointerEventManager("pem_" + this.getKey(), this);
     this._cameraDragManager = new CameraDragManager("cdm_" + this.getKey());
 
@@ -101,6 +101,7 @@ BaseScene.prototype.onCreate = function() {
 
 // update. fps 수치에 맞게 onUpdate 호출
 BaseScene.prototype.update = function(time, delta) {
+    if (this.checkSleep(delta) === true) { return; }
     if (this._isPause == true) { return; }
     
     //console.log("upate time: " + time + ", delta: " + delta);
@@ -134,35 +135,45 @@ BaseScene.prototype.recomputeFps = function(fps) {
 
 // 외부에서 이 secene 멈출 것이라는 통지용 함수
 BaseScene.prototype.stop = function() {
-    // stop flash effect
-    this.stopFlashEffect();
-    this._pointerEventManager.destroy();
-    this._cameraDragManager.destroy();
 
-    //scene stop
-    this.onStop();
+    try {
+        // stop flash effect
+        this.stopFlashEffect();
+        this._pointerEventManager.destroy();
+        this._cameraDragManager.destroy();
+        this._sleepCounter.destroy();
 
-    this.load.off('progress');
-    this.load.off('complete');
-    this.swipeOff();
-    this.sceneDragOff();
+        //scene stop
+        this.onStop();
 
-    // clear subcribe update objects
-    this.clearSubcribeUpdate();
+        this.load.off('progress');
+        this.load.off('complete');
+        this.swipeOff();
+        this.sceneDragOff();
 
-    //예약된 destroy 진행
-    if (this._reservedDestroy.length > 0) {
-        this._reservedDestroy.forEach(element=>{element.destroy();});
-        this._reservedDestroy = [];
+        // clear subcribe update objects
+        this.clearSubcribeUpdate();
+
+        //예약된 destroy 진행
+        if (this._reservedDestroy.length > 0) {
+            this._reservedDestroy.forEach(element=>{element.destroy();});
+            this._reservedDestroy = [];
+        }
+        this._destroyMap.destroyAll();
+        this._destroyCB.destroyAll();
+
+        //예약된 .input.off
+        if (this._reservedInput.length > 0) {
+            this._reservedInput.forEach(element=>{ this.input.off(element); });
+            this._reservedInput = [];
+        }
+    } catch(e) {
+        var errMsg = this.getKey() + ".stop.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
     }
-    this._destroyMap.destroyAll();
-    this._destroyCB.destroyAll();
 
-    //예약된 .input.off
-    if (this._reservedInput.length > 0) {
-        this._reservedInput.forEach(element=>{ this.input.off(element); });
-        this._reservedInput = [];
-    }
+    
 }
 
 // scene stop event. (상속하여 사용)
@@ -1308,3 +1319,25 @@ BaseScene.prototype.onObjectDragEnd = function(pointer, gameObject) {
 
 //// game object drag -->
 ///////////////////////////////
+
+// sleep counter reserve
+BaseScene.prototype.reserveSleep = function(interval) {
+    try {
+        this._sleepCounter.sleep(interval);
+    } catch(e) {
+        var errMsg = this.getKey() + ".reserveSleep.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// sleep check
+BaseScene.prototype.checkSleep = function(delta) {
+    try {
+        return this._sleepCounter.check(delta);
+    } catch(e) {
+        var errMsg = this.getKey() + ".checkSleep.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}

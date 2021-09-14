@@ -411,6 +411,8 @@ class SceneShootTheStars extends GameScene {
             let bullet = this.getGameObject('bullet_normal');
             bullet.reset();
             bullet.run(x, y);
+
+            //this.reserveSleep(100);
         } catch(e) {
             var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
             console.log(errMsg);
