@@ -35,6 +35,10 @@ class SceneShootTheStars extends GameScene {
             super.onStop();
 
             this._isStopped = true;
+
+            let v = this.#_SPV;
+            destroyObjects( v.goalProgress );
+            v.goalProgress = undefined;
             
         } catch(e) {
             var errMsg = this.getKey() + ".onStop.catched: " + e;
@@ -387,6 +391,16 @@ class SceneShootTheStars extends GameScene {
             // background
             this.setBackgroundColor( COLOR_SHOOTTHESTARS_BACKGROUND );
 
+            // progressbar
+            {
+                const contentRc = this.ContentRc;
+                let pb = new ProgressBar('progressbar_goal', this, contentRc.Left + 10, contentRc.Top + 10, contentRc.Width - 20, 8,
+                        0, this.Goal, 0xff0000, 0xffffff, 0, 0.2, 0.5, ()=>{
+                            console.log("ok~~~~~~~~~~~~~~~~~~~~~~~~~!!!!");
+                        });
+                v.goalProgress = pb;
+            }
+
             // menu 
             {
                 v.menus = {
@@ -422,6 +436,30 @@ class SceneShootTheStars extends GameScene {
                 });
             }
 
+            // test star
+            {
+                var x = 0;
+                var y = 0;
+                var idx = 0;
+                var tints = [0xffffff, 0xffff55, 0xff55ff, 0x8888ff, 
+                    0x15b59c, 0x48ec87, 0x901568, 0x6c5589, 
+                    0xf95555, 0xff0000, 0xbb0000, 0x990000];
+                for (var i = 0; i < 3; i++)
+                {
+                    y += 100;
+                    x = 35;
+                    for (var j = 0; j < 4; j++)
+                    {
+                        var star = this.add.sprite(x, y, 'shootthestars_sprite', 'STAR');
+                        star.setOrigin(0.5);
+                        star.setTint(tints[idx]);
+
+                        x += 80;
+                        idx++;
+                    }
+                }
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);
@@ -437,6 +475,9 @@ class SceneShootTheStars extends GameScene {
             bullet.run(x, y);
 
             //this.reserveSleep(100);
+
+            let v = this.#_SPV;
+            v.goalProgress.increase();
         } catch(e) {
             var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
             console.log(errMsg);
@@ -559,5 +600,10 @@ class SceneShootTheStars extends GameScene {
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // 게임 목표
+    get Goal() {
+        return (_gameData.EntryGameLevelInfo.gamelevel * 3) + 25;
     }
 }

@@ -84,4 +84,9 @@ class STSBulletLaserV2 extends STSBaseBullet {
             alert(errMsg);
         }
     }
+
+    // strength
+    get Strength() {
+        return 3; // 탄마다 별도 처리
+    }
 }

@@ -74,4 +74,9 @@ class STSBulletNormal extends STSBaseBullet {
             alert(errMsg);
         }
     }
+
+    // strength
+    get Strength() {
+        return 5; // 탄마다 별도 처리
+    }
 }

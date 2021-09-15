@@ -1,8 +1,8 @@
-class STSBaseBullet extends GameSprite {
+class STSBaseEnemy extends GameSprite {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, frameData, gameRect) {
+    constructor(name, scene, frameData, exhaustedCallback) {
         super(name, scene, frameData, false);
 
         try {
@@ -10,7 +10,7 @@ class STSBaseBullet extends GameSprite {
             
             v.scene = scene;
             v.frameData = frameData;
-            v.gameRect = gameRect;
+            v.exhaustedCallback = exhaustedCallback;
             
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
@@ -23,8 +23,8 @@ class STSBaseBullet extends GameSprite {
         super.destroy();
 
         let v = this.#_PV;
-        destroyObjects( v.sprite );
-        v.sprite = undefined;
+        destroyObjects( v.waitTimer, v.sprite, v.waitPercent );
+        v.sprite = v.waitPercent = v.waitTimer = undefined;
     }
 
     // onInitialize
@@ -36,8 +36,12 @@ class STSBaseBullet extends GameSprite {
             if (v.sprite == undefined) {
                 v.sprite = this.getSprite();
                 v.sprite.setOrigin(0.5);
-                v.sprite.setDepth(DEPTH_SHOOTTHESTARS_BULLET);
+                v.sprite.setDepth(DEPTH_SHOOTTHESTARS_ENEMY);
             }
+            this.onRegisterAnimatorManager(this.getAnimatorManager(v.sprite));
+
+            this.#_PV.fireCount.limit = this.BulletLimit;
+            this.#_PV.fireCount.current = 0;
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
@@ -45,11 +49,69 @@ class STSBaseBullet extends GameSprite {
         }
     }
 
+    // state machine 등록
+    onRegisterStateMachine() {
+        try {
+            let v = this.#_PV;
+            v.stateMachine = this.getStateMachine();
+
+            v.stateMachine.add('patrol', true)
+                .addEntry('attack', ()=>this.fire())
+                .addEntry('explosion', ()=>this.explosion());
+
+            v.stateMachine.add('attack')
+                .addEntry('explosion', ()=>this.explosion());
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("onRegisterStateMachine", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+     }
+
      // get sprite
      getSprite() {
          // 상속 하여 반환 필요
          console.log('not implement - getSprite');
          return undefined;
+     }
+
+     // animator 등록
+     onRegisterAnimatorManager(animatorManager) {
+        // 상속 구현 필요
+     }
+     
+     // patrol
+     patrol() {
+        try {
+            this.play('patrol');
+        } catch (e) {
+            var errMsg = this.getExpMsg("patrol", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+     }
+
+     // attack
+     attack() {
+        try {
+            this.play('attack');
+        } catch (e) {
+            var errMsg = this.getExpMsg("attack", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+     }
+
+     // explosion
+     explosion() {
+        try {
+            this.play('explosion');
+        } catch (e) {
+            var errMsg = this.getExpMsg("explosion", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
      }
 
     //////////////////////////////////
@@ -185,7 +247,9 @@ class STSBaseBullet extends GameSprite {
     // reset
     reset() {
         try {
-
+            this.resetState();
+            this.patrol();
+            this.alpha = 1;
         } catch (e) {
             var errMsg = this.getExpMsg("reset", e);
             console.log(errMsg);
@@ -196,7 +260,10 @@ class STSBaseBullet extends GameSprite {
     // remove
     remove() {
         try {
+            if (this.#_PV.waitTimer != undefined) { this.#_PV.waitTimer.stop(); }
+            this.resetState();
 
+            //console.log("remove object = " + this.Name);
         } catch (e) {
             var errMsg = this.getExpMsg("remove", e);
             console.log(errMsg);
@@ -231,19 +298,26 @@ class STSBaseBullet extends GameSprite {
     //// alpha -->
     //////////////////////////////////
 
-    // get game rect
-    get GameRect() {
-        return this.#_PV.gameRect;
+    // end animation
+    onAnimationEnd() {
+        try {
+            let v = this.#_PV;
+            
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("onAnimationEnd", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
-    // run
-    run(x, y) {
-        //상속 구현 필요
-        console.log("Not implement - run !!!");
+    // get rect
+    get Sprite() {
+        return this.#_PV.sprite;
     }
 
-    // strength
-    get Strength() {
-        return 1; // 탄마다 별도 처리
+    // HP max
+    get MaxHP() {
+        return 1;
     }
 }

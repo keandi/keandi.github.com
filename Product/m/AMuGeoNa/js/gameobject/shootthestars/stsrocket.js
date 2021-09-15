@@ -26,7 +26,7 @@ class STSRocket extends STSBaseCanon {
 
             let v = this.#_PV;
 
-            destoryObjects( v.missile );
+            destroyObjects( v.missile );
             v.missile = undefined;
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
