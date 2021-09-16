@@ -60,12 +60,13 @@ class TimerOnPool extends ClsObject {
     }
 
     // start timeout
-    startInterval(cb, interval) {
+    startInterval(cb, interval, isEarlyStart) {
         try {
             this.stop();
 
             let v = this.#_PV;
             
+            if (isEarlyStart === true) { cb(); }
             v.id = v.timerPool.setInterval(()=>cb(), interval);
         } catch (e) {
             var errMsg = this.getExpMsg("startInterval", e);

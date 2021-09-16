@@ -77,7 +77,7 @@ class SpawnManager extends DestroyableObject {
             let selfIt = this;
             let v = this.#_PV;
 
-            let checkRoutine = function() {
+            v.checkTimer.startInterval(()=>{
                 if (v.current < v.max) {
                     if (v.current > 0) {
                         if (Phaser.Math.Between(0, 2) === 0) { return; }
@@ -90,12 +90,7 @@ class SpawnManager extends DestroyableObject {
 
                     v.current++;
                 }
-            };
-
-            v.checkTimer.startInterval(()=>{
-                checkRoutine();
-            }, v.interval);
-            checkRoutine();
+            }, v.interval, true);
         } catch (e) {
             var errMsg = this.getExpMsg("check", e);
             console.log(errMsg);
