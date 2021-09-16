@@ -12,6 +12,8 @@ class STSBaseEnemy extends GameSprite {
             v.frameData = frameData;
             v.gameRect = gameRect;
             v.getoutCallback = getoutCallback;
+
+            super.GroupTag = 'enemy';
             
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);

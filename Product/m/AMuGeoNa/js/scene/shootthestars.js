@@ -473,9 +473,49 @@ class SceneShootTheStars extends GameScene {
             // enemy
             {
                 const contentRc = this.ContentRc;
-                let star = this.getGameObject('enemy_star');
-                star.reset();
-                star.setPosition(contentRc.CenterX, contentRc.Top + 100);
+                const gameLevel = _gameData.EntryGameLevelInfo.gamelevel;
+
+                let createStar = function(x, y) {
+                    var star = selfIt.getGameObject('enemy_star');
+                    star.reset();
+                    star.setPosition(x, y);
+                };
+
+                // enemy spawn
+                {
+                    let getEnemyMax = function() {
+                        if (gameLevel > 80) { return 9; }
+                        else if (gameLevel > 55) { return 8; }
+                        else if (gameLevel > 40) { return 7; }
+                        else if (gameLevel > 25) { return 6; }
+
+                        return 5;
+                    };
+
+                    let getEnemyCallback = function() {
+                        let count_star = 1;
+
+                        if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+
+                        return [{ cb: (x, y)=>createStar(x, y), count: count_star}];
+                    };
+
+                    v.enemySpawn = new SpawnManager('enemy_spawn', this, 
+                        [
+                            { x: contentRc.X, y: contentRc.Top - 50 },
+                            { x: contentRc.X + contentRc.HalfWidth, y: contentRc.Top - 50 },
+                            { x: contentRc.CenterX, y: contentRc.Top - 50 },
+                            { x: contentRc.CenterX + contentRc.HalfWidth, y: contentRc.Top - 50 },
+                            { x: contentRc.Right, y: contentRc.Top - 50 },
+                        ], 
+                        getEnemyCallback(), getEnemyMax(), 3000);
+                }
             }
 
         } catch(e) {
@@ -623,6 +663,10 @@ class SceneShootTheStars extends GameScene {
     // 화면 밖으로 나갔음
     getOut(who) {
         try {
+
+            if (who.GroupTag == 'enemy') {
+                this.#_SPV.enemySpawn.decrease(1);
+            }
 
             // remove
             who.remove();

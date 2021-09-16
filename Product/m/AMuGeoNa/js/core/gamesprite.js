@@ -174,5 +174,19 @@ class GameSprite extends GameObject {
     onRegisterStateMachine() {
        // 상속 사용
     }
+
+    ////////////////////////////
+    //// <!-- object group tag
+
+    set GroupTag(value) {
+        this.#_PV.groupTag = value;
+    }
+
+    get GroupTag() {
+        return this.#_PV.groupTag;
+    }
+
+    //// object group tag -->
+    ////////////////////////////
     
 }
