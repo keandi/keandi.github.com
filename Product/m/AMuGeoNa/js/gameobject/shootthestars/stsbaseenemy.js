@@ -2,7 +2,7 @@ class STSBaseEnemy extends GameSprite {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, frameData, exhaustedCallback) {
+    constructor(name, scene, frameData, gameRect, getoutCallback) {
         super(name, scene, frameData, false);
 
         try {
@@ -10,7 +10,8 @@ class STSBaseEnemy extends GameSprite {
             
             v.scene = scene;
             v.frameData = frameData;
-            v.exhaustedCallback = exhaustedCallback;
+            v.gameRect = gameRect;
+            v.getoutCallback = getoutCallback;
             
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
@@ -32,6 +33,7 @@ class STSBaseEnemy extends GameSprite {
         try {
             super.onInitialize();
 
+            let selfIt = this;
             let v = this.#_PV;
             if (v.sprite == undefined) {
                 v.sprite = this.getSprite();
@@ -40,8 +42,13 @@ class STSBaseEnemy extends GameSprite {
             }
             this.onRegisterAnimatorManager(this.getAnimatorManager(v.sprite));
 
-            this.#_PV.fireCount.limit = this.BulletLimit;
-            this.#_PV.fireCount.current = 0;
+            if (v.hp == undefined) {
+                v.hp = new PointManager('hp_' + this.Name, this.MaxHP, ()=>{
+                    selfIt.explosion();
+                });
+            } else {
+                v.hp.resetMax(this.MaxHP);
+            }
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
@@ -106,7 +113,8 @@ class STSBaseEnemy extends GameSprite {
      // explosion
      explosion() {
         try {
-            this.play('explosion');
+            console.log('I`m die');
+            //this.play('explosion');
         } catch (e) {
             var errMsg = this.getExpMsg("explosion", e);
             console.log(errMsg);
@@ -250,6 +258,7 @@ class STSBaseEnemy extends GameSprite {
             this.resetState();
             this.patrol();
             this.alpha = 1;
+            this.#_PV.hp.resetMax(this.MaxHP);
         } catch (e) {
             var errMsg = this.getExpMsg("reset", e);
             console.log(errMsg);
@@ -319,5 +328,30 @@ class STSBaseEnemy extends GameSprite {
     // HP max
     get MaxHP() {
         return 1;
+    }
+
+    // get hp info
+    get HPInfo() {
+        return this.#_PV.hp;
+    }
+
+    // get game rect
+    get GameRect() {
+        return this.#_PV.gameRect;
+    }
+
+    // get out event
+    getOut() {
+        try {
+            let v = this.#_PV;
+            
+            if (v.getoutCallback == undefined) { return; }
+            v.getoutCallback(this);
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("getOut", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

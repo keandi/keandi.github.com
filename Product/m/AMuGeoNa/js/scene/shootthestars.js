@@ -359,6 +359,14 @@ class SceneShootTheStars extends GameScene {
                 });
             }
 
+            // enemy
+            {
+                // star
+                this.registerGameObjectCreateCallback('enemy_star', ()=>{
+                    return new STSEnemyStar('enemyStar', selfIt, v.frameInfo, selfIt.ContentRc, (who)=>selfIt.getOut(who));
+                });
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
@@ -438,6 +446,7 @@ class SceneShootTheStars extends GameScene {
 
             // test star
             {
+                /*
                 var x = 0;
                 var y = 0;
                 var idx = 0;
@@ -458,6 +467,15 @@ class SceneShootTheStars extends GameScene {
                         idx++;
                     }
                 }
+                */
+            }
+
+            // enemy
+            {
+                const contentRc = this.ContentRc;
+                let star = this.getGameObject('enemy_star');
+                star.reset();
+                star.setPosition(contentRc.CenterX, contentRc.Top + 100);
             }
 
         } catch(e) {
@@ -597,6 +615,21 @@ class SceneShootTheStars extends GameScene {
             canonData.object.alpha = 1;
         } catch(e) {
             var errMsg = this.getKey() + ".exhaustedCanon.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 화면 밖으로 나갔음
+    getOut(who) {
+        try {
+
+            // remove
+            who.remove();
+            this.releaseGameObject(who);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".getOut.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }

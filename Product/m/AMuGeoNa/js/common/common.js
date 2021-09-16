@@ -94,3 +94,8 @@ function hit_test(player, block) {
 function numberWithCommas(x) {
     return (x + "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+// fps
+function fps(value) { 
+    return 1000 / value;
+}

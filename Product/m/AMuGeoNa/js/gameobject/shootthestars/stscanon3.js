@@ -54,7 +54,7 @@ class STSCanon3 extends STSBaseCanon {
        try {
            let v = this.#_PV;
            let selfIt = this;
-           const fps = 24 / 1000;
+           const fps = 1000 / 24;
 
             animatorManager.add('ready', {
                     asset: 'shootthestars_sprite',

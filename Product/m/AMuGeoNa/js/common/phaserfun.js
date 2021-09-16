@@ -37,6 +37,16 @@ function MoveTowards(srcX, srcY, dstX, dstY, velocity) {
     return [srcX, srcY, false];
 }
 
+// point move towards x, y
+function MoveTowards2(srcX, srcY, dstX, dstY, velocity) {
+    var res = MoveTowards(srcX, srcY, dstX, dstY, velocity);
+    return {
+        x: res[0],
+        y: res[1],
+        isFinished: res[2]
+    };
+}
+
 // object move towards
 function objectMoveTowards(object, x, y, velocity) {
     var res = MoveTowards(object.x, object.y, x, y, velocity);
