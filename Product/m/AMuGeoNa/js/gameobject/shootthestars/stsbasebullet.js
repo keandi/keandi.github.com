@@ -76,15 +76,18 @@ class STSBaseBullet extends GameSprite {
     //// visible -->
     //////////////////////////////////
 
-    // set x
-    set X(value) {
+    // 좌표가 변경되었는지 여부
+    isChangedXY(x, y) {
+        return (this.#_PV.sprite.x != x || this.#_PV.sprite.y != y) ? true : false;
+    }
+
+    // set position event
+    onSetPosition(x, y) {
         try {
-            if (this.#_PV.sprite.x != value) {
-                this.#_PV.sprite.x = value;
-                this.#onChangedPosition();
-            }
+            this.#_PV.sprite.x = x;
+            this.#_PV.sprite.y = y;
         } catch (e) {
-            var errMsg = this.getExpMsg("set_X", e);
+            var errMsg = this.getExpMsg("onSetPosition", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -101,20 +104,6 @@ class STSBaseBullet extends GameSprite {
         }
     }
 
-    // set y
-    set Y(value) {
-        try {
-            if (this.#_PV.sprite.y != value) {
-                this.#_PV.sprite.y = value;
-                this.#onChangedPosition();
-            }
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_Y", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
     // get y
     get Y() {
         try {
@@ -126,8 +115,19 @@ class STSBaseBullet extends GameSprite {
         }
     }
 
-    // changed position
-    #onChangedPosition() {
+    // move y
+    moveY(value) {
+        try {
+            this.setPosition(this.#_PV.sprite.x, this.#_PV.sprite.y + value);
+        } catch (e) {
+            var errMsg = this.getExpMsg("moveY", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // recompute collision rect
+    recomputeSpriteRect() {
         try {
             let v = this.#_PV;
             if (v.spriteRect == undefined) {
@@ -139,9 +139,8 @@ class STSBaseBullet extends GameSprite {
             v.spriteRect.X = v.sprite.x - (v.sprite.width / 2);
             v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
 
-            this.IsNeedCollisionRect = true;
         } catch (e) {
-            var errMsg = this.getExpMsg("onChangedPosition", e);
+            var errMsg = this.getExpMsg("recomputeSpriteRect", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -151,36 +150,6 @@ class STSBaseBullet extends GameSprite {
     get SpriteRect() {
         return this.#_PV.spriteRect;
     }
-
-    ///////////////////////////////
-    //// <!-- need collision rect recompute
-
-    // set need collision rect recompute
-    set IsNeedCollisionRect(value) {
-        try {
-            let v = this.#_PV;
-
-            v.isNeedCollisionRectRecompute = value;
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_IsNeedCollisionRect", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    // get need collision rect recompute
-    get IsNeedCollisionRect() {
-        try {
-            return (v.isNeedCollisionRectRecompute === false) ? false : true;
-        } catch (e) {
-            var errMsg = this.getExpMsg("get_IsNeedCollisionRect", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    //// collision rect -->
-    ///////////////////////////////
 
     // reset
     reset() {

@@ -59,7 +59,7 @@ class STSMissile extends STSBaseBullet {
             }
 
             let upBullet = function() {
-                selfIt.Y -= 20;
+                selfIt.moveY(-20);
                 return (selfIt.SpriteRect.Bottom <= selfIt.GameRect.Top) ? false : true;
             };
 

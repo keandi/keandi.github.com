@@ -183,40 +183,12 @@ class STSBaseCanon extends GameSprite {
     //// visible -->
     //////////////////////////////////
 
-    // set x
-    set X(value) {
-        try {
-            if (this.#_PV.sprite.x != value) {
-                this.#_PV.sprite.x = value;
-                this.#onChangedPosition();
-            }
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_X", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
     // get x
     get X() {
         try {
             return this.#_PV.sprite.x;
         } catch (e) {
             var errMsg = this.getExpMsg("get_X", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    // set y
-    set Y(value) {
-        try {
-            if (this.#_PV.sprite.y != value) {
-                this.#_PV.sprite.y = value;
-                this.#onChangedPosition();
-            }
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_Y", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -233,8 +205,8 @@ class STSBaseCanon extends GameSprite {
         }
     }
 
-    // changed position
-    #onChangedPosition() {
+    // recompute collision rect
+    recomputeSpriteRect() {
         try {
             let v = this.#_PV;
             if (v.spriteRect == undefined) {
@@ -246,9 +218,8 @@ class STSBaseCanon extends GameSprite {
             v.spriteRect.X = v.sprite.x - (v.sprite.width / 2);
             v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
 
-            this.IsNeedCollisionRect = true;
         } catch (e) {
-            var errMsg = this.getExpMsg("onChangedPosition", e);
+            var errMsg = this.getExpMsg("recomputeSpriteRect", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -485,5 +456,22 @@ class STSBaseCanon extends GameSprite {
         }
 
         return false;
+    }
+
+    // set position event
+    onSetPosition(x, y) {
+        try {
+            this.#_PV.sprite.x = x;
+            this.#_PV.sprite.y = y;
+        } catch (e) {
+            var errMsg = this.getExpMsg("onSetPosition", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 현재 상태 반환
+    get CurrentState() {
+        return this.getStateMachine().Current;
     }
 }

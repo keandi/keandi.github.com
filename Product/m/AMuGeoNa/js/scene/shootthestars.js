@@ -198,15 +198,19 @@ class SceneShootTheStars extends GameScene {
                             if (objectKind != undefined) {
                                 let oldCanonInfo = selfIt.getCanonOfArea(canonRect.CenterX, canonRect.CenterY);
                                 if (oldCanonInfo != undefined) {
-                                    oldCanonInfo.object.remove();
-                                    selfIt.releaseGameObject(oldCanonInfo.object);
-                                }                          
-                                
-                                var newCanon = selfIt.getGameObject(objectKind);
-                                newCanon.setPosition(canonRect.CenterX, canonRect.CenterY);
-                                newCanon.reset();
+                                    //console.log("object state: " + oldCanonInfo.object.CurrentState);
+                                    if (oldCanonInfo.object.CurrentState !== 'fire') 
+                                    {
+                                        oldCanonInfo.object.remove();
+                                        selfIt.releaseGameObject(oldCanonInfo.object);
 
-                                oldCanonInfo.object = newCanon;
+                                        var newCanon = selfIt.getGameObject(objectKind);
+                                        newCanon.setPosition(canonRect.CenterX, canonRect.CenterY);
+                                        newCanon.reset();
+
+                                        oldCanonInfo.object = newCanon;
+                                    }                                    
+                                }                          
                             }
 
                             //console.log("change canon - " + canonType.name);

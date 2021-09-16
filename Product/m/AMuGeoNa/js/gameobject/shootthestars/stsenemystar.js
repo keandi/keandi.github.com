@@ -182,7 +182,7 @@ class STSEnemyStar extends STSBaseEnemy {
                 let v = this.#_PV;
                 return {
                     x: v.sprite.x + ( (this.#IsPatrolToLeft === true) ? Phaser.Math.Between(-8, -15) : Phaser.Math.Between(8, 15) ),
-                    y: v.sprite.y + Phaser.Math.Between(-1, 5)
+                    y: v.sprite.y + Phaser.Math.Between(-2, 4)
                 };
             } else if (state === 'attack') {
                 console.log("need logic!");
@@ -244,6 +244,38 @@ class STSEnemyStar extends STSBaseEnemy {
             return moveSpeed(_gameData.EntryGameLevelInfo.gamelevel, this.getStateMachine().Current);
         } catch (e) {
             var errMsg = this.getExpMsg("MoveVelocity", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // set position event
+    onSetPosition(x, y) {
+        try {
+            this.#_PV.sprite.x = x;
+            this.#_PV.sprite.y = y;
+        } catch (e) {
+            var errMsg = this.getExpMsg("onSetPosition", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // recompute collision rect
+    recomputeSpriteRect() {
+        try {
+            let v = this.#_PV;
+            if (v.spriteRect == undefined) {
+                v.spriteRect = new Rect();
+            }
+
+            v.spriteRect.Width = v.sprite.width;
+            v.spriteRect.Height = v.sprite.height;
+            v.spriteRect.X = v.sprite.x - (v.sprite.width / 2);
+            v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("recomputeSpriteRect", e);
             console.log(errMsg);
             alert(errMsg);
         }

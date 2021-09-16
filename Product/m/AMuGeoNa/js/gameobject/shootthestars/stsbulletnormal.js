@@ -51,14 +51,14 @@ class STSBulletNormal extends STSBaseBullet {
             let v = this.#_PV;
             let selfIt = this;
 
-            setPosition(v.sprite, x, y);
+            this.setPosition(x, y);
 
             if (v.moveTimer == undefined) {
                 v.moveTimer = new TimerOnPool('timeronpool_' + this.Name, v.scene.getTimerPool());
             }
 
             let upBullet = function() {
-                selfIt.Y -= 35;
+                selfIt.moveY(-35);
                 return (selfIt.SpriteRect.Bottom <= selfIt.GameRect.Top) ? false : true;
             };
 

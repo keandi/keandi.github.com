@@ -164,11 +164,18 @@ class GOImageButton extends DestroyableObject {
 
             this.#_PV.pointerEvents.move = this.#_PV.scene.addPointerEvent('move', (pointer)=>{
                 //console.log( stringFormat( "move pointer - x: {0}, y: {1}", pointer.x, pointer.y) );
-                if (buttonRc.ptInRect(pointer.x, pointer.y) == false) {
-                    if (isPressed == true) {
-                        setUp(true);
+                try {
+                    if (buttonRc.ptInRect(pointer.x, pointer.y) == false) {
+                        if (isPressed == true) {
+                            setUp(true);
+                        }
                     }
+                } catch (e) {
+                    var errMsg = selfIt.getExpMsg("pointerEvents.move", e);
+                    console.log(errMsg);
+                    alert(errMsg);
                 }
+                
             });
 
         } catch (e) {

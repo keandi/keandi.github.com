@@ -189,4 +189,51 @@ class GameSprite extends GameObject {
     //// object group tag -->
     ////////////////////////////
     
+    ////////////////////////////
+    //// <!--  position
+
+    setPosition(x, y) {
+        if (this.isChangedXY(x, y) !== true) { return; }
+
+        // 1. body X body collision 체크하고 (충돌하면 이동못함)
+        if (this.onCheckCollisionBodyXBody() === true) { return; }
+
+        // 2. 이동하고
+        this.onSetPosition(x, y);
+
+        // 3. 충돌영역 재계산
+        this.recomputeSpriteRect();
+
+        // 4. attacker X group(attack, body) collision 체크하고
+        this.onCheckCollisionAttackerXGroup();
+    }
+
+    // 좌표가 변경되었는지 여부
+    isChangedXY(x, y) {
+        //console.log("not implement - isChangedXY - " + this.Name);
+        return true;
+    }
+
+    // set position event
+    onSetPosition(x, y) {
+        console.log("not implement - onSetPosition - " + this.Name);
+    }
+
+    // body X body 충돌 체크
+    onCheckCollisionBodyXBody(bodyRc) {
+        //console.log("not implement - onCheckCollisionBodyXBody - " + this.Name);
+    }
+
+    // attack X group(attack, body) 충돌 체크
+    onCheckCollisionAttackerXGroup() {
+        //console.log("not implement - onCheckCollisionAttackerXGroup - " + this.Name);
+    }
+
+    // recompute collision rect
+    recomputeSpriteRect() {
+        //console.log("not implement - recomputeCollisionRect - " + this.Name);
+    }
+
+    ////  position -->
+    ////////////////////////////
 }
