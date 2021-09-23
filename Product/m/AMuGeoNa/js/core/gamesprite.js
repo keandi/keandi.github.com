@@ -192,6 +192,14 @@ class GameSprite extends GameObject {
     ////////////////////////////
     //// <!--  position
 
+    setX(x) {
+        this.setPosition(x, this.Y);
+    }
+
+    setY(y) {
+        this.setPosition(this.X, y);
+    }
+
     setPosition(x, y) {
         if (this.isChangedXY(x, y) !== true) { return; }
 
@@ -210,7 +218,13 @@ class GameSprite extends GameObject {
 
     // 좌표가 변경되었는지 여부
     isChangedXY(x, y) {
-        //console.log("not implement - isChangedXY - " + this.Name);
+        try {
+            return (x === this.X && y === this.Y) ? false : true
+        } catch (e) {
+            var errMsg = this.getExpMsg("isChangedXY", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
         return true;
     }
 
@@ -235,5 +249,42 @@ class GameSprite extends GameObject {
     }
 
     ////  position -->
+    ////////////////////////////
+
+    /////////////////////////////
+    //// <!-- get object rectangle
+
+    // get x
+    get X() {
+        console.log("not implement - get X");
+    }
+
+    // get y
+    get Y() {
+        console.log("not implement - get Y");
+    }
+
+    // get width
+    get W() {
+        console.log("not implement - get W");
+    }
+
+    // get height
+    get H() {
+        console.log("not implement - get H");
+    }
+
+    /*
+    // get center x
+    get CenterX() {
+        return (this.W / 2) + this.X;
+    }
+
+    // get center y
+    get CenterY() {
+        return (this.H / 2) + this.Y;
+    } */
+
+    //// get object rectangle -->
     ////////////////////////////
 }

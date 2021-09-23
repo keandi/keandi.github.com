@@ -51,6 +51,8 @@ class STSBaseEnemy extends GameSprite {
             } else {
                 v.hp.resetMax(this.MaxHP);
             }
+
+            v.collisionData = new CollisionData('collisionData_' + this.Name, v.scene, v.frameData, this.AllFrameNames, this);
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
@@ -76,6 +78,11 @@ class STSBaseEnemy extends GameSprite {
             console.log(errMsg);
             alert(errMsg);
         }
+     }
+
+     // get all framenames
+     get AllFrameNames() {
+         console.log("not implement - AllFrameNames !!!");
      }
 
      // get sprite
@@ -150,16 +157,7 @@ class STSBaseEnemy extends GameSprite {
 
     // set x
     set X(value) {
-        try {
-            if (this.#_PV.sprite.x != value) {
-                this.#_PV.sprite.x = value;
-                this.#onChangedPosition();
-            }
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_X", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
+        this.setX(value);
     }
 
     // get x
@@ -173,18 +171,19 @@ class STSBaseEnemy extends GameSprite {
         }
     }
 
+    // get width
+    get W() {
+        return this.#_PV.sprite.width;
+    }
+
+    // get height
+    get H() {
+        return this.#_PV.sprite.height;
+    }
+
     // set y
     set Y(value) {
-        try {
-            if (this.#_PV.sprite.y != value) {
-                this.#_PV.sprite.y = value;
-                this.#onChangedPosition();
-            }
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_Y", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
+        this.setY(value);
     }
 
     // get y
@@ -198,8 +197,19 @@ class STSBaseEnemy extends GameSprite {
         }
     }
 
-    // changed position
-    #onChangedPosition() {
+    // set position event
+    onSetPosition(x, y) {
+        try {
+            setPosition(this.#_PV.sprite, x, y);
+        } catch (e) {
+            var errMsg = this.getExpMsg("onSetPosition", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // recompute collision rect
+    recomputeSpriteRect() {
         try {
             let v = this.#_PV;
             if (v.spriteRect == undefined) {
@@ -211,9 +221,11 @@ class STSBaseEnemy extends GameSprite {
             v.spriteRect.X = v.sprite.x - (v.sprite.width / 2);
             v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
 
-            this.IsNeedCollisionRect = true;
+            v.collisionData.setRecomputeFlag();
+            v.collisionData.forcedRecomputeAllArea();
+
         } catch (e) {
-            var errMsg = this.getExpMsg("onChangedPosition", e);
+            var errMsg = this.getExpMsg("recomputeSpriteRect", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -224,36 +236,6 @@ class STSBaseEnemy extends GameSprite {
         return this.#_PV.spriteRect;
     }
 
-    ///////////////////////////////
-    //// <!-- need collision rect recompute
-
-    // set need collision rect recompute
-    set IsNeedCollisionRect(value) {
-        try {
-            let v = this.#_PV;
-
-            v.isNeedCollisionRectRecompute = value;
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_IsNeedCollisionRect", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    // get need collision rect recompute
-    get IsNeedCollisionRect() {
-        try {
-            return (v.isNeedCollisionRectRecompute === false) ? false : true;
-        } catch (e) {
-            var errMsg = this.getExpMsg("get_IsNeedCollisionRect", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    //// collision rect -->
-    ///////////////////////////////
-
     // reset
     reset() {
         try {
@@ -261,6 +243,8 @@ class STSBaseEnemy extends GameSprite {
             this.patrol();
             this.alpha = 1;
             this.#_PV.hp.resetMax(this.MaxHP);
+
+            this.recomputeSpriteRect();
         } catch (e) {
             var errMsg = this.getExpMsg("reset", e);
             console.log(errMsg);

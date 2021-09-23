@@ -270,6 +270,8 @@ class STSBaseCanon extends GameSprite {
             this.ready();
             this.alpha = 1;
             this.#registerPointerDown();
+
+            this.recomputeSpriteRect();
         } catch (e) {
             var errMsg = this.getExpMsg("reset", e);
             console.log(errMsg);

@@ -31,6 +31,11 @@ class STSEnemyStar extends STSBaseEnemy {
         v.moveTimer = undefined;
     }
 
+    // get all framenames
+    get AllFrameNames() {
+        return ['ENEMY_STAR_0000', 'ENEMY_STAR_0001'];
+    }
+
     // get sprite
     getSprite() {
         try {
@@ -149,6 +154,7 @@ class STSEnemyStar extends STSBaseEnemy {
                     this.getOut();
                 }
             }, fps(60));
+
         } catch (e) {
             var errMsg = this.getExpMsg("reset", e);
             console.log(errMsg);
@@ -262,7 +268,7 @@ class STSEnemyStar extends STSBaseEnemy {
     }
 
     // recompute collision rect
-    recomputeSpriteRect() {
+    /*recomputeSpriteRect() {
         try {
             let v = this.#_PV;
             if (v.spriteRect == undefined) {
@@ -279,5 +285,5 @@ class STSEnemyStar extends STSBaseEnemy {
             console.log(errMsg);
             alert(errMsg);
         }
-    }
+    }*/
 }
