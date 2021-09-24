@@ -95,6 +95,11 @@ class CollisionData extends ClsObject {
     // set skip
     set IsSkip(value) {
         this.#_PV.isSkip = value;
+        if (this.#_PV.showDebugDisplay === true) {
+            if (value === true) {
+                this.#clearDebugDisplay();
+            }
+        }
     }
 
     // get body array

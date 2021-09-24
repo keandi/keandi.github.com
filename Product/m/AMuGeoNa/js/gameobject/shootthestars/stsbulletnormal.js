@@ -28,6 +28,18 @@ class STSBulletNormal extends STSBaseBullet {
         v.moveTimer = undefined;
     }
 
+    // onInitialize
+    onInitialize() {
+        try {
+            super.onInitialize();
+            this.ActiveFrameName = 'BULLET';
+        } catch (e) {
+            var errMsg = this.getExpMsg("onInitialize", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // get sprite
     getSprite() {
         try {
@@ -43,6 +55,11 @@ class STSBulletNormal extends STSBaseBullet {
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get all framenames
+    get AllFrameNames() {
+        return ['BULLET'];
     }
 
     // run

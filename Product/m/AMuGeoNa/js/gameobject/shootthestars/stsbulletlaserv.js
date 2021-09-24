@@ -22,6 +22,15 @@ class STSBulletLaserV extends STSBaseBullet {
 
     destroy() {
         super.destroy();
+
+        let v = this.#_PV;
+        destroyObjects( v.collisionTimer );
+        v.collisionTimer = undefined;
+    }
+
+    // get all framenames
+    get AllFrameNames() {
+        return ['LASER_V1'];
     }
 
     // onInitialize
@@ -29,7 +38,8 @@ class STSBulletLaserV extends STSBaseBullet {
         try {
 
             this.#_PV.frameName = 'LASER_V1';
-            super.onInitialize();
+            super.onInitialize({isFullX: false, isFullY: true});
+            this.ActiveFrameName = 'LASER_V1';
         
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
@@ -50,6 +60,32 @@ class STSBulletLaserV extends STSBaseBullet {
             return v.sprite;
         } catch (e) {
             var errMsg = this.getExpMsg("getSprite", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // get width
+    get W() {
+        try {
+            return this.#_PV.frameData.frames.get(v.frameName).sourceSize.w;
+        } catch (e) {
+            var errMsg = this.getExpMsg("W", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // get height
+    get H() {
+        try {
+            let v = this.#_PV;
+            const gameRect = this.GameRect;
+            const canonHeight = v.frameData.frames.get('LASER1_0000').sourceSize.h;
+
+            return gameRect.Height - canonHeight;            
+        } catch (e) {
+            var errMsg = this.getExpMsg("H", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -77,12 +113,37 @@ class STSBulletLaserV extends STSBaseBullet {
             v.sprite.y = v.fireRect.CenterY;
 
             setPixelScaleY(v.sprite, v.fireRect.Height, false);
+
+            //
+            if (v.collisionTimer == undefined) {
+                v.collisionTimer = new TimerOnPool('timeronpool_' + this.Name, v.scene.getTimerPool());
+            }
+
+            let checkCollision = function() {
+                selfIt.recomputeSpriteRect();
+            };
+
+            v.collisionTimer.startInterval(()=>checkCollision(), 1000 / 60);
             
         } catch (e) {
             var errMsg = this.getExpMsg("run", e);
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // remove
+    remove() {
+        try {
+            let v = this.#_PV;
+            if (v.collisionTimer != undefined) {
+                v.collisionTimer.stop();
+            }
+        } catch (e) {
+            var errMsg = this.getExpMsg("remove", e);
+            console.log(errMsg);
+            alert(errMsg);
+        } 
     }
 
     // strength

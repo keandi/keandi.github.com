@@ -28,7 +28,7 @@ class STSBaseBullet extends GameSprite {
     }
 
     // onInitialize
-    onInitialize() {
+    onInitialize(config) {
         try {
             super.onInitialize();
 
@@ -38,6 +38,11 @@ class STSBaseBullet extends GameSprite {
                 v.sprite.setOrigin(0.5);
                 v.sprite.setDepth(DEPTH_SHOOTTHESTARS_BULLET);
             }
+
+            let isFullX = (config == undefined) ? false : config.isFullX;
+            let isFullY = (config == undefined) ? false : config.isFullY;
+
+            v.collisionData = new CollisionData('collisionData_' + this.Name, v.scene, v.frameData, this.AllFrameNames, this, isFullX, isFullY);
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
@@ -52,11 +57,17 @@ class STSBaseBullet extends GameSprite {
          return undefined;
      }
 
+    // get all framenames
+    get AllFrameNames() {
+        console.log("not implement - AllFrameNames !!!");
+    }
+
     //////////////////////////////////
     //// <!-- visible (상속 구현 필요)
     set visible(value) {
         try {
             this.#_PV.sprite.visible = value;
+            this.#_PV.collisionData.IsSkip = !value;
         } catch (e) {
             var errMsg = this.getExpMsg("set_visible", e);
             console.log(errMsg);
@@ -139,6 +150,9 @@ class STSBaseBullet extends GameSprite {
             v.spriteRect.X = v.sprite.x - (v.sprite.width / 2);
             v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
 
+            v.collisionData.setRecomputeFlag();
+            v.collisionData.forcedRecomputeActiveFrame();
+
         } catch (e) {
             var errMsg = this.getExpMsg("recomputeSpriteRect", e);
             console.log(errMsg);
@@ -214,5 +228,16 @@ class STSBaseBullet extends GameSprite {
     // strength
     get Strength() {
         return 1; // 탄마다 별도 처리
+    }
+
+    // set active collision frame
+    set ActiveFrameName(value) {
+        try {
+            this.#_PV.collisionData.ActiveFrameName = value;
+        } catch (e) {
+            var errMsg = this.getExpMsg("ActiveFrameName", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

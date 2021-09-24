@@ -136,6 +136,7 @@ class STSBaseEnemy extends GameSprite {
     set visible(value) {
         try {
             this.#_PV.sprite.visible = value;
+            this.#_PV.collisionData.IsSkip = !value;
         } catch (e) {
             var errMsg = this.getExpMsg("set_visible", e);
             console.log(errMsg);

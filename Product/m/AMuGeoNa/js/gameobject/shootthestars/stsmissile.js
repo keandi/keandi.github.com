@@ -45,6 +45,23 @@ class STSMissile extends STSBaseBullet {
         }
     }
 
+    // get all framenames
+    get AllFrameNames() {
+        return ['MISSILE'];
+    }
+
+    // onInitialize
+    onInitialize() {
+        try {
+            super.onInitialize();
+            this.ActiveFrameName = 'MISSILE';
+        } catch (e) {
+            var errMsg = this.getExpMsg("onInitialize", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // run
     run(x, y) {
         try {
