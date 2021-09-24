@@ -13,7 +13,7 @@ class CollisionData extends ClsObject {
             v.frameNames = frameNames;
             v.gameObject = gameObject;
 
-            v.showDebugDisplay = false;
+            v.showDebugDisplay = true;
 
             v.frameMap = new Map();
 
@@ -39,6 +39,7 @@ class CollisionData extends ClsObject {
                         var area = {
                             recompute: true,
                             rect: new Rect(element.rect.x, element.rect.y, element.rect.w, element.rect.h),
+                            debugRect: undefined,
                             distance: { x: 0, y: 0},
                             debugColor: (element.isAttacker === true) ? 0xff2222 : 0x2222ff,
                             debugGraphic: undefined,
@@ -76,18 +77,6 @@ class CollisionData extends ClsObject {
     destroy() {
         try {
             let v = this.#_PV;
-
-            let destroyGraphics = function(array) {
-                if (array == undefined) { return; }
-                array.forEach(area => {
-                    destroyObject( area.debugGraphic );
-                });
-            }
-
-            v.frameMap.forEach(collisions => {
-                destroyGraphics( collisions.attackers );
-                destroyGraphics( collisions.bodies );
-            });
 
             v.frameMap.clear();
             
@@ -330,11 +319,20 @@ class CollisionData extends ClsObject {
     #debugDisplay(area) {
         try {
            
-            let draw = function(g, color) {
+            let draw = function(g, r, color) {
                 g.clear();
 
-                g.fillStyle(color, 0.3);
-                g.fillRect(area.rect.X, area.rect.Y, area.rect.Width, area.rect.Height);
+                //g.fillStyle(color, 0.3);
+                //g.fillRect(area.rect.X, area.rect.Y, area.rect.Width, area.rect.Height);
+                //g.setDepth(9999);
+
+                r.left = area.rect.X;
+                r.top = area.rect.Y;
+                r.width = area.rect.Width;
+                r.height = area.rect.Height;
+
+                g.lineStyle(1, color);
+                g.strokeRectShape(r, 1);
                 g.setDepth(9999);
             }
 
@@ -343,7 +341,10 @@ class CollisionData extends ClsObject {
                 area.debugGraphic = v.scene.add.graphics();
                 v.scene.addDestroyableObject( area.debugGraphic );
             }
-            draw(area.debugGraphic, area.debugColor);
+            if (area.debugRect == undefined) {
+                area.debugRect = new Phaser.Geom.Rectangle(0, 0, 0, 0);
+            }
+            draw(area.debugGraphic, area.debugRect, area.debugColor);
         } catch (e) {
             var errMsg = this.getExpMsg("debugDisplay", e);
             console.log(errMsg);
