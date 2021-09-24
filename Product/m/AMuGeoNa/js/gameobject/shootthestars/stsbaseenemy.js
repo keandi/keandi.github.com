@@ -222,7 +222,7 @@ class STSBaseEnemy extends GameSprite {
             v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
 
             v.collisionData.setRecomputeFlag();
-            v.collisionData.forcedRecomputeAllArea();
+            v.collisionData.forcedRecomputeActiveFrame();
 
         } catch (e) {
             var errMsg = this.getExpMsg("recomputeSpriteRect", e);
@@ -234,6 +234,17 @@ class STSBaseEnemy extends GameSprite {
     // get sprite rect
     get SpriteRect() {
         return this.#_PV.spriteRect;
+    }
+
+    // set active collision frame
+    set ActiveFrameName(value) {
+        try {
+            this.#_PV.collisionData.ActiveFrameName = value;
+        } catch (e) {
+            var errMsg = this.getExpMsg("ActiveFrameName", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
     // reset

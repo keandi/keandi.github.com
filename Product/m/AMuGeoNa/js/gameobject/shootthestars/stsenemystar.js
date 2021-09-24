@@ -58,7 +58,7 @@ class STSEnemyStar extends STSBaseEnemy {
         try {
             let v = this.#_PV;
             let selfIt = this;
-            const fps = 1000 / 7;
+            const fps = 500;//1000 / 7;
  
              animatorManager.add('patrol', {
                      asset: 'shootthestars_sprite',
@@ -90,6 +90,7 @@ class STSEnemyStar extends STSBaseEnemy {
             let hp = this.HPInfo;
             
             v.sprite.setTint(this.getTint(hp.Max, hp.Current));
+            this.ActiveFrameName = frameName;
         } catch (e) {
             var errMsg = this.getExpMsg("onFrameChanged", e);
             console.log(errMsg);
@@ -126,7 +127,7 @@ class STSEnemyStar extends STSBaseEnemy {
             if (idx >= tintSize) { idx = tintSize - 1; }
             return COLOR_STAR_TINTS[idx];
         } catch (e) {
-             var errMsg = this.getExpMsg("StarTint", e);
+             var errMsg = this.getExpMsg("getTint", e);
              console.log(errMsg);
              alert(errMsg);
         }

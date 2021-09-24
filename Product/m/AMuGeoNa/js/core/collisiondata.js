@@ -13,8 +13,9 @@ class CollisionData extends ClsObject {
             v.frameNames = frameNames;
             v.gameObject = gameObject;
 
-            v.attackers = [];
-            v.bodies = [];
+            v.showDebugDisplay = false;
+
+            v.frameMap = new Map();
 
             // create collision data
             {
@@ -23,12 +24,18 @@ class CollisionData extends ClsObject {
                     var hitFrames = frame.hitframes;
                     if (hitFrames == undefined || hitFrames == null) { continue; }
 
+                    var collisions = {
+                        attackers: [],
+                        bodies: []
+                    };
+                    v.frameMap.set(frameNames[i], collisions)
+
                     var frameArea = frame.frame;
                     var frameX = frameArea.x + (frameArea.w / 2);
                     var frameY = frameArea.y + (frameArea.h / 2);
 
                     hitFrames.forEach(element => {
-                        var target = (element.isAttacker === true) ? v.attackers : v.bodies;
+                        var target = (element.isAttacker === true) ? collisions.attackers : collisions.bodies;
                         var area = {
                             recompute: true,
                             rect: new Rect(element.rect.x, element.rect.y, element.rect.w, element.rect.h),
@@ -70,8 +77,19 @@ class CollisionData extends ClsObject {
         try {
             let v = this.#_PV;
 
-            v.attackers = [];
-            v.bodies = [];
+            let destroyGraphics = function(array) {
+                if (array == undefined) { return; }
+                array.forEach(area => {
+                    destroyObject( area.debugGraphic );
+                });
+            }
+
+            v.frameMap.forEach(collisions => {
+                destroyGraphics( collisions.attackers );
+                destroyGraphics( collisions.bodies );
+            });
+
+            v.frameMap.clear();
             
         } catch (e) {
             var errMsg = this.getExpMsg("destroy", e);
@@ -105,6 +123,65 @@ class CollisionData extends ClsObject {
         return this.#_PV.gameObject;
     }
 
+    // set active frame
+    set ActiveFrameName(value) {
+        if (this.#_PV.showDebugDisplay === true) {
+            if (this.#_PV.activeFrameName !== value)
+            {
+                this.#clearDebugDisplay();
+            }
+        }
+        
+        this.#_PV.activeFrameName = value;
+    }
+
+    // get active frame
+    get ActiveFrameName() {
+        return this.#_PV.activeFrameName;
+    }
+
+    // get active collision
+    get ActiveCollisionData() {
+        try {
+            let v = this.#_PV;
+            if (v.frameMap.has(v.activeFrameName) === false) { return undefined; }
+
+            return v.frameMap.get(v.activeFrameName);
+        } catch (e) {
+            var errMsg = this.getExpMsg("ActiveCollisionData", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // get active bodies
+    get ActiveBodies() {
+        try {
+            let collisions = this.ActiveCollisionData();
+            if (collisions == undefined) { return undefined; }
+
+            return collisions.bodies;
+        } catch (e) {
+            var errMsg = this.getExpMsg("ActiveBodies", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // get active attackers
+    get ActiveAttackers() {
+        try {
+            let collisions = this.ActiveCollisionData();
+            if (collisions == undefined) { return undefined; }
+
+            return collisions.attackers;
+        } catch (e) {
+            var errMsg = this.getExpMsg("ActiveAttackers", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // set all recompute flag = true
     setRecomputeFlag() {
         try {
@@ -114,8 +191,11 @@ class CollisionData extends ClsObject {
                 });
             }
 
-            flagTrue(this.#_PV.attackers);
-            flagTrue(this.#_PV.bodies);
+            let v = this.#_PV;
+            v.frameMap.forEach(element => {
+                flagTrue(element.attackers);
+                flagTrue(element.bodies);
+            });
 
         } catch (e) {
             var errMsg = this.getExpMsg("setRecomputeFlag", e);
@@ -127,7 +207,7 @@ class CollisionData extends ClsObject {
     // check collision
     #checkCollision(myArray, targetArray, target) {
         try {
-            if (target.IsSkip === true) { return false; }
+            if (target.IsSkip === true || myArray == undefined || targetArray == undefined || target == undefined) { return false; }
 
             let v = this.#_PV;
             for (var i = 0; i < myArray.length; i++) {
@@ -154,8 +234,7 @@ class CollisionData extends ClsObject {
         try {
             if (target.IsSkip === true) { return false; }
 
-            let v = this.#_PV;
-            return this.#checkCollision(v.bodies, target.Bodies, target);
+            return this.#checkCollision(this.ActiveBodies, target.ActiveBodies, target);
 
         } catch (e) {
             var errMsg = this.getExpMsg("checkCollisionBodyXBody", e);
@@ -171,8 +250,7 @@ class CollisionData extends ClsObject {
         try {
             if (target.IsSkip === true) { return false; }
 
-            let v = this.#_PV;
-            return this.#checkCollision(v.attackers, target.Attackers, target);
+            return this.#checkCollision(this.ActiveAttackers, target.ActiveAttackers, target);
 
         } catch (e) {
             var errMsg = this.getExpMsg("checkCollisionAttackerXBody", e);
@@ -184,7 +262,7 @@ class CollisionData extends ClsObject {
     }
 
     // 테스트용 강제 재계산
-    forcedRecomputeAllArea() {
+    /*forcedRecomputeAllArea() {
         try {
             let v = this.#_PV;
             let selfIt = this;
@@ -203,6 +281,31 @@ class CollisionData extends ClsObject {
             console.log(errMsg);
             alert(errMsg);
         }
+    } */
+
+    // 강제 active frame 재계산
+    forcedRecomputeActiveFrame() {
+        try {
+
+            let collisions = this.ActiveCollisionData;
+            if (collisions == undefined) { return; }
+
+            let selfIt = this;
+
+            let recompute = function(array) {
+                array.forEach(element => {
+                    selfIt.recomputeArea(element);
+                });
+            }
+
+            recompute(collisions.attackers);
+            recompute(collisions.bodies);
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("recomputeArea", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
     // recompute area
@@ -213,7 +316,9 @@ class CollisionData extends ClsObject {
             area.rect.CenterY = gameObject.Y - area.distance.y;
             area.recompute = false;
 
-            this.#debugDisplay(area);
+            if (this.#_PV.showDebugDisplay === true) {
+                this.#debugDisplay(area);
+            }
         } catch (e) {
             var errMsg = this.getExpMsg("recomputeArea", e);
             console.log(errMsg);
@@ -241,6 +346,29 @@ class CollisionData extends ClsObject {
             draw(area.debugGraphic, area.debugColor);
         } catch (e) {
             var errMsg = this.getExpMsg("debugDisplay", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // clear debug display
+    #clearDebugDisplay() {
+        try {
+            let collisions = this.ActiveCollisionData;
+            if (collisions == undefined) { return; }
+
+            let clearDisplay = function(area) {
+                if (area == undefined) { return; }
+                area.forEach(element => {
+                    if (element.debugGraphic == undefined) { return; }
+                    element.debugGraphic.clear();
+                });
+            };
+
+            clearDisplay(collisions.attackers);
+            clearDisplay(collisions.bodies);
+        } catch (e) {
+            var errMsg = this.getExpMsg("clearDebugDisplay", e);
             console.log(errMsg);
             alert(errMsg);
         }
