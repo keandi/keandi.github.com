@@ -39,11 +39,17 @@ class STSRocket extends STSBaseCanon {
     onInitialize() {
         try {
             super.onInitialize();
+            this.ActiveFrameName = 'ROCKET'
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get all framenames
+    get AllFrameNames() {
+        return ['ROCKET'];
     }
 
     // get sprite

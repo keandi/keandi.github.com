@@ -28,11 +28,17 @@ class STSContinousCanon extends STSBaseCanon {
     onInitialize() {
         try {
             super.onInitialize();
+            this.ActiveFrameName = 'CONTINOUS_CANON_0000';
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get all framenames
+    get AllFrameNames() {
+        return ['CONTINOUS_CANON_0000', 'CONTINOUS_CANON_0001', 'CONTINOUS_CANON_0002', 'CONTINOUS_CANON_0003'];
     }
 
     // get sprite
@@ -93,6 +99,9 @@ class STSContinousCanon extends STSBaseCanon {
     // frame changed event
     onFrameChanged(frameIndex, frameName) {
         try {
+
+            this.ActiveFrameName = frameName;
+            this.recomputeSpriteRect();
 
             if (frameIndex === 1) {
                 let sprite = this.Sprite;

@@ -28,11 +28,17 @@ class STSCanon2 extends STSBaseCanon {
     onInitialize() {
         try {
             super.onInitialize();
+            this.ActiveFrameName = 'CANON2_0000';
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get all framenames
+    get AllFrameNames() {
+        return ['CANON2_0000', 'CANON2_0001', 'CANON2_0002', 'CANON2_0003'];
     }
 
     // get sprite
@@ -93,6 +99,9 @@ class STSCanon2 extends STSBaseCanon {
     // frame changed event
     onFrameChanged(frameIndex, frameName) {
         try {
+
+            this.ActiveFrameName = frameName;
+            this.recomputeSpriteRect();
 
             if (frameIndex === 1) {
                 let sprite = this.Sprite;

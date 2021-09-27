@@ -68,6 +68,8 @@ class STSBaseCanon extends GameSprite {
 
             this.#_PV.fireCount.limit = this.BulletLimit;
             this.#_PV.fireCount.current = 0;
+
+            v.collisionData = new CollisionData('collisionData_' + this.Name, v.scene, v.frameData, this.AllFrameNames, this);
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
@@ -100,12 +102,28 @@ class STSBaseCanon extends GameSprite {
         }
      }
 
+     // get all framenames
+     get AllFrameNames() {
+        console.log("not implement - AllFrameNames !!!");
+    }
+
      // get sprite
      getSprite() {
          // 상속 하여 반환 필요
          console.log('not implement - getSprite');
          return undefined;
      }
+
+     // set active collision frame
+    set ActiveFrameName(value) {
+        try {
+            this.#_PV.collisionData.ActiveFrameName = value;
+        } catch (e) {
+            var errMsg = this.getExpMsg("ActiveFrameName", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 
      // animator 등록
      onRegisterAnimatorManager(animatorManager) {
@@ -164,6 +182,8 @@ class STSBaseCanon extends GameSprite {
             if (value === false) {
                 this.#_PV.waitPercent.visible = value;
             }
+
+            this.#_PV.collisionData.IsSkip = !value;
         } catch (e) {
             var errMsg = this.getExpMsg("set_visible", e);
             console.log(errMsg);
@@ -217,6 +237,9 @@ class STSBaseCanon extends GameSprite {
             v.spriteRect.Height = v.sprite.height;
             v.spriteRect.X = v.sprite.x - (v.sprite.width / 2);
             v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
+
+            v.collisionData.setRecomputeFlag();
+            v.collisionData.forcedRecomputeActiveFrame();
 
         } catch (e) {
             var errMsg = this.getExpMsg("recomputeSpriteRect", e);

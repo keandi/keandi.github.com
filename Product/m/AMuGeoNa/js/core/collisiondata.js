@@ -39,6 +39,7 @@ class CollisionData extends ClsObject {
                         var area = {
                             recompute: true,
                             rect: new Rect(element.rect.x, element.rect.y, element.rect.w, element.rect.h),
+                            isAttacker: element.isAttacker,
                             debugRect: undefined,
                             distance: { x: 0, y: 0},
                             debugColor: (element.isAttacker === true) ? 0xff2222 : 0x2222ff,
@@ -349,6 +350,7 @@ class CollisionData extends ClsObject {
             if (area.debugRect == undefined) {
                 area.debugRect = new Phaser.Geom.Rectangle(0, 0, 0, 0);
             }
+            //if (area.isAttacker !== true) { return; }
             draw(area.debugGraphic, area.debugRect, area.debugColor);
         } catch (e) {
             var errMsg = this.getExpMsg("debugDisplay", e);

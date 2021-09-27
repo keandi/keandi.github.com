@@ -28,11 +28,17 @@ class STSLaserV2 extends STSBaseCanon {
     onInitialize() {
         try {
             super.onInitialize();
+            this.ActiveFrameName = 'LASER2_0000'
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get all framenames
+    get AllFrameNames() {
+        return ['LASER2_0000','LASER2_0001','LASER2_0002','LASER2_0003'];
     }
 
     // get sprite
@@ -99,6 +105,9 @@ class STSLaserV2 extends STSBaseCanon {
      onFrameChanged(frameIndex, frameName) {
         // 상속 구현 필요
         //console.log( stringFormat('not implement - onFrameChanged - idx[{0}], name[{1}]', frameIndex, frameName) );
+
+        this.ActiveFrameName = frameName;
+        this.recomputeSpriteRect();
     }
 
     // end animation
