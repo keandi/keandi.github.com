@@ -706,7 +706,11 @@ class SceneShootTheStars extends GameScene {
     onCollisionAttackerXBody(attacker, body) {
         try {
             console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
-
+            if (body.GroupTag === 'star') {
+                this.reserveSleep(200);
+                body.decreaseHP(attacker.Strength);
+                body.setSuperArmor();
+            }
         } catch(e) {
             var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;
             console.log(errMsg);

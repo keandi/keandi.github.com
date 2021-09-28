@@ -359,4 +359,39 @@ class STSBaseEnemy extends GameSprite {
     get CollisionData() {
         return this.#_PV.collisionData;
     }
+
+    // set super armor
+    setSuperArmor() {
+        try {
+
+            let v = this.#_PV;
+            let selfIt = this;
+            if (v.superArmorTimer == undefined) {
+                v.superArmorTimer = new TimerOnPool('timeronpool_superarmor_' + this.Name, v.scene.getTimerPool());
+            }
+
+            this.IsSkip = true;
+            this.alpha = 0.35;
+            v.superArmorTimer.startTimeout(()=>{
+                selfIt.IsSkip = false;
+                selfIt.alpha = 1;
+            }, 500);
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("setSuperArmor", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // hp decrease
+    decreaseHP(value) {
+        try {
+            this.#_PV.hp.decrease(value);
+        } catch (e) {
+            var errMsg = this.getExpMsg("decreaseHP", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 }
