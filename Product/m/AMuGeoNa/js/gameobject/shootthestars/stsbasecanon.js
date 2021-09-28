@@ -29,6 +29,9 @@ class STSBaseCanon extends GameSprite {
                     return (this.current >= this.limit) ? false : true; // false=더이상 사용 불가
                 }
             };
+
+            v.collisionGroup = this.CollisionGroup;
+            this.registerOnGroup('canon');
             
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
@@ -498,5 +501,10 @@ class STSBaseCanon extends GameSprite {
     // 현재 상태 반환
     get CurrentState() {
         return this.getStateMachine().Current;
+    }
+
+    // get collision data
+    get CollisionData() {
+        return this.#_PV.collisionData;
     }
 }

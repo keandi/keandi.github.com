@@ -357,6 +357,9 @@ BaseScene.prototype.onCompleteSerialLoadAllAssetsAfter = function() {
 
 // 게임 시작 프로세스
 BaseScene.prototype.startGame = function() {
+    // create collision group
+    this.createCollisionGroup();
+    
     this.onRegisterObjectCreateCallback();
     this.onGameStart();
 }
@@ -1341,3 +1344,73 @@ BaseScene.prototype.checkSleep = function(delta) {
         alert(errMsg);
     }
 }
+
+/////////////////////////////////
+//// <!-- collision group
+
+// get group
+BaseScene.prototype.getCollisionGroup = function() {
+    try {
+        if (this._collisionGroup == undefined) {
+            let selfIt = this;
+            this._collisionGroup = new CollisionGroup('collision_group_' + this.getKey(), this, {
+                attackerXBody: (a, b)=>selfIt.onCollisionAttackerXBody(a, b), 
+                attackerXAttacker: (a1, a2)=>selfIt.onCollisionAttackerXAttacker(a1, a2), 
+                bodyXBody: (b1, b2)=>selfIt.onCollisionBodyXBody(b1, b2), 
+                bodyXAttacker: (b, a)=>selfIt.onCollisionBodyXAttacker(b, a)
+            });
+        }
+
+        return this._collisionGroup;
+    } catch(e) {
+        var errMsg = this.getKey() + ".getCollisionGroup.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// group create event
+BaseScene.prototype.createCollisionGroup = function() {
+    try {
+        this.onCreateCollisionGroup(this.getCollisionGroup());
+    } catch(e) {
+        var errMsg = this.getKey() + ".createCollisionGroup.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// group create event
+BaseScene.prototype.onCreateCollisionGroup = function(collisionGroup) {
+    try {
+        // nothing
+    } catch(e) {
+        var errMsg = this.getKey() + ".onCreateCollisionGroup.catched: " + e;
+        console.log(errMsg);
+        alert(errMsg);
+    }
+}
+
+// group collision event - attacker X body
+BaseScene.prototype.onCollisionAttackerXBody = function(attacker, body) {
+    console.log('not implement - onCollisionAttackerXBody !!!');
+}
+
+// group collision event - attacker X attacker
+BaseScene.prototype.onCollisionAttackerXAttacker = function(attacker, attacker) {
+    console.log('not implement - onCollisionAttackerXBody !!!');
+}
+
+// group collision event - body X attacker
+BaseScene.prototype.onCollisionBodyXAttacker = function(body, attacker) {
+    console.log('not implement - onCollisionBodyXAttacker !!!');
+}
+
+// group collision event - body X body
+BaseScene.prototype.onCollisionBodyXBody = function(body, body) {
+    console.log('not implement - onCollisionBodyXBody !!!');
+}
+
+
+//// collision group -->
+/////////////////////////////////

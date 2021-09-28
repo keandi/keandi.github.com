@@ -11,6 +11,9 @@ class STSBaseBullet extends GameSprite {
             v.scene = scene;
             v.frameData = frameData;
             v.gameRect = gameRect;
+
+            v.collisionGroup = this.CollisionGroup;
+            this.registerOnGroup('bullet');
             
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
@@ -151,7 +154,8 @@ class STSBaseBullet extends GameSprite {
             v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
 
             v.collisionData.setRecomputeFlag();
-            v.collisionData.forcedRecomputeActiveFrame();
+            //v.collisionData.forcedRecomputeActiveFrame();
+            v.collisionGroup.checkCollisionAttackerXBody(this);
 
         } catch (e) {
             var errMsg = this.getExpMsg("recomputeSpriteRect", e);
@@ -239,5 +243,10 @@ class STSBaseBullet extends GameSprite {
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get collision data
+    get CollisionData() {
+        return this.#_PV.collisionData;
     }
 }

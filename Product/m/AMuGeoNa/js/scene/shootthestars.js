@@ -687,4 +687,30 @@ class SceneShootTheStars extends GameScene {
     get Goal() {
         return (_gameData.EntryGameLevelInfo.gamelevel * 3) + 25;
     }
+
+    // create collision group event
+    onCreateCollisionGroup(collisionGroup) {
+        try {
+            collisionGroup.addGroups('canon', 'star', 'bullet')
+                .setTargetGroups('bullet', 'star')
+                .setTargetGroups('star', 'canon');
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".onCreateCollisionGroup.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // group collision event - attacker X body
+    onCollisionAttackerXBody(attacker, body) {
+        try {
+            console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
 }

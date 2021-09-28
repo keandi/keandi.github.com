@@ -152,7 +152,7 @@ class CollisionData extends ClsObject {
     // get active bodies
     get ActiveBodies() {
         try {
-            let collisions = this.ActiveCollisionData();
+            let collisions = this.ActiveCollisionData;
             if (collisions == undefined) { return undefined; }
 
             return collisions.bodies;
@@ -166,7 +166,7 @@ class CollisionData extends ClsObject {
     // get active attackers
     get ActiveAttackers() {
         try {
-            let collisions = this.ActiveCollisionData();
+            let collisions = this.ActiveCollisionData;
             if (collisions == undefined) { return undefined; }
 
             return collisions.attackers;
@@ -208,8 +208,8 @@ class CollisionData extends ClsObject {
             for (var i = 0; i < myArray.length; i++) {
                 if (myArray[i].recompute === true) { this.recomputeArea(myArray[i]); };
 
-                for (var j = 0; targetArray.length; j++) {
-                    if (targetArray[j].recompute === true) { target.recomputeArea(targetArray[j]); };
+                for (var j = 0; j < targetArray.length; j++) {
+                    if (targetArray[j].recompute === true) { target.CollisionData.recomputeArea(targetArray[j]); };
 
                     if (myArray[i].rect.isCollision(targetArray[j].rect) === true) { return true; }
                 }
@@ -245,7 +245,7 @@ class CollisionData extends ClsObject {
         try {
             if (target.IsSkip === true) { return false; }
 
-            return this.#checkCollision(this.ActiveAttackers, target.ActiveAttackers, target);
+            return this.#checkCollision(this.ActiveAttackers, target.CollisionData.ActiveBodies, target);
 
         } catch (e) {
             var errMsg = this.getExpMsg("checkCollisionAttackerXBody", e);

@@ -116,9 +116,11 @@ class STSBulletLaserV2 extends STSBaseBullet {
             }
 
             let checkCollision = function() {
-                selfIt.recomputeSpriteRect();
+                //selfIt.recomputeSpriteRect();
+                selfIt.CollisionGroup.checkCollisionAttackerXBody(selfIt);
             };
 
+            this.CollisionData.setRecomputeFlag();
             v.collisionTimer.startInterval(()=>checkCollision(), 1000 / 60);
             
         } catch (e) {

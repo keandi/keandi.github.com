@@ -176,17 +176,30 @@ class GameSprite extends GameObject {
     }
 
     ////////////////////////////
-    //// <!-- object group tag
+    //// <!-- group
 
+    // set group tag
     set GroupTag(value) {
         this.#_PV.groupTag = value;
     }
 
+    // get group tag
     get GroupTag() {
         return this.#_PV.groupTag;
     }
 
-    //// object group tag -->
+    // get collision group
+    get CollisionGroup() {
+        return this.#_PV.scene.getCollisionGroup();
+    }
+
+    // register group (+tag)
+    registerOnGroup(tag) {
+        this.GroupTag = tag;
+        this.CollisionGroup.addObject(tag, this);
+    }
+
+    //// group -->
     ////////////////////////////
     
     ////////////////////////////
@@ -287,4 +300,9 @@ class GameSprite extends GameObject {
 
     //// get object rectangle -->
     ////////////////////////////
+
+    // get collision data
+    get CollisionData() {
+        console.log("not implement - get CollisionData !!!");
+    }
 }
