@@ -69,6 +69,7 @@ class STSMissile extends STSBaseBullet {
             let selfIt = this;
 
             setPosition(v.sprite, x, y);
+            this.visible = true;
             v.sprite.setDepth(DEPTH_SHOOTTHESTARS_UPBULLET); // 미사일은 canon 보다 상단 레이어에 위치해야 한다.
 
             if (v.moveTimer == undefined) {
@@ -85,7 +86,7 @@ class STSMissile extends STSBaseBullet {
                     v.moveTimer.stop();
                     v.scene.releaseGameObject(selfIt);
                 }
-            }, 1000 / 60);
+            }, fps(60));
         } catch (e) {
             var errMsg = this.getExpMsg("run", e);
             console.log(errMsg);

@@ -69,6 +69,8 @@ class PointManager extends ClsObject {
                 v.curPoint = 0;
                 this.#fireExhaust();
             }
+
+            //console.log('point: ' + v.curPoint);
         } catch (e) {
             var errMsg = this.getExpMsg("decrease", e);
             console.log(errMsg);

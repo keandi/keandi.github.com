@@ -95,8 +95,16 @@ class CollisionData extends ClsObject {
 
     // set skip
     set IsSkip(value) {
-        this.#_PV.isSkip = value;
-        if (this.#_PV.showDebugDisplay === true) {
+        let v = this.#_PV;
+        v.isSkip = value;
+        /*if (v.gameObject.GroupTag === 'star')
+        {
+            console.log( stringFormat("star collision data object: {0}, skip = {1}", v.gameObject.Name, value));
+            if (value === false) {
+                var aaa = true;
+            }
+        }*/
+        if (v.showDebugDisplay === true) {
             if (value === true) {
                 this.#clearDebugDisplay();
             }
@@ -243,7 +251,7 @@ class CollisionData extends ClsObject {
     // check collision attacker x body
     checkCollisionAttackerXBody(target) {
         try {
-            if (target.IsSkip === true) { return false; }
+            if (target.CollisionData.IsSkip === true) { return false; }
 
             return this.#checkCollision(this.ActiveAttackers, target.CollisionData.ActiveBodies, target);
 

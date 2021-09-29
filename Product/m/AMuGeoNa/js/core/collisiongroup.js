@@ -82,6 +82,8 @@ class CollisionGroup extends DestroyableObject {
             if (group == undefined) { return; }
 
             group.elements.set(object, object);
+
+            //console.log('collision group add object: ' + object.Name);
         } catch (e) {
             var errMsg = this.getExpMsg("addObject", e);
             console.log(errMsg);
@@ -153,12 +155,29 @@ class CollisionGroup extends DestroyableObject {
             srcGroup.targetGroups.forEach(target => {
                 target.elements.forEach(targetObject => {
                     if (sourceObject.CollisionData.checkCollisionAttackerXBody(targetObject) === true) {
+                        //console.log( stringFormat( "collision A x B = {0} x {1} - Iskip: {2}", sourceObject.Name, targetObject.Name, targetObject.CollisionData.IsSkip) )
                         v.callbacks.attackerXBody(sourceObject, targetObject);
                     } 
                 });
             });
         } catch (e) {
             var errMsg = this.getExpMsg("checkCollisionAttackerXBody", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // display group elements name
+    displayGroupElementName(groupName) {
+        try {
+            let group = this.getGroupByName(groupName);
+            console.log( stringFormat("group: '{0}' display begin", groupName) );
+            group.elements.forEach(element => {
+                console.log(element.Name);
+            });
+            console.log( stringFormat("group: '{0}' display end", groupName) );
+        } catch (e) {
+            var errMsg = this.getExpMsg("displayGroupElementName", e);
             console.log(errMsg);
             alert(errMsg);
         }

@@ -2,7 +2,7 @@ class STSBaseEnemy extends GameSprite {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, frameData, gameRect, getoutCallback) {
+    constructor(name, scene, frameData, gameRect, callbacks) {
         super(name, scene, frameData, false);
 
         try {
@@ -11,7 +11,7 @@ class STSBaseEnemy extends GameSprite {
             v.scene = scene;
             v.frameData = frameData;
             v.gameRect = gameRect;
-            v.getoutCallback = getoutCallback;
+            v.callbacks = callbacks;
 
             v.collisionGroup = this.CollisionGroup;
             this.registerOnGroup('star');
@@ -123,8 +123,12 @@ class STSBaseEnemy extends GameSprite {
      // explosion
      explosion() {
         try {
-            console.log('I`m die');
-            //this.play('explosion');
+            //console.log('I`m die');
+
+            let v = this.#_PV;
+            
+            if (v.callbacks == undefined || v.callbacks.die == undefined) { return; }
+            v.callbacks.die(this);
         } catch (e) {
             var errMsg = this.getExpMsg("explosion", e);
             console.log(errMsg);
@@ -253,10 +257,10 @@ class STSBaseEnemy extends GameSprite {
     // reset
     reset() {
         try {
+            this.#_PV.hp.resetMax(this.MaxHP);
             this.resetState();
             this.patrol();
             this.alpha = 1;
-            this.#_PV.hp.resetMax(this.MaxHP);
 
             this.recomputeSpriteRect();
         } catch (e) {
@@ -345,8 +349,8 @@ class STSBaseEnemy extends GameSprite {
         try {
             let v = this.#_PV;
             
-            if (v.getoutCallback == undefined) { return; }
-            v.getoutCallback(this);
+            if (v.callbacks == undefined || v.callbacks.getout) { return; }
+            v.callbacks.getout(this);
 
         } catch (e) {
             var errMsg = this.getExpMsg("getOut", e);

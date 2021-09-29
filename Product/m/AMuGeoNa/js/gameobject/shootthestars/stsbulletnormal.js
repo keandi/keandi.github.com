@@ -69,6 +69,7 @@ class STSBulletNormal extends STSBaseBullet {
             let selfIt = this;
 
             this.setPosition(x, y);
+            this.visible = true;
 
             if (v.moveTimer == undefined) {
                 v.moveTimer = new TimerOnPool('timeronpool_' + this.Name, v.scene.getTimerPool());
@@ -76,7 +77,7 @@ class STSBulletNormal extends STSBaseBullet {
 
             let upBullet = function() {
                 selfIt.moveY(-35);
-                return (selfIt.SpriteRect.Bottom <= selfIt.GameRect.Top) ? false : true;
+                return (selfIt.visible === false || selfIt.SpriteRect.Bottom <= selfIt.GameRect.Top) ? false : true;
             };
 
             v.moveTimer.startInterval(()=>{
@@ -95,5 +96,10 @@ class STSBulletNormal extends STSBaseBullet {
     // strength
     get Strength() {
         return 5; // 탄마다 별도 처리
+    }
+
+    // get object kind
+    get ObjectKind() {
+        return 'bullet';
     }
 }

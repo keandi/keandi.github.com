@@ -166,6 +166,7 @@ class SceneShootTheStars extends GameScene {
                 let dragFakeImageControl = function(x, y, dragprocess, texture, canonType) {
                     if (dragprocess.value === DragProcess.START.value) {
                         dragFakeImage = selfIt.getGameObject(texture);
+                        dragFakeImage.visible = true;
                     }
 
                     var canonRect = isCanonArea(x, y);
@@ -206,6 +207,7 @@ class SceneShootTheStars extends GameScene {
 
                                         var newCanon = selfIt.getGameObject(objectKind);
                                         newCanon.setPosition(canonRect.CenterX, canonRect.CenterY);
+                                        newCanon.visible = true;
                                         newCanon.reset();
 
                                         oldCanonInfo.object = newCanon;
@@ -367,7 +369,10 @@ class SceneShootTheStars extends GameScene {
             {
                 // star
                 this.registerGameObjectCreateCallback('enemy_star', ()=>{
-                    return new STSEnemyStar('enemyStar', selfIt, v.frameInfo, selfIt.ContentRc, (who)=>selfIt.getOut(who));
+                    return new STSEnemyStar('enemyStar_' + _gameHost.Time, selfIt, v.frameInfo, selfIt.ContentRc, {
+                        die: (who)=>selfIt.die(who),
+                        getout: (who)=>selfIt.getOut(who)
+                    });
                 });
             }
 
@@ -443,6 +448,7 @@ class SceneShootTheStars extends GameScene {
                     var canon = this.getGameObject('canon_1');
                     canon.reset();
                     canon.setPosition(element.rect.CenterX, element.rect.CenterY);
+                    canon.visible = true;
                     canon.alpha = 1;
                     element.object = canon;
                 });
@@ -483,6 +489,7 @@ class SceneShootTheStars extends GameScene {
                     var star = selfIt.getGameObject('enemy_star');
                     star.reset();
                     star.setPosition(x, y);
+                    star.visible = true;
                 };
 
                 // enemy spawn
@@ -537,9 +544,6 @@ class SceneShootTheStars extends GameScene {
             bullet.run(x, y);
 
             //this.reserveSleep(100);
-
-            let v = this.#_SPV;
-            v.goalProgress.increase();
         } catch(e) {
             var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
             console.log(errMsg);
@@ -656,6 +660,7 @@ class SceneShootTheStars extends GameScene {
             canonData.object = this.getGameObject('canon_1');
             canonData.object.reset();
             canonData.object.setPosition(canonData.rect.CenterX, canonData.rect.CenterY);
+            canonData.object.visible = true;
             canonData.object.alpha = 1;
         } catch(e) {
             var errMsg = this.getKey() + ".exhaustedCanon.catched: " + e;
@@ -668,7 +673,7 @@ class SceneShootTheStars extends GameScene {
     getOut(who) {
         try {
 
-            if (who.GroupTag == 'enemy') {
+            if (who.GroupTag == 'star') {
                 this.#_SPV.enemySpawn.decrease(1);
             }
 
@@ -678,6 +683,40 @@ class SceneShootTheStars extends GameScene {
 
         } catch(e) {
             var errMsg = this.getKey() + ".getOut.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // die
+    die(who) {
+        try {
+
+            this.removeObject(who);
+
+            if (who.GroupTag == 'star') {
+                let v = this.#_SPV;
+
+                v.enemySpawn.decrease(1);
+                v.goalProgress.increase();
+
+                //explosion
+                /*if (v.diecount == undefined) { v.diecount = 0; }
+                v.diecount++;
+                if (v.diecount === 2)
+                {
+                    var a = 1;
+                }*/
+                /*if (v.lastDieName === who.Name) {
+                    console.log('die: ' + who.Name);
+                    this.getCollisionGroup().displayGroupElementName('star');
+                }
+                v.lastDieName = who.Name;*/
+                console.log("i'm die");
+            }
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".die.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -705,12 +744,33 @@ class SceneShootTheStars extends GameScene {
     // group collision event - attacker X body
     onCollisionAttackerXBody(attacker, body) {
         try {
-            console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
+            //console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
             if (body.GroupTag === 'star') {
                 this.reserveSleep(200);
                 body.decreaseHP(attacker.Strength);
-                body.setSuperArmor();
+                if (body.visible === true) { // 죽었나?
+                    body.setSuperArmor();
+                }
             }
+
+            if (attacker.ObjectKind === 'bullet') {
+                this.removeObject(attacker);
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // object remove
+    removeObject(object) {
+        try {
+            if (object.GroupTag === 'star') {
+                var aaaa = 1;
+            }
+            object.remove();
+            this.releaseGameObject(object);
         } catch(e) {
             var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;
             console.log(errMsg);

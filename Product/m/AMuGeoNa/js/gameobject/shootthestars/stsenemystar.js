@@ -2,8 +2,8 @@ class STSEnemyStar extends STSBaseEnemy {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, frameData, gameRect, getoutCallback) {
-        super(name, scene, frameData, gameRect, getoutCallback);
+    constructor(name, scene, frameData, gameRect, callbacks) {
+        super(name, scene, frameData, gameRect, callbacks);
 
         try {
             let v = this.#_PV;

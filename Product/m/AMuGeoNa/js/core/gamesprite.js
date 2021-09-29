@@ -305,4 +305,9 @@ class GameSprite extends GameObject {
     get CollisionData() {
         console.log("not implement - get CollisionData !!!");
     }
+
+    // get object kind
+    get ObjectKind() {
+        return undefined;
+    }
 }

@@ -109,6 +109,7 @@ class STSBulletLaserV2 extends STSBaseBullet {
             v.sprite.y = v.fireRect.CenterY;
 
             setPixelScaleY(v.sprite, v.fireRect.Height, false);
+            this.visible = true;
 
             //
             if (v.collisionTimer == undefined) {
@@ -146,6 +147,6 @@ class STSBulletLaserV2 extends STSBaseBullet {
 
     // strength
     get Strength() {
-        return 3; // 탄마다 별도 처리
+        return 10; // 탄마다 별도 처리
     }
 }
