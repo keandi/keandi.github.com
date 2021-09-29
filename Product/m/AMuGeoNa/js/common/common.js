@@ -99,3 +99,17 @@ function numberWithCommas(x) {
 function fps(value) { 
     return 1000 / value;
 }
+
+// 연속된 name 배열로 가져오기
+function makePrefixNumNames(prefix, start, end, midChar, maxLength) {
+    let array = [];
+
+    if (midChar == undefined || midChar.length != 1) { midChar = ''; }
+    if (maxLength == undefined || maxLength < 1) { maxLength = 4; }
+
+    for (var i = start; i <= end; i++) {
+        array.push(prefix + midChar + String(i).padStart(maxLength, '0'));
+    }
+
+    return array;
+}

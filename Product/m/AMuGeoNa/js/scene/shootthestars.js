@@ -51,7 +51,7 @@ class SceneShootTheStars extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('shootthestars_sprite', 'explosion_sprite_01' );
+            .addArgs('shootthestars_sprite', 'explosion_sprite_01', 'explosion_sprite_02' );
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
