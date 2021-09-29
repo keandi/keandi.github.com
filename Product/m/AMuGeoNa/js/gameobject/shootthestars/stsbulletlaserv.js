@@ -153,4 +153,9 @@ class STSBulletLaserV extends STSBaseBullet {
     get Strength() {
         return 8; // 탄마다 별도 처리
     }
+
+    // get object kind
+    get ObjectKind() {
+        return 'laser';
+    }
 }

@@ -51,7 +51,7 @@ class SceneShootTheStars extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('shootthestars_sprite' );
+            .addArgs('shootthestars_sprite', 'explosion_sprite_01' );
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
@@ -376,6 +376,15 @@ class SceneShootTheStars extends GameScene {
                 });
             }
 
+            // explosion effect
+            {
+                this.registerGameObjectCreateCallback('explosion_01', ()=>{
+                    return new ExplosionSprite('explosion_01_' + _gameHost.Time, selfIt, v.frameInfo, 'explosion_sprite_01', 'EXP_01_01', (who)=>{
+                        selfIt.removeObject(who);
+                    });
+                });
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
@@ -694,6 +703,8 @@ class SceneShootTheStars extends GameScene {
 
             this.removeObject(who);
 
+            let selfIt = this;
+
             if (who.GroupTag == 'star') {
                 let v = this.#_SPV;
 
@@ -713,6 +724,22 @@ class SceneShootTheStars extends GameScene {
                 }
                 v.lastDieName = who.Name;*/
                 console.log("i'm die");
+
+                let explosionTimer = new TimerOnPool('timeronpool_explosion_effect' + this.Name, this.getTimerPool());
+                let whoRect = who.SpriteRect;
+                let explosionCount = 0;
+                explosionTimer.startInterval(()=>{
+                    explosionCount++;
+                    if (explosionCount > 4) {
+                        explosionTimer.destroy();
+                        return;
+                    }
+
+                    selfIt.explosionEffect01(
+                        Phaser.Math.Between(whoRect.Left, whoRect.Right),
+                        Phaser.Math.Between(whoRect.Top, whoRect.Bottom)
+                    );
+                }, 60, true);
             }
 
         } catch(e) {
@@ -746,14 +773,26 @@ class SceneShootTheStars extends GameScene {
         try {
             //console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
             if (body.GroupTag === 'star') {
-                this.reserveSleep(200);
+                this.reserveSleep(50);
                 body.decreaseHP(attacker.Strength);
                 if (body.visible === true) { // 죽었나?
                     body.setSuperArmor();
                 }
-            }
+            } 
 
+            // explosion effect
+            {
+                if (attacker.ObjectKind === 'bullet') {
+                    this.explosionEffect01(attacker.X, attacker.Y);
+                }
+                else { // body explosion effect
+                    this.explosionEffect01(Phaser.Math.Between(body.SpriteRect.Left, body.SpriteRect.Right), Phaser.Math.Between(body.SpriteRect.Top, body.SpriteRect.Bottom));
+                }
+            }
+            
             if (attacker.ObjectKind === 'bullet') {
+                this.removeObject(attacker);
+            } else if (attacker.ObjectKind === 'missile') {
                 this.removeObject(attacker);
             }
         } catch(e) {
@@ -763,12 +802,23 @@ class SceneShootTheStars extends GameScene {
         } 
     }
 
+    // explosion effect
+    explosionEffect01(x, y) {
+        try {
+            var explosion = this.getGameObject('explosion_01');
+            explosion.setPosition(x, y);
+            explosion.visible = true;
+            explosion.reset();
+        } catch(e) {
+            var errMsg = this.getKey() + ".explosionEffect01.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
     // object remove
     removeObject(object) {
         try {
-            if (object.GroupTag === 'star') {
-                var aaaa = 1;
-            }
             object.remove();
             this.releaseGameObject(object);
         } catch(e) {

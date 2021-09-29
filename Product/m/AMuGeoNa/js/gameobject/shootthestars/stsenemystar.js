@@ -103,7 +103,7 @@ class STSEnemyStar extends STSBaseEnemy {
         try {
             let getMaxHP = function(level) {
                 let levelGroup = (level < 10) ? 1 : ((level - (level % 10)) / 10) + 1;
-                return levelGroup * 50;
+                return levelGroup * 20;
             };
 
             return getMaxHP(_gameData.EntryGameLevelInfo.gamelevel);
@@ -204,7 +204,7 @@ class STSEnemyStar extends STSBaseEnemy {
     // move
     move() {
         try {
-            let selfIt = this;
+            if (this.visible === false) { return false; } // 죽었음
             let v = this.#_PV;
             const gameRect = this.GameRect;
 

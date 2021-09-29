@@ -78,7 +78,7 @@ class STSMissile extends STSBaseBullet {
 
             let upBullet = function() {
                 selfIt.moveY(-20);
-                return (selfIt.SpriteRect.Bottom <= selfIt.GameRect.Top) ? false : true;
+                return (selfIt.visible === false || selfIt.SpriteRect.Bottom <= selfIt.GameRect.Top) ? false : true;
             };
 
             v.moveTimer.startInterval(()=>{
@@ -96,6 +96,11 @@ class STSMissile extends STSBaseBullet {
 
     // strength
     get Strength() {
-        return 12; // 탄마다 별도 처리
+        return 50; // 탄마다 별도 처리
+    }
+
+    // get object kind
+    get ObjectKind() {
+        return 'missile';
     }
 }
