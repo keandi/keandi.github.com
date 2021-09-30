@@ -68,6 +68,9 @@ class SceneShootTheStars extends GameScene {
             v.frameInfo = {
                 frames: _resourcePool.getJsonFrameMap('shootthestars_sprite'),
             };
+            v.bulletExplosionframeInfo = {
+                frames: _resourcePool.getJsonFrameMap('explosion_sprite_02'),
+            };
 
             // menu icon coords
             const menuIconCount = 7;
@@ -362,6 +365,10 @@ class SceneShootTheStars extends GameScene {
 
                 this.registerGameObjectCreateCallback('bullet_missile', ()=>{
                     return new STSMissile('bulletMissile', selfIt, v.frameInfo, selfIt.ContentRc);
+                });
+
+                this.registerGameObjectCreateCallback('bullet_explosion', ()=>{
+                    return new STSBulletExplosion('bulletExplosion', selfIt, v.bulletExplosionframeInfo, selfIt.ContentRc, (who)=>selfIt.removeObject(who));
                 });
             }
 
@@ -794,6 +801,13 @@ class SceneShootTheStars extends GameScene {
                 this.removeObject(attacker);
             } else if (attacker.ObjectKind === 'missile') {
                 this.removeObject(attacker);
+
+                // explosion attack
+                {
+                    var explosion = this.getGameObject('bullet_explosion');
+                    explosion.reset();
+                    explosion.run(attacker.X, attacker.Y);
+                }
             }
         } catch(e) {
             var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;

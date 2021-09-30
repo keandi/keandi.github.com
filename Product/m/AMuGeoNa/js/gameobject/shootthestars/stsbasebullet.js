@@ -53,6 +53,11 @@ class STSBaseBullet extends GameSprite {
         }
     }
 
+    // animator 등록
+    onRegisterAnimatorManager(animatorManager) {
+        // 상속 구현 필요
+     }
+
      // get sprite
      getSprite() {
          // 상속 하여 반환 필요

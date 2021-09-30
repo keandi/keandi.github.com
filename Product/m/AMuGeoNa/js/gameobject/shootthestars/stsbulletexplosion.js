@@ -30,14 +30,7 @@ class STSBulletExplosion extends STSBaseBullet {
     onInitialize() {
         try {
             super.onInitialize();
-
-            let v = this.#_PV;
-            if (v.sprite == undefined) {
-                v.sprite = this.getSprite();
-                v.sprite.setOrigin(0.5);
-                v.sprite.setDepth(DEPTH_GAMEEFFECT_TOP);
-            }
-            this.onRegisterAnimatorManager(this.getAnimatorManager(v.sprite));
+            this.onRegisterAnimatorManager(this.getAnimatorManager(this.#_PV.sprite));
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
@@ -80,6 +73,7 @@ class STSBulletExplosion extends STSBaseBullet {
                     end: 15,
                     duration: fps(60),
                     repeat: 1,
+                    frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
                     endCallback: ()=>v.exhaustedCallback(selfIt),
                 });
         } catch (e) {
@@ -88,6 +82,18 @@ class STSBulletExplosion extends STSBaseBullet {
              alert(errMsg);
          }
      }
+
+     // frame changed event
+    onFrameChanged(frameIndex, frameName) {
+        try {
+            this.ActiveFrameName = frameName;
+            this.recomputeSpriteRect();
+        } catch (e) {
+            var errMsg = this.getExpMsg("onFrameChanged", e);
+            console.log(errMsg);
+            alert(errMsg);
+       }
+    }
      
      // explosion
      explosion() {
@@ -146,18 +152,6 @@ class STSBulletExplosion extends STSBaseBullet {
         }
     }
 
-    // recompute collision rect
-    recomputeSpriteRect() {
-        try {
-            //nothing
-
-        } catch (e) {
-            var errMsg = this.getExpMsg("recomputeSpriteRect", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
     // get sprite rect
     get SpriteRect() {
         return this.#_PV.spriteRect;
@@ -167,8 +161,6 @@ class STSBulletExplosion extends STSBaseBullet {
     reset() {
         try {
             this.alpha = 1;
-            this.visible = true;
-            this.explosion();
         } catch (e) {
             var errMsg = this.getExpMsg("reset", e);
             console.log(errMsg);
@@ -229,6 +221,34 @@ class STSBulletExplosion extends STSBaseBullet {
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // run
+    run(x, y) {
+        try {
+            let v = this.#_PV;
+            let selfIt = this;
+
+            setPosition(v.sprite, x, y);
+            this.visible = true;
+            v.sprite.setDepth(DEPTH_GAMEEFFECT_TOP);
+
+            this.explosion();
+        } catch (e) {
+            var errMsg = this.getExpMsg("run", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // strength
+    get Strength() {
+        return 50; // 탄마다 별도 처리
+    }
+
+    // get object kind
+    get ObjectKind() {
+        return 'explosion';
     }
 
 }
