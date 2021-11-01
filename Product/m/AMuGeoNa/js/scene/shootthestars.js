@@ -693,6 +693,9 @@ class SceneShootTheStars extends GameScene {
                 this.#_SPV.enemySpawn.decrease(1);
             }
 
+            // 일단 화면밖으로 이동
+            who.setY(-1000);
+
             // remove
             who.remove();
             this.releaseGameObject(who);
@@ -783,12 +786,17 @@ class SceneShootTheStars extends GameScene {
             if (attacker.GroupTag === 'star' && body.GroupTag === 'canon')
             {
                 this.reserveSleep(100);
-                body.explosion();   // 폭발시켜버림
+                body.enter('explosion');   // 폭발시켜버림
                 attacker.getOut();  // 사라짐
 
                 // effect
                 for (var i = 0; i < 7; i++) {
                     this.explosionEffect01(Phaser.Math.Between(body.SpriteRect.Left, body.SpriteRect.Right), Phaser.Math.Between(body.SpriteRect.Top, body.SpriteRect.Bottom));
+                }
+
+                if (this.#LiveCanonCount <= 0) {
+                    // 실패
+                    console.log("mission failed !!!");
                 }
 
                 return;
@@ -854,6 +862,24 @@ class SceneShootTheStars extends GameScene {
             this.releaseGameObject(object);
         } catch(e) {
             var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // 현재 살아있는 canon 개수 구하기
+    get #LiveCanonCount() {
+        try {
+            let count = 0;
+            this.#_SPV.canonData.canon.forEach(element => {
+                if (element.object.IsExploded === false) {
+                    count++;
+                }
+            });
+
+            return count;
+        } catch(e) {
+            var errMsg = this.getKey() + ".#LiveCanonCount.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         } 

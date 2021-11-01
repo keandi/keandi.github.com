@@ -509,4 +509,15 @@ class STSBaseCanon extends GameSprite {
     get CollisionData() {
         return this.#_PV.collisionData;
     }
+
+    // 폭발해버렸나?
+    get IsExploded() {
+        try {
+            return (this.CurrentState === 'explosion') ? true : false;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsExploded", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 }
