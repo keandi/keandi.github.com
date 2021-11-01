@@ -10,6 +10,10 @@ class STSEnemyStar extends STSBaseEnemy {
             
             v.scene = scene;
             v.frameData = frameData;
+            v.velocity = {
+                patrol: 0,
+                attack: 0
+            };
             
             //
             super.initialize(); // 구현의 가장 하층에서 호출되어야 된다.
@@ -183,13 +187,17 @@ class STSEnemyStar extends STSBaseEnemy {
     // get new target x, y
     #getNewTargetXY() {
         try {
+            const velocity = this.#MoveVelocity;
+            const min = velocity + 10;
+            const max = min + 7;
+
             const state = this.getStateMachine().Current;
 
             if (state === 'patrol') {
                 let v = this.#_PV;
                 return {
-                    x: v.sprite.x + ( (this.#IsPatrolToLeft === true) ? Phaser.Math.Between(-8, -15) : Phaser.Math.Between(8, 15) ),
-                    y: v.sprite.y + Phaser.Math.Between(-2, 4)
+                    x: v.sprite.x + ( (this.#IsPatrolToLeft === true) ? Phaser.Math.Between(-max, -min) : Phaser.Math.Between(min, max) ),
+                    y: v.sprite.y + Phaser.Math.Between(-2, 20)
                 };
             } else if (state === 'attack') {
                 console.log("need logic!");
@@ -214,6 +222,7 @@ class STSEnemyStar extends STSBaseEnemy {
             }
 
             let res = MoveTowards2(v.sprite.x, v.sprite.y, v.moveTarget.X, v.moveTarget.Y, this.#MoveVelocity);
+            //console.log('velocity: ' + this.#MoveVelocity);
             if (res.isFinished === true) {
                 if (v.sprite.x < gameRect.Left) {
                     v.isPatrolToLeft = false;
@@ -243,12 +252,23 @@ class STSEnemyStar extends STSBaseEnemy {
     // get move velocity
     get #MoveVelocity() {
         try {
-            let moveSpeed = function(gamelevel, state) {
-                let speed = Math.floor((gamelevel / 20) + 3);
-                return (state === 'attack') ? speed * 2 : speed;
+            let state = this.getStateMachine().Current;
+            let v = this.#_PV;
+
+            let patrolSpeed = function(gamelevel, state) {
+                return Math.floor((gamelevel / 8) + Phaser.Math.Between(2, 4));
             };
 
-            return moveSpeed(_gameData.EntryGameLevelInfo.gamelevel, this.getStateMachine().Current);
+            //
+            if (v.velocity.patrol === 0) {
+                v.velocity.patrol = patrolSpeed(_gameData.EntryGameLevelInfo.gamelevel, 'patrol');
+                //v.velocity.patrol = 15;
+                v.velocity.attack = v.velocity.patrol * 2;
+            }
+
+            //
+            return (state === 'attack') ? v.velocity.attack : v.velocity.patrol;
+
         } catch (e) {
             var errMsg = this.getExpMsg("MoveVelocity", e);
             console.log(errMsg);

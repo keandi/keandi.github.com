@@ -349,7 +349,7 @@ class STSBaseEnemy extends GameSprite {
         try {
             let v = this.#_PV;
             
-            if (v.callbacks == undefined || v.callbacks.getout) { return; }
+            if (v.callbacks == undefined || v.callbacks.getout == undefined) { return; }
             v.callbacks.getout(this);
 
         } catch (e) {

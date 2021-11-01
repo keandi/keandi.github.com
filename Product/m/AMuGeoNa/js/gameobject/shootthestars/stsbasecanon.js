@@ -98,6 +98,8 @@ class STSBaseCanon extends GameSprite {
                 .addEntry('ready', ()=>this.ready())
                 .addEntry('explosion', ()=>this.explosion());
 
+            v.stateMachine.add('explosion');
+
         } catch (e) {
             var errMsg = this.getExpMsg("onRegisterStateMachine", e);
             console.log(errMsg);

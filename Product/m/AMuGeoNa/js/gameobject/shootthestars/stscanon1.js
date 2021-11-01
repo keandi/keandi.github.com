@@ -38,7 +38,7 @@ class STSCanon1 extends STSBaseCanon {
 
     // get all framenames
     get AllFrameNames() {
-        return ['CANON1_0000', 'CANON1_0001', 'CANON1_0002', 'CANON1_0003'];
+        return ['CANON1_0000', 'CANON1_0001', 'CANON1_0002', 'CANON1_0003', 'DESTROYED_CANON1'];
     }
 
     // get sprite
@@ -82,6 +82,14 @@ class STSCanon1 extends STSBaseCanon {
                     textures: ['CANON1_0000'],
                     duration: fps,
                     repeat: 1,
+                    endCallback: ()=>selfIt.onAnimationEnd(),
+                })
+                .add('explosion', {
+                    asset: 'shootthestars_sprite',
+                    textures: ['DESTROYED_CANON1'],
+                    duration: fps,
+                    repeat: 1,
+                    frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 });
        } catch (e) {

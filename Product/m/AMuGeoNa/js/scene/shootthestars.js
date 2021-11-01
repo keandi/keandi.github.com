@@ -779,13 +779,30 @@ class SceneShootTheStars extends GameScene {
     onCollisionAttackerXBody(attacker, body) {
         try {
             //console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
-            if (body.GroupTag === 'star') {
-                this.reserveSleep(50);
-                body.decreaseHP(attacker.Strength);
-                if (body.visible === true) { // 죽었나?
-                    body.setSuperArmor();
+
+            if (attacker.GroupTag === 'star' && body.GroupTag === 'canon')
+            {
+                this.reserveSleep(100);
+                body.explosion();   // 폭발시켜버림
+                attacker.getOut();  // 사라짐
+
+                // effect
+                for (var i = 0; i < 7; i++) {
+                    this.explosionEffect01(Phaser.Math.Between(body.SpriteRect.Left, body.SpriteRect.Right), Phaser.Math.Between(body.SpriteRect.Top, body.SpriteRect.Bottom));
                 }
-            } 
+
+                return;
+            }
+            else 
+            {
+                if (body.GroupTag === 'star') {
+                    this.reserveSleep(50);
+                    body.decreaseHP(attacker.Strength);
+                    if (body.visible === true) { // 죽었나?
+                        body.setSuperArmor();
+                    }
+                }
+            }
 
             // explosion effect
             {
