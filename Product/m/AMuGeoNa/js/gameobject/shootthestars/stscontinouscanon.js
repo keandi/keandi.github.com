@@ -38,7 +38,7 @@ class STSContinousCanon extends STSBaseCanon {
 
     // get all framenames
     get AllFrameNames() {
-        return ['CONTINOUS_CANON_0000', 'CONTINOUS_CANON_0001', 'CONTINOUS_CANON_0002', 'CONTINOUS_CANON_0003'];
+        return ['CONTINOUS_CANON_0000', 'CONTINOUS_CANON_0001', 'CONTINOUS_CANON_0002', 'CONTINOUS_CANON_0003', 'DESTROYED_CONTINOUS_CANON'];
     }
 
     // get sprite
@@ -82,6 +82,14 @@ class STSContinousCanon extends STSBaseCanon {
                     textures: ['CONTINOUS_CANON_0000'],
                     duration: fps,
                     repeat: 1,
+                    endCallback: ()=>selfIt.onAnimationEnd(),
+                })
+                .add('explosion', {
+                    asset: 'shootthestars_sprite',
+                    textures: ['DESTROYED_CONTINOUS_CANON'],
+                    duration: fps,
+                    repeat: 1,
+                    frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 });
        } catch (e) {

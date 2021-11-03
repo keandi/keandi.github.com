@@ -49,7 +49,7 @@ class STSRocket extends STSBaseCanon {
 
     // get all framenames
     get AllFrameNames() {
-        return ['ROCKET'];
+        return ['ROCKET','DESTROYED_ROCKET'];
     }
 
     // get sprite
@@ -102,6 +102,14 @@ class STSRocket extends STSBaseCanon {
                     duration: fps,
                     repeat: 1,
                     endCallback: ()=>selfIt.onAnimationEnd(),
+                })
+                .add('explosion', {
+                    asset: 'shootthestars_sprite',
+                    textures: ['DESTROYED_ROCKET'],
+                    duration: fps,
+                    repeat: 1,
+                    frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
+                    endCallback: ()=>selfIt.onAnimationEnd(),
                 });
        } catch (e) {
             var errMsg = this.getExpMsg("onRegisterAnimatorManager", e);
@@ -129,7 +137,8 @@ class STSRocket extends STSBaseCanon {
     // fire
     fire() {
         try {
-            this.play('fire');
+            //this.play('fire');
+            if (this.enter('fire') != true) { return; }
 
             let spriteRect = this.SpriteRect;
             let v = this.#_PV;
@@ -180,4 +189,16 @@ class STSRocket extends STSBaseCanon {
             alert(errMsg);
         }
     }
+
+    // explosion
+    explosion() {
+        try {
+            super.explosion();
+            this.#_PV.missile.visible = false;
+        } catch (e) {
+            var errMsg = this.getExpMsg("explosion", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+     }
 }

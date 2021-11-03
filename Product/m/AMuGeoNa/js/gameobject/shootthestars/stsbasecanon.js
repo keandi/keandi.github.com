@@ -296,6 +296,7 @@ class STSBaseCanon extends GameSprite {
             this.#_PV.fireCount.init();
 
             this.ready();
+            //if (this.enter('ready') != true) { return; }
             this.alpha = 1;
             this.#registerPointerDown();
 

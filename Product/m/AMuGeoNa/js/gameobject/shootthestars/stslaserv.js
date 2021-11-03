@@ -38,7 +38,7 @@ class STSLaserV extends STSBaseCanon {
 
     // get all framenames
     get AllFrameNames() {
-        return ['LASER1_0000','LASER1_0001','LASER1_0002','LASER1_0003'];
+        return ['LASER1_0000','LASER1_0001','LASER1_0002','LASER1_0003','DESTROYED_LASER1',];
     }
 
     // get sprite
@@ -82,6 +82,14 @@ class STSLaserV extends STSBaseCanon {
                     textures: ['LASER1_0000'],
                     duration: fps,
                     repeat: 1,
+                    endCallback: ()=>selfIt.onAnimationEnd(),
+                })
+                .add('explosion', {
+                    asset: 'shootthestars_sprite',
+                    textures: ['DESTROYED_LASER1'],
+                    duration: fps,
+                    repeat: 1,
+                    frameCallback: (idx, name)=>selfIt.onFrameChanged(idx, name),
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 });
        } catch (e) {
