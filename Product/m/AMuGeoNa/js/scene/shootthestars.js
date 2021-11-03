@@ -35,6 +35,10 @@ class SceneShootTheStars extends GameScene {
             super.onStop();
 
             this._isStopped = true;
+
+            let v = this.#_SPV;
+            destroyObjects( v.goalProgress );
+            v.goalProgress = undefined;
             
         } catch(e) {
             var errMsg = this.getKey() + ".onStop.catched: " + e;
@@ -47,7 +51,7 @@ class SceneShootTheStars extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('shootthestars_sprite' );
+            .addArgs('shootthestars_sprite', 'explosion_sprite_01', 'explosion_sprite_02' );
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
@@ -63,6 +67,9 @@ class SceneShootTheStars extends GameScene {
             // json data
             v.frameInfo = {
                 frames: _resourcePool.getJsonFrameMap('shootthestars_sprite'),
+            };
+            v.bulletExplosionframeInfo = {
+                frames: _resourcePool.getJsonFrameMap('explosion_sprite_02'),
             };
 
             // menu icon coords
@@ -159,9 +166,10 @@ class SceneShootTheStars extends GameScene {
                     return undefined;
                 };
 
-                let dragFakeImageControl = function(x, y, dragprocess, texture) {
+                let dragFakeImageControl = function(x, y, dragprocess, texture, canonType) {
                     if (dragprocess.value === DragProcess.START.value) {
                         dragFakeImage = selfIt.getGameObject(texture);
+                        dragFakeImage.visible = true;
                     }
 
                     var canonRect = isCanonArea(x, y);
@@ -174,6 +182,44 @@ class SceneShootTheStars extends GameScene {
                     }
 
                     if (dragprocess.value === DragProcess.END.value) {
+                        if (canonRect != undefined && canonType != undefined) {
+                            var newCanon = undefined;
+                            var objectKind = undefined;
+                            if (canonType.value === ShootTheStarsCanonIconType.BASE_2.value) {
+                                objectKind = 'canon_2';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.BASE_3.value) {
+                                objectKind = 'canon_3';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.CONTINOUS_CANON.value) {
+                                objectKind = 'continous_canon';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.LASER_VERTICAL.value) {
+                                objectKind = 'laser_v';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.LASER_HORIZONTAL.value) {
+                                objectKind = 'laser_v2';
+                            } else if (canonType.value === ShootTheStarsCanonIconType.ROCKET.value) {
+                                objectKind = 'rocket';
+                            }
+
+                            if (objectKind != undefined) {
+                                let oldCanonInfo = selfIt.getCanonOfArea(canonRect.CenterX, canonRect.CenterY);
+                                if (oldCanonInfo != undefined) {
+                                    //console.log("object state: " + oldCanonInfo.object.CurrentState);
+                                    if (oldCanonInfo.object.CurrentState !== 'fire') 
+                                    {
+                                        oldCanonInfo.object.remove();
+                                        selfIt.releaseGameObject(oldCanonInfo.object);
+
+                                        var newCanon = selfIt.getGameObject(objectKind);
+                                        newCanon.setPosition(canonRect.CenterX, canonRect.CenterY);
+                                        newCanon.visible = true;
+                                        newCanon.reset();
+
+                                        oldCanonInfo.object = newCanon;
+                                    }                                    
+                                }                          
+                            }
+
+                            //console.log("change canon - " + canonType.name);
+                        }
                         selfIt.releaseGameObject(dragFakeImage);
                         dragFakeImage = undefined;
                     }
@@ -183,7 +229,7 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_base2', selfIt, ShootTheStarsCanonIconType.BASE_2, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base2');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base2', who.IconType);
                     });
                 });
 
@@ -191,15 +237,15 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_base3', selfIt, ShootTheStarsCanonIconType.BASE_3, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base3');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_base3', who.IconType);
                     });
                 });
 
                 this.registerGameObjectCreateCallback('canonIcon_coutinouse_canon', ()=>{
-                    return new CanonMenuIcon('icon_continouse_canon', selfIt, ShootTheStarsCanonIconType.CONTINOUSE_CANON, menuIconSize.w, (who, x, y, dragprocess)=>{
+                    return new CanonMenuIcon('icon_continouse_canon', selfIt, ShootTheStarsCanonIconType.CONTINOUS_CANON, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_continous_canon');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_continous_canon', who.IconType);
                     });
                 });
 
@@ -207,7 +253,7 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_laser_vertical', selfIt, ShootTheStarsCanonIconType.LASER_VERTICAL, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_vertical');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_vertical', who.IconType);
                     });
                 });
 
@@ -215,21 +261,21 @@ class SceneShootTheStars extends GameScene {
                     return new CanonMenuIcon('icon_laser_horizontal', selfIt, ShootTheStarsCanonIconType.LASER_HORIZONTAL, menuIconSize.w, (who, x, y, dragprocess)=>{
                         //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_horizontal');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_laser_horizontal', who.IconType);
                     });
                 });
 
                 this.registerGameObjectCreateCallback('canonIcon_rocket', ()=>{
                     return new CanonMenuIcon('icon_rocket', selfIt, ShootTheStarsCanonIconType.ROCKET, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
-                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_rocket');
+                        dragFakeImageControl(x, y, dragprocess, 'dragIcon_rocket', who.IconType);
                     });
                 });
 
                 this.registerGameObjectCreateCallback('canonIcon_hp_up', ()=>{
                     return new CanonMenuIcon('icon_hp_up', selfIt, ShootTheStarsCanonIconType.HP_UP, menuIconSize.w, (who, x, y, dragprocess)=>{
-                        console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
+                        //console.log( stringFormat('drag x: {0}, y: {1}, dragprocess: {2}', x, y, dragprocess.value) );
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_hp_up');
                     }, (who)=>{
@@ -275,7 +321,74 @@ class SceneShootTheStars extends GameScene {
             // canon 
             {
                 this.registerGameObjectCreateCallback('canon_1', ()=>{
-                    return new STSCanon1('canon1', selfIt, v.frameInfo);
+                    return new STSCanon1('canon1', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y));
+                });
+
+                this.registerGameObjectCreateCallback('canon_2', ()=>{
+                    return new STSCanon2('canon2', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
+
+                this.registerGameObjectCreateCallback('canon_3', ()=>{
+                    return new STSCanon3('canon3', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
+
+                this.registerGameObjectCreateCallback('continous_canon', ()=>{
+                    return new STSContinousCanon('continousCanon', selfIt, v.frameInfo, (x, y)=>selfIt.fireBulletNormal(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
+
+                this.registerGameObjectCreateCallback('laser_v', ()=>{
+                    return new STSLaserV('laserV', selfIt, v.frameInfo, (x, y)=>selfIt.fireVerticalLaser(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
+
+                this.registerGameObjectCreateCallback('laser_v2', ()=>{
+                    return new STSLaserV2('laserV2', selfIt, v.frameInfo, (x, y)=>selfIt.fireVerticalLaser2(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
+
+                this.registerGameObjectCreateCallback('rocket', ()=>{
+                    return new STSRocket('rocket', selfIt, v.frameInfo, (x, y)=>selfIt.fireMissile(x, y), (who)=>selfIt.exhaustedCanon(who));
+                });
+            }
+
+            // bullet
+            {
+                this.registerGameObjectCreateCallback('bullet_normal', ()=>{
+                    return new STSBulletNormal('bullet_normal', selfIt, v.frameInfo, selfIt.ContentRc);
+                });
+
+                this.registerGameObjectCreateCallback('bullet_laser_v', ()=>{
+                    return new STSBulletLaserV('bulletLaserV', selfIt, v.frameInfo, selfIt.ContentRc);
+                });
+
+                this.registerGameObjectCreateCallback('bullet_laser_v2', ()=>{
+                    return new STSBulletLaserV2('bulletLaserV2', selfIt, v.frameInfo, selfIt.ContentRc);
+                });
+
+                this.registerGameObjectCreateCallback('bullet_missile', ()=>{
+                    return new STSMissile('bulletMissile', selfIt, v.frameInfo, selfIt.ContentRc);
+                });
+
+                this.registerGameObjectCreateCallback('bullet_explosion', ()=>{
+                    return new STSBulletExplosion('bulletExplosion', selfIt, v.bulletExplosionframeInfo, selfIt.ContentRc, (who)=>selfIt.removeObject(who));
+                });
+            }
+
+            // enemy
+            {
+                // star
+                this.registerGameObjectCreateCallback('enemy_star', ()=>{
+                    return new STSEnemyStar('enemyStar_' + _gameHost.Time, selfIt, v.frameInfo, selfIt.ContentRc, {
+                        die: (who)=>selfIt.die(who),
+                        getout: (who)=>selfIt.getOut(who)
+                    });
+                });
+            }
+
+            // explosion effect
+            {
+                this.registerGameObjectCreateCallback('explosion_01', ()=>{
+                    return new ExplosionSprite('explosion_01_' + _gameHost.Time, selfIt, v.frameInfo, 'explosion_sprite_01', 'EXP_01_01', (who)=>{
+                        selfIt.removeObject(who);
+                    });
                 });
             }
 
@@ -311,6 +424,16 @@ class SceneShootTheStars extends GameScene {
             // background
             this.setBackgroundColor( COLOR_SHOOTTHESTARS_BACKGROUND );
 
+            // progressbar
+            {
+                const contentRc = this.ContentRc;
+                let pb = new ProgressBar('progressbar_goal', this, contentRc.Left + 10, contentRc.Top + 10, contentRc.Width - 20, 8,
+                        0, this.Goal, 0xff0000, 0xffffff, 0, 0.2, 0.5, ()=>{
+                            console.log("ok~~~~~~~~~~~~~~~~~~~~~~~~~!!!!");
+                        });
+                v.goalProgress = pb;
+            }
+
             // menu 
             {
                 v.menus = {
@@ -341,8 +464,85 @@ class SceneShootTheStars extends GameScene {
                     var canon = this.getGameObject('canon_1');
                     canon.reset();
                     canon.setPosition(element.rect.CenterX, element.rect.CenterY);
+                    canon.visible = true;
                     canon.alpha = 1;
+                    element.object = canon;
                 });
+            }
+
+            // test star
+            {
+                /*
+                var x = 0;
+                var y = 0;
+                var idx = 0;
+                var tints = [0xffffff, 0xffff55, 0xff55ff, 0x8888ff, 
+                    0x15b59c, 0x48ec87, 0x901568, 0x6c5589, 
+                    0xf95555, 0xff0000, 0xbb0000, 0x990000];
+                for (var i = 0; i < 3; i++)
+                {
+                    y += 100;
+                    x = 35;
+                    for (var j = 0; j < 4; j++)
+                    {
+                        var star = this.add.sprite(x, y, 'shootthestars_sprite', 'STAR');
+                        star.setOrigin(0.5);
+                        star.setTint(tints[idx]);
+
+                        x += 80;
+                        idx++;
+                    }
+                }
+                */
+            }
+
+            // enemy
+            {
+                const contentRc = this.ContentRc;
+                const gameLevel = _gameData.EntryGameLevelInfo.gamelevel;
+
+                let createStar = function(x, y) {
+                    var star = selfIt.getGameObject('enemy_star');
+                    star.reset();
+                    star.setPosition(x, y);
+                    star.visible = true;
+                };
+
+                // enemy spawn
+                {
+                    let getEnemyMax = function() {
+                        if (gameLevel > 80) { return 9; }
+                        else if (gameLevel > 55) { return 8; }
+                        else if (gameLevel > 40) { return 7; }
+                        else if (gameLevel > 25) { return 6; }
+
+                        return 5;
+                    };
+
+                    let getEnemyCallback = function() {
+                        let count_star = 1;
+
+                        if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+                        else if (gameLevel >= 80) {}
+
+                        return [{ cb: (x, y)=>createStar(x, y), count: count_star}];
+                    };
+
+                    v.enemySpawn = new SpawnManager('enemy_spawn', this, 
+                        [
+                            { x: contentRc.X, y: contentRc.Top - 50 },
+                            { x: contentRc.X + contentRc.HalfWidth, y: contentRc.Top - 50 },
+                            { x: contentRc.CenterX, y: contentRc.Top - 50 },
+                            { x: contentRc.CenterX + contentRc.HalfWidth, y: contentRc.Top - 50 },
+                            { x: contentRc.Right, y: contentRc.Top - 50 },
+                        ], 
+                        getEnemyCallback(), getEnemyMax(), 3000);
+                }
             }
 
         } catch(e) {
@@ -352,6 +552,77 @@ class SceneShootTheStars extends GameScene {
         }
     }
 
+    // fire normal bullet
+    fireBulletNormal(x,  y) {
+        try {
+            let bullet = this.getGameObject('bullet_normal');
+            bullet.reset();
+            bullet.run(x, y);
+
+            //this.reserveSleep(100);
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // fire vertical laser
+    fireVerticalLaser(x,  y) {
+        try {
+            //console.log('fire laser v');
+            let selfIt = this;
+            let laser = this.getGameObject('bullet_laser_v');
+            laser.reset();
+            laser.run(x, y);
+            return ()=> {
+                //console.log('fire laser v - ended');
+                laser.remove();
+                selfIt.releaseGameObject(laser);
+            };
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireVerticalLaser.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // fire vertical laser2
+    fireVerticalLaser2(x,  y) {
+        try {
+            //console.log('fire laser v2');
+            
+            let selfIt = this;
+            let laser = this.getGameObject('bullet_laser_v2');
+            laser.reset();
+            laser.run(x, y);
+            return ()=> {
+                //console.log('fire laser v2 - ended');
+                laser.remove();
+                selfIt.releaseGameObject(laser);
+            };
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireVerticalLaser2.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // fire missile
+    fireMissile(x,  y) {
+        try {
+            //console.log('fire missile');
+            
+            let bullet = this.getGameObject('bullet_missile');
+            bullet.reset();
+            bullet.run(x, y);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireVerticfireMissilealLaser2.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 
      // get msgbox x, y (상속하여 반환 필요)
      getMsgBoxXY() {
@@ -367,5 +638,250 @@ class SceneShootTheStars extends GameScene {
     // 게임 정상종료 처리
     gameFinished() {
         this.gameEnd(false);
+    }
+
+    //
+    getCanonOfArea(x, y) {
+        try {
+            let v = this.#_SPV;
+
+            for (var i = 0; i < v.canonData.canon.length; i++) {
+                if (v.canonData.canon[i].rect.ptInRect(x, y) === true) {
+                    return v.canonData.canon[i];
+                }
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+
+        return undefined;
+    }
+
+    // 탄을 모두 소진함
+    exhaustedCanon(who) {
+        try {
+            let canonData = this.getCanonOfArea(who.X, who.Y);
+
+            if (canonData == undefined) {
+                throw 'exhaustedCanon - unknown canon data';
+            }
+
+            // remove
+            who.remove();
+            this.releaseGameObject(who);
+
+            // new
+            canonData.object = this.getGameObject('canon_1');
+            canonData.object.reset();
+            canonData.object.setPosition(canonData.rect.CenterX, canonData.rect.CenterY);
+            canonData.object.visible = true;
+            canonData.object.alpha = 1;
+        } catch(e) {
+            var errMsg = this.getKey() + ".exhaustedCanon.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 화면 밖으로 나갔음
+    getOut(who) {
+        try {
+
+            if (who.GroupTag == 'star') {
+                this.#_SPV.enemySpawn.decrease(1);
+            }
+
+            // 일단 화면밖으로 이동
+            who.setY(-1000);
+
+            // remove
+            who.remove();
+            this.releaseGameObject(who);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".getOut.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // die
+    die(who) {
+        try {
+
+            this.removeObject(who);
+
+            let selfIt = this;
+
+            if (who.GroupTag == 'star') {
+                let v = this.#_SPV;
+
+                v.enemySpawn.decrease(1);
+                v.goalProgress.increase();
+
+                //explosion
+                /*if (v.diecount == undefined) { v.diecount = 0; }
+                v.diecount++;
+                if (v.diecount === 2)
+                {
+                    var a = 1;
+                }*/
+                /*if (v.lastDieName === who.Name) {
+                    console.log('die: ' + who.Name);
+                    this.getCollisionGroup().displayGroupElementName('star');
+                }
+                v.lastDieName = who.Name;*/
+                console.log("i'm die");
+
+                let explosionTimer = new TimerOnPool('timeronpool_explosion_effect' + this.Name, this.getTimerPool());
+                let whoRect = who.SpriteRect;
+                let explosionCount = 0;
+                explosionTimer.startInterval(()=>{
+                    explosionCount++;
+                    if (explosionCount > 4) {
+                        explosionTimer.destroy();
+                        return;
+                    }
+
+                    selfIt.explosionEffect01(
+                        Phaser.Math.Between(whoRect.Left, whoRect.Right),
+                        Phaser.Math.Between(whoRect.Top, whoRect.Bottom)
+                    );
+                }, 60, true);
+            }
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".die.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 게임 목표
+    get Goal() {
+        return (_gameData.EntryGameLevelInfo.gamelevel * 3) + 25;
+    }
+
+    // create collision group event
+    onCreateCollisionGroup(collisionGroup) {
+        try {
+            collisionGroup.addGroups('canon', 'star', 'bullet')
+                .setTargetGroups('bullet', 'star')
+                .setTargetGroups('star', 'canon');
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".onCreateCollisionGroup.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // group collision event - attacker X body
+    onCollisionAttackerXBody(attacker, body) {
+        try {
+            //console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
+
+            if (attacker.GroupTag === 'star' && body.GroupTag === 'canon')
+            {
+                this.reserveSleep(100);
+                body.enter('explosion');   // 폭발시켜버림
+                attacker.getOut();  // 사라짐
+
+                // effect
+                for (var i = 0; i < 7; i++) {
+                    this.explosionEffect01(Phaser.Math.Between(body.SpriteRect.Left, body.SpriteRect.Right), Phaser.Math.Between(body.SpriteRect.Top, body.SpriteRect.Bottom));
+                }
+
+                if (this.#LiveCanonCount <= 0) {
+                    // 실패
+                    console.log("mission failed !!!");
+                }
+
+                return;
+            }
+            else 
+            {
+                if (body.GroupTag === 'star') {
+                    this.reserveSleep(50);
+                    body.decreaseHP(attacker.Strength);
+                    if (body.visible === true) { // 죽었나?
+                        body.setSuperArmor();
+                    }
+                }
+            }
+
+            // explosion effect
+            {
+                if (attacker.ObjectKind === 'bullet') {
+                    this.explosionEffect01(attacker.X, attacker.Y);
+                }
+                else { // body explosion effect
+                    this.explosionEffect01(Phaser.Math.Between(body.SpriteRect.Left, body.SpriteRect.Right), Phaser.Math.Between(body.SpriteRect.Top, body.SpriteRect.Bottom));
+                }
+            }
+            
+            if (attacker.ObjectKind === 'bullet') {
+                this.removeObject(attacker);
+            } else if (attacker.ObjectKind === 'missile') {
+                this.removeObject(attacker);
+
+                // explosion attack
+                {
+                    var explosion = this.getGameObject('bullet_explosion');
+                    explosion.reset();
+                    explosion.run(attacker.X, attacker.Y);
+                }
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // explosion effect
+    explosionEffect01(x, y) {
+        try {
+            var explosion = this.getGameObject('explosion_01');
+            explosion.setPosition(x, y);
+            explosion.visible = true;
+            explosion.reset();
+        } catch(e) {
+            var errMsg = this.getKey() + ".explosionEffect01.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // object remove
+    removeObject(object) {
+        try {
+            object.remove();
+            this.releaseGameObject(object);
+        } catch(e) {
+            var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // 현재 살아있는 canon 개수 구하기
+    get #LiveCanonCount() {
+        try {
+            let count = 0;
+            this.#_SPV.canonData.canon.forEach(element => {
+                if (element.object.IsExploded === false) {
+                    count++;
+                }
+            });
+
+            return count;
+        } catch(e) {
+            var errMsg = this.getKey() + ".#LiveCanonCount.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
     }
 }

@@ -2,7 +2,7 @@ class ProgressBar extends ClsObject {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, x, y, width, height, min, max, backColor, foreColor, borderDepth, backAlpha, foreAlpha) {
+    constructor(name, scene, x, y, width, height, min, max, backColor, foreColor, borderDepth, backAlpha, foreAlpha, maxCallback) {
         try {
             super(name);
 
@@ -38,6 +38,8 @@ class ProgressBar extends ClsObject {
                 foreground: undefined,
                 background: undefined
             };
+
+            v.maxCallback = maxCallback;
 
 
             //
@@ -144,6 +146,10 @@ class ProgressBar extends ClsObject {
             v.object.foreground.fillStyle(v.color.foreground, v.alpha.foreground);
             v.object.foreground.fillRect(v.rect.foreground.X, v.rect.foreground.Y, progressWidth, v.rect.foreground.Height);
             v.object.foreground.setDepth(DEPTH_GAMEINFO_UI);
+
+            if (v.maxCallback != undefined && this.IsMax === true) {
+                v.maxCallback();
+            }
 
         } catch (e) {
             var errMsg = this.getExpMsg("Value", e);

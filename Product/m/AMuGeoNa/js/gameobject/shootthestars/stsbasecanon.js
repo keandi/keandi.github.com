@@ -2,14 +2,36 @@ class STSBaseCanon extends GameSprite {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, frameData) {
+    constructor(name, scene, frameData, exhaustedCallback) {
         super(name, scene, frameData, false);
 
         try {
             let v = this.#_PV;
+            let selfIt = this;
             
             v.scene = scene;
             v.frameData = frameData;
+            v.exhaustedCallback = exhaustedCallback;
+            v.fireCount = {
+                limit: COUNTLIMIT_INFINITY,
+                current: 0,
+                reset: function() {
+                    this.limit = COUNTLIMIT_INFINITY;
+                    this.current = 0;
+                },
+                init: function() {
+                    this.limit = selfIt.BulletLimit;
+                    this.current = 0;
+                },
+                increase: function() {
+                    if (this.limit === COUNTLIMIT_INFINITY) { return true; }
+                    this.current++;
+                    return (this.current >= this.limit) ? false : true; // false=더이상 사용 불가
+                }
+            };
+
+            v.collisionGroup = this.CollisionGroup;
+            this.registerOnGroup('canon');
             
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
@@ -46,6 +68,11 @@ class STSBaseCanon extends GameSprite {
                 v.waitPercent.visible = false;
             }
             this.onRegisterAnimatorManager(this.getAnimatorManager(v.sprite));
+
+            this.#_PV.fireCount.limit = this.BulletLimit;
+            this.#_PV.fireCount.current = 0;
+
+            v.collisionData = new CollisionData('collisionData_' + this.Name, v.scene, v.frameData, this.AllFrameNames, this);
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);
@@ -68,8 +95,10 @@ class STSBaseCanon extends GameSprite {
                 .addEntry('explosion', ()=>this.explosion());
 
             v.stateMachine.add('wait')
-                .addEntry('ready', ()=>this.wait())
+                .addEntry('ready', ()=>this.ready())
                 .addEntry('explosion', ()=>this.explosion());
+
+            v.stateMachine.add('explosion');
 
         } catch (e) {
             var errMsg = this.getExpMsg("onRegisterStateMachine", e);
@@ -78,12 +107,28 @@ class STSBaseCanon extends GameSprite {
         }
      }
 
+     // get all framenames
+     get AllFrameNames() {
+        console.log("not implement - AllFrameNames !!!");
+    }
+
      // get sprite
      getSprite() {
          // 상속 하여 반환 필요
          console.log('not implement - getSprite');
          return undefined;
      }
+
+     // set active collision frame
+    set ActiveFrameName(value) {
+        try {
+            this.#_PV.collisionData.ActiveFrameName = value;
+        } catch (e) {
+            var errMsg = this.getExpMsg("ActiveFrameName", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 
      // animator 등록
      onRegisterAnimatorManager(animatorManager) {
@@ -139,6 +184,11 @@ class STSBaseCanon extends GameSprite {
     set visible(value) {
         try {
             this.#_PV.sprite.visible = value;
+            if (value === false) {
+                this.#_PV.waitPercent.visible = value;
+            }
+
+            this.#_PV.collisionData.IsSkip = !value;
         } catch (e) {
             var errMsg = this.getExpMsg("set_visible", e);
             console.log(errMsg);
@@ -158,40 +208,12 @@ class STSBaseCanon extends GameSprite {
     //// visible -->
     //////////////////////////////////
 
-    // set x
-    set X(value) {
-        try {
-            if (this.#_PV.sprite.x != value) {
-                this.#_PV.sprite.x = value;
-                this.#onChangedPosition();
-            }
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_X", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
     // get x
     get X() {
         try {
             return this.#_PV.sprite.x;
         } catch (e) {
             var errMsg = this.getExpMsg("get_X", e);
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    // set y
-    set Y(value) {
-        try {
-            if (this.#_PV.sprite.y != value) {
-                this.#_PV.sprite.y = value;
-                this.#onChangedPosition();
-            }
-        } catch (e) {
-            var errMsg = this.getExpMsg("set_Y", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -208,8 +230,8 @@ class STSBaseCanon extends GameSprite {
         }
     }
 
-    // changed position
-    #onChangedPosition() {
+    // recompute collision rect
+    recomputeSpriteRect() {
         try {
             let v = this.#_PV;
             if (v.spriteRect == undefined) {
@@ -221,12 +243,19 @@ class STSBaseCanon extends GameSprite {
             v.spriteRect.X = v.sprite.x - (v.sprite.width / 2);
             v.spriteRect.Y = v.sprite.y - (v.sprite.height / 2);
 
-            this.IsNeedCollisionRect = true;
+            v.collisionData.setRecomputeFlag();
+            v.collisionData.forcedRecomputeActiveFrame();
+
         } catch (e) {
-            var errMsg = this.getExpMsg("onChangedPosition", e);
+            var errMsg = this.getExpMsg("recomputeSpriteRect", e);
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get sprite rect
+    get SpriteRect() {
+        return this.#_PV.spriteRect;
     }
 
     ///////////////////////////////
@@ -263,8 +292,15 @@ class STSBaseCanon extends GameSprite {
     reset() {
         try {
             this.resetState();
+
+            this.#_PV.fireCount.init();
+
             this.ready();
+            //if (this.enter('ready') != true) { return; }
+            this.alpha = 1;
             this.#registerPointerDown();
+
+            this.recomputeSpriteRect();
         } catch (e) {
             var errMsg = this.getExpMsg("reset", e);
             console.log(errMsg);
@@ -276,6 +312,11 @@ class STSBaseCanon extends GameSprite {
     remove() {
         try {
             this.#unregisterPointerDown();
+
+            if (this.#_PV.waitTimer != undefined) { this.#_PV.waitTimer.stop(); }
+            this.resetState();
+            this.#_PV.fireCount.reset();
+            //console.log("remove object = " + this.Name);
         } catch (e) {
             var errMsg = this.getExpMsg("remove", e);
             console.log(errMsg);
@@ -350,11 +391,12 @@ class STSBaseCanon extends GameSprite {
             if (v.stateMachine.Current === 'fire') {
                 v.stateMachine.enter('wait');
             } else if (v.stateMachine.Current === 'wait') {
+                //console.log('onAnimationEnd = ' + this.Name);
                 this.#waitDisplay();
             }
 
         } catch (e) {
-            var errMsg = this.getExpMsg("unregisterPointerDown", e);
+            var errMsg = this.getExpMsg("onAnimationEnd", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -363,6 +405,8 @@ class STSBaseCanon extends GameSprite {
     // wait display
     #waitDisplay() {
         try {
+            if (this.waitProcess() === true) { return; }
+            //console.log('#waitDisplay = ' + this.Name);
             let v = this.#_PV;
 
             if (v.waitTimer == undefined) {
@@ -370,22 +414,29 @@ class STSBaseCanon extends GameSprite {
             }
 
             const waitTime = this.WaitTime;
-            const interval = waitTime / 50;
+            const interval = waitTime / 100;
             let percent = 0.00;
             v.sprite.alpha = 0.5;
             setPosition(v.waitPercent, v.sprite.x, v.sprite.y);
             v.waitPercent.setText('0');
             v.waitPercent.visible = true;
             v.waitTimer.startInterval(()=>{
-                percent += 0.05;
-                v.waitPercent.setText('' + parseInt(percent * 100));
+                if (interval >= 20) { percent += 0.05; }
+                else if (interval >= 15) { percent += 0.07; }
+                else if (interval >= 10) { percent += 0.1; }
+                else if (interval >= 7) { percent += 0.12; }
+                else if (interval >= 5) { percent += 0.15; }
+                else if (interval >= 3) { percent += 0.18; }
+                else { percent += 0.20; }
+                
                 if (percent >= 1) {
                     v.sprite.alpha = 1;
                     v.waitPercent.visible = false;
-                    v.waitTimer.stop();
+                    if (v.waitTimer != undefined) { v.waitTimer.stop(); }
                     v.stateMachine.enter('ready');
-                    console.log('ready ok');
+                    //console.log('ready ok');
                 }
+                v.waitPercent.setText('' + parseInt(percent * 100));
             }, interval);
         } catch (e) {
             var errMsg = this.getExpMsg("waitDisplay", e);
@@ -394,8 +445,80 @@ class STSBaseCanon extends GameSprite {
         }
     }
 
+    // wait 처리를 sub class 에서 시도
+    waitProcess() {
+        return false; // 안했다.
+    }
+
     // 대기 시간 설정. 상속 구현하여 canon 별로 처리
     get WaitTime() {
         return 6 * 1000;
+    }
+
+    // get rect
+    get Sprite() {
+        return this.#_PV.sprite;
+    }
+
+    // bullet limit
+    get BulletLimit() {
+        return COUNTLIMIT_INFINITY;
+    }
+
+    increaseFireCount() {
+        try {
+            let v = this.#_PV;
+
+            if (v.fireCount.increase() === false) {
+                //console.log(' fire ended !!!!');
+                if (v.exhaustedCallback != undefined) {
+                    v.exhaustedCallback(this);
+                    return true;
+                } else {
+                    v.fireCount.init();
+                }
+                return false;
+            }
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("increaseFireCount", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+
+        return false;
+    }
+
+    // set position event
+    onSetPosition(x, y) {
+        try {
+            this.#_PV.sprite.x = x;
+            this.#_PV.sprite.y = y;
+        } catch (e) {
+            var errMsg = this.getExpMsg("onSetPosition", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 현재 상태 반환
+    get CurrentState() {
+        return this.getStateMachine().Current;
+    }
+
+    // get collision data
+    get CollisionData() {
+        return this.#_PV.collisionData;
+    }
+
+    // 폭발해버렸나?
+    get IsExploded() {
+        try {
+            return (this.CurrentState === 'explosion') ? true : false;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsExploded", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

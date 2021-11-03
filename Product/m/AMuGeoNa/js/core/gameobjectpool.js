@@ -73,7 +73,7 @@ class GameObjectPool extends DestroyableObject {
             let objectInfo = o.get(name);
             for (var i = 0; i < objectInfo.objects.length; i++) {
                 if (objectInfo.objects[i].use === false) {
-                    objectInfo.objects[i].object.visible = true;
+                    //objectInfo.objects[i].object.visible = true;
                     objectInfo.objects[i].use = true;
                     v.objectRef.set(objectInfo.objects[i].object, objectInfo.objects[i]);
                     return objectInfo.objects[i].object;
@@ -104,6 +104,8 @@ class GameObjectPool extends DestroyableObject {
             let or = v.objectRef.get(object);
             or.use = false;
             or.object.visible = false;
+
+            //console.log("game object release - object count: " + v.objectRef.size);
         } catch (e) {
             var errMsg = this.getExpMsg("release", e);
             console.log(errMsg);

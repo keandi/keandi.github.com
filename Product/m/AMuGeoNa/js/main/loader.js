@@ -135,7 +135,8 @@ class Loader extends ClsObject {
                 }
 
                 h = window.innerHeight - 50;
-                w = parseInt(h * (2/3));
+                //w = parseInt(h * (2/3));
+                w = parseInt((9 * h) / 16);
 
                 sceneDiv.style.width = w + 'px';
                 sceneDiv.style.height = h + 'px';

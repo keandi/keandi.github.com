@@ -106,37 +106,6 @@ class GameObject extends ClsObject {
     //////////////////////////////////
 
     //////////////////////////////////
-    //// <!-- set position
-
-    setPosition(x, y) {
-        this.X = x;
-        this.Y = y;
-    }
-
-    // set x
-    set X(value) {
-        // 상속 구현 필요
-    }
-
-    // get x
-    get X() {
-        // 상속 구현 필요
-    }
-
-    // set y
-    set Y(value) {
-        // 상속 구현 필요
-    }
-
-    // get y
-    get Y() {
-        // 상속 구현 필요
-    }
-
-    //// set position -->
-    //////////////////////////////////
-
-    //////////////////////////////////
     //// <!-- alpha
 
     // set
