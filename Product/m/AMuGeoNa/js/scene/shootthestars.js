@@ -456,6 +456,8 @@ class SceneShootTheStars extends GameScene {
                 v.menus.laser_horizontal.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
                 v.menus.rocket.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
                 v.menus.hp_up.setPosition(beginX, c.menuIconBegin.y); 
+
+                v.menus.hp_up.Enable = false; // 처음 시작 시 모든 캐논이 살아있으므로 사용 불가
             }
 
             // canon
@@ -797,6 +799,10 @@ class SceneShootTheStars extends GameScene {
                 if (this.#LiveCanonCount <= 0) {
                     // 실패
                     console.log("mission failed !!!");
+
+                    this.#_SPV.menus.hp_up.Enable = false; // 파괴된 캐논이 있으면 사용할 수 없다.
+                } else if (this.#DestroyedCanonCount > 0) {
+                    this.#_SPV.menus.hp_up.Enable = true; // 파괴된 캐논이 있으면 사용할 수 있다.
                 }
 
                 return;
@@ -873,6 +879,24 @@ class SceneShootTheStars extends GameScene {
             let count = 0;
             this.#_SPV.canonData.canon.forEach(element => {
                 if (element.object.IsExploded === false) {
+                    count++;
+                }
+            });
+
+            return count;
+        } catch(e) {
+            var errMsg = this.getKey() + ".#LiveCanonCount.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // 파괴된 canon 개수 구하기
+    get #DestroyedCanonCount() {
+        try {
+            let count = 0;
+            this.#_SPV.canonData.canon.forEach(element => {
+                if (element.object.IsExploded === true) {
                     count++;
                 }
             });
