@@ -214,6 +214,10 @@ class SceneShootTheStars extends GameScene {
                                         newCanon.reset();
 
                                         oldCanonInfo.object = newCanon;
+
+                                        // use gold
+                                        //console.log("use gold: " + canonType.needgold);
+                                        selfIt.useGold(canonType.needgold);
                                     }                                    
                                 }                          
                             }
