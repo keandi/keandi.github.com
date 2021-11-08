@@ -283,8 +283,8 @@ class SceneShootTheStars extends GameScene {
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_hp_up');
                     }, (who)=>{
-                        console.log( stringFormat('touch who: {0}', who.Name) );
-                        selfIt.useGold(5);
+                        //console.log( stringFormat('touch who: {0} + hp_up', who.Name) );
+                        selfIt.reviveCanon();
                     });
                 });
             }
@@ -467,12 +467,14 @@ class SceneShootTheStars extends GameScene {
             // canon
             {
                 v.canonData.canon.forEach(element => {
-                    var canon = this.getGameObject('canon_1');
+                    selfIt.createBaseCanon(element);
+                    /*var canon = this.getGameObject('canon_1');
                     canon.reset();
                     canon.setPosition(element.rect.CenterX, element.rect.CenterY);
                     canon.visible = true;
                     canon.alpha = 1;
                     element.object = canon;
+                    */
                 });
             }
 
@@ -908,6 +910,58 @@ class SceneShootTheStars extends GameScene {
             return count;
         } catch(e) {
             var errMsg = this.getKey() + ".#LiveCanonCount.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // 기본 canon 생성
+    createBaseCanon(element) {
+        try {
+            var canon = this.getGameObject('canon_1');
+            canon.reset();
+            canon.setPosition(element.rect.CenterX, element.rect.CenterY);
+            canon.visible = true;
+            canon.alpha = 1;
+            element.object = canon;
+
+            return true;
+        } catch(e) {
+            var errMsg = this.getKey() + ".createBaseCanon.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+
+        return false;
+    }
+
+    // 파괴된 임의의 canon 되살리기
+    reviveCanon() {
+        try {
+            let destroyedCanons = [];
+            this.#_SPV.canonData.canon.forEach(element => {
+                if (element.object.IsExploded === true) {
+                    destroyedCanons.push(element);
+                }
+            });
+
+            if (destroyedCanons.length <= 0) { throw "no destroyed canon"; }
+
+            let index = Phaser.Math.Between(0, destroyedCanons.length - 1);
+
+            // 파괴된 canon 제거
+            destroyedCanons[index].object.remove();
+            this.releaseGameObject(destroyedCanons[index].object);
+
+            if (this.createBaseCanon(destroyedCanons[index]) === true) {
+                this.useGold(ShootTheStarsCanonIconType.HP_UP.needgold);
+            }
+
+            if (this.#DestroyedCanonCount <= 0) {
+                this.#_SPV.menus.hp_up.Enable = false; // 파괴된 캐논이 없으면 사용할 수 없다.
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".reviveCanon.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         } 
