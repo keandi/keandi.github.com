@@ -51,7 +51,7 @@ class SceneShootTheStars extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('shootthestars_sprite', 'explosion_sprite_01', 'explosion_sprite_02' );
+            .addArgs('shootthestars_sprite', 'explosion_sprite_01', 'explosion_sprite_02', 'explosion_low', 'explosion_middle', 'explosion_loud', 'gun_bullet', 'laser1', 'missile' );
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
@@ -214,6 +214,10 @@ class SceneShootTheStars extends GameScene {
                                         newCanon.reset();
 
                                         oldCanonInfo.object = newCanon;
+
+                                        // use gold
+                                        //console.log("use gold: " + canonType.needgold);
+                                        selfIt.useGold(canonType.needgold);
                                     }                                    
                                 }                          
                             }
@@ -279,8 +283,8 @@ class SceneShootTheStars extends GameScene {
                         // drag 구현 필요
                         dragFakeImageControl(x, y, dragprocess, 'dragIcon_hp_up');
                     }, (who)=>{
-                        console.log( stringFormat('touch who: {0}', who.Name) );
-                        selfIt.useGold(5);
+                        //console.log( stringFormat('touch who: {0} + hp_up', who.Name) );
+                        selfIt.reviveCanon();
                     });
                 });
             }
@@ -456,17 +460,21 @@ class SceneShootTheStars extends GameScene {
                 v.menus.laser_horizontal.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
                 v.menus.rocket.setPosition(beginX, c.menuIconBegin.y); beginX += c.menuIconGap;
                 v.menus.hp_up.setPosition(beginX, c.menuIconBegin.y); 
+
+                v.menus.hp_up.Enable = false; // 처음 시작 시 모든 캐논이 살아있으므로 사용 불가
             }
 
             // canon
             {
                 v.canonData.canon.forEach(element => {
-                    var canon = this.getGameObject('canon_1');
+                    selfIt.createBaseCanon(element);
+                    /*var canon = this.getGameObject('canon_1');
                     canon.reset();
                     canon.setPosition(element.rect.CenterX, element.rect.CenterY);
                     canon.visible = true;
                     canon.alpha = 1;
                     element.object = canon;
+                    */
                 });
             }
 
@@ -560,6 +568,7 @@ class SceneShootTheStars extends GameScene {
             bullet.run(x, y);
 
             //this.reserveSleep(100);
+            this.playSound('gun_bullet');
         } catch(e) {
             var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
             console.log(errMsg);
@@ -575,6 +584,9 @@ class SceneShootTheStars extends GameScene {
             let laser = this.getGameObject('bullet_laser_v');
             laser.reset();
             laser.run(x, y);
+
+            this.playSound('laser1');
+
             return ()=> {
                 //console.log('fire laser v - ended');
                 laser.remove();
@@ -596,6 +608,9 @@ class SceneShootTheStars extends GameScene {
             let laser = this.getGameObject('bullet_laser_v2');
             laser.reset();
             laser.run(x, y);
+
+            this.playSound('laser1');
+
             return ()=> {
                 //console.log('fire laser v2 - ended');
                 laser.remove();
@@ -616,6 +631,8 @@ class SceneShootTheStars extends GameScene {
             let bullet = this.getGameObject('bullet_missile');
             bullet.reset();
             bullet.run(x, y);
+
+            this.playSound('missile');
 
         } catch(e) {
             var errMsg = this.getKey() + ".fireVerticfireMissilealLaser2.catched: " + e;
@@ -793,10 +810,15 @@ class SceneShootTheStars extends GameScene {
                 for (var i = 0; i < 7; i++) {
                     this.explosionEffect01(Phaser.Math.Between(body.SpriteRect.Left, body.SpriteRect.Right), Phaser.Math.Between(body.SpriteRect.Top, body.SpriteRect.Bottom));
                 }
+                this.playSound('explosion_middle');
 
                 if (this.#LiveCanonCount <= 0) {
                     // 실패
                     console.log("mission failed !!!");
+
+                    this.#_SPV.menus.hp_up.Enable = false; // 파괴된 캐논이 있으면 사용할 수 없다.
+                } else if (this.#DestroyedCanonCount > 0) {
+                    this.#_SPV.menus.hp_up.Enable = true; // 파괴된 캐논이 있으면 사용할 수 있다.
                 }
 
                 return;
@@ -832,6 +854,8 @@ class SceneShootTheStars extends GameScene {
                     var explosion = this.getGameObject('bullet_explosion');
                     explosion.reset();
                     explosion.run(attacker.X, attacker.Y);
+
+                    this.playSound('explosion_loud');
                 }
             }
         } catch(e) {
@@ -848,6 +872,8 @@ class SceneShootTheStars extends GameScene {
             explosion.setPosition(x, y);
             explosion.visible = true;
             explosion.reset();
+
+            this.playSound('explosion_low');
         } catch(e) {
             var errMsg = this.getKey() + ".explosionEffect01.catched: " + e;
             console.log(errMsg);
@@ -880,6 +906,76 @@ class SceneShootTheStars extends GameScene {
             return count;
         } catch(e) {
             var errMsg = this.getKey() + ".#LiveCanonCount.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // 파괴된 canon 개수 구하기
+    get #DestroyedCanonCount() {
+        try {
+            let count = 0;
+            this.#_SPV.canonData.canon.forEach(element => {
+                if (element.object.IsExploded === true) {
+                    count++;
+                }
+            });
+
+            return count;
+        } catch(e) {
+            var errMsg = this.getKey() + ".#LiveCanonCount.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // 기본 canon 생성
+    createBaseCanon(element) {
+        try {
+            var canon = this.getGameObject('canon_1');
+            canon.reset();
+            canon.setPosition(element.rect.CenterX, element.rect.CenterY);
+            canon.visible = true;
+            canon.alpha = 1;
+            element.object = canon;
+
+            return true;
+        } catch(e) {
+            var errMsg = this.getKey() + ".createBaseCanon.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+
+        return false;
+    }
+
+    // 파괴된 임의의 canon 되살리기
+    reviveCanon() {
+        try {
+            let destroyedCanons = [];
+            this.#_SPV.canonData.canon.forEach(element => {
+                if (element.object.IsExploded === true) {
+                    destroyedCanons.push(element);
+                }
+            });
+
+            if (destroyedCanons.length <= 0) { throw "no destroyed canon"; }
+
+            let index = Phaser.Math.Between(0, destroyedCanons.length - 1);
+
+            // 파괴된 canon 제거
+            destroyedCanons[index].object.remove();
+            this.releaseGameObject(destroyedCanons[index].object);
+
+            if (this.createBaseCanon(destroyedCanons[index]) === true) {
+                this.useGold(ShootTheStarsCanonIconType.HP_UP.needgold);
+            }
+
+            if (this.#DestroyedCanonCount <= 0) {
+                this.#_SPV.menus.hp_up.Enable = false; // 파괴된 캐논이 없으면 사용할 수 없다.
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".reviveCanon.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         } 

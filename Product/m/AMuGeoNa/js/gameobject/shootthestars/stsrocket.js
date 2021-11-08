@@ -132,13 +132,16 @@ class STSRocket extends STSBaseCanon {
     onFrameChanged(frameIndex, frameName) {
         // 상속 구현 필요
         //console.log( stringFormat('not implement - onFrameChanged - idx[{0}], name[{1}]', frameIndex, frameName) );
+
+        this.ActiveFrameName = frameName;
+        this.recomputeSpriteRect();
     }
 
     // fire
     fire() {
         try {
-            //this.play('fire');
-            if (this.enter('fire') != true) { return; }
+            this.play('fire');
+            //if (this.enter('fire') != true) { return; }
 
             let spriteRect = this.SpriteRect;
             let v = this.#_PV;

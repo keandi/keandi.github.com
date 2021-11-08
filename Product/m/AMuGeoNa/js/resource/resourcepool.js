@@ -162,6 +162,8 @@ class ResourcePool extends ClsObject {
 
                 case 'coin_add':
                 case 'coin_use':
+                case 'gun_bullet':
+                case 'laser1':
                     this.#addOgg(key);
                     break;
 
@@ -169,6 +171,10 @@ class ResourcePool extends ClsObject {
                 case 'dice-8':
                 case 'dice-18':
                 case 'dice-24':
+                case 'explosion_low':
+                case 'explosion_middle':
+                case 'explosion_loud':
+                case 'missile':
                     this.#addWav(key);
                     break;
             }
