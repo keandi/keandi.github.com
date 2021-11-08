@@ -51,7 +51,7 @@ class SceneShootTheStars extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('shootthestars_sprite', 'explosion_sprite_01', 'explosion_sprite_02' );
+            .addArgs('shootthestars_sprite', 'explosion_sprite_01', 'explosion_sprite_02', 'explosion_low', 'explosion_middle', 'explosion_loud', 'gun_bullet', 'laser1', 'missile' );
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
@@ -568,6 +568,7 @@ class SceneShootTheStars extends GameScene {
             bullet.run(x, y);
 
             //this.reserveSleep(100);
+            this.playSound('gun_bullet');
         } catch(e) {
             var errMsg = this.getKey() + ".fireBulletNormal.catched: " + e;
             console.log(errMsg);
@@ -583,6 +584,9 @@ class SceneShootTheStars extends GameScene {
             let laser = this.getGameObject('bullet_laser_v');
             laser.reset();
             laser.run(x, y);
+
+            this.playSound('laser1');
+
             return ()=> {
                 //console.log('fire laser v - ended');
                 laser.remove();
@@ -604,6 +608,9 @@ class SceneShootTheStars extends GameScene {
             let laser = this.getGameObject('bullet_laser_v2');
             laser.reset();
             laser.run(x, y);
+
+            this.playSound('laser1');
+
             return ()=> {
                 //console.log('fire laser v2 - ended');
                 laser.remove();
@@ -624,6 +631,8 @@ class SceneShootTheStars extends GameScene {
             let bullet = this.getGameObject('bullet_missile');
             bullet.reset();
             bullet.run(x, y);
+
+            this.playSound('missile');
 
         } catch(e) {
             var errMsg = this.getKey() + ".fireVerticfireMissilealLaser2.catched: " + e;
@@ -801,6 +810,7 @@ class SceneShootTheStars extends GameScene {
                 for (var i = 0; i < 7; i++) {
                     this.explosionEffect01(Phaser.Math.Between(body.SpriteRect.Left, body.SpriteRect.Right), Phaser.Math.Between(body.SpriteRect.Top, body.SpriteRect.Bottom));
                 }
+                this.playSound('explosion_middle');
 
                 if (this.#LiveCanonCount <= 0) {
                     // 실패
@@ -844,6 +854,8 @@ class SceneShootTheStars extends GameScene {
                     var explosion = this.getGameObject('bullet_explosion');
                     explosion.reset();
                     explosion.run(attacker.X, attacker.Y);
+
+                    this.playSound('explosion_loud');
                 }
             }
         } catch(e) {
@@ -860,6 +872,8 @@ class SceneShootTheStars extends GameScene {
             explosion.setPosition(x, y);
             explosion.visible = true;
             explosion.reset();
+
+            this.playSound('explosion_low');
         } catch(e) {
             var errMsg = this.getKey() + ".explosionEffect01.catched: " + e;
             console.log(errMsg);
