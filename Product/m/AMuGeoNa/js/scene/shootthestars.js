@@ -736,7 +736,7 @@ class SceneShootTheStars extends GameScene {
             if (who.GroupTag == 'star') {
                 let v = this.#_SPV;
 
-                v.enemySpawn.decrease(1);
+                //v.enemySpawn.decrease(1); // 죽으면 화면 밖으로 이동되면서 감소 되므로 여기에선 X.
                 v.goalProgress.increase();
 
                 //explosion
