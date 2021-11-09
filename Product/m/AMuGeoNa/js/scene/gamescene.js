@@ -218,7 +218,7 @@ class GameScene extends BaseScene {
                 'exit_button', 'BTN_UP', 'exit_button', 'BTN_DOWN',
                 () => {
                     if (selfIt.#_PV.isNeedUserExitQuery === false) {
-                        selfIt.gameEnd(); //param 을 비워서 scene만 바꿈
+                        selfIt.gameEnd(GameExitType.GiveUp); //param 을 비워서 scene만 바꿈
                         return;
                     }
 
@@ -490,15 +490,20 @@ class GameScene extends BaseScene {
     ////////////////////////////////////
     //// <!-- game end
     //
-    gameEnd(isGiveup) {
-        if (isGiveup != undefined) {
-            if (isGiveup === false) {
+    gameEnd(gameExitType) {
+        switch (gameExitType.value)
+        {
+            case GameExitType.GiveUp.value:
+            case GameExitType.Failure.value:
+                break;
+
+            case GameExitType.Success.value:
                 _gameData.setLastLevel(_gameData.EntryGameLevelInfo.level);
-            }
-    
-            // 현재 정보 저장
-            _gameData.save();
+                break;
         }
+
+        // 현재 정보 저장
+        _gameData.save();
 
         // go level
         this._gameHost.switchScene(KEY_LEVEL);
@@ -510,8 +515,33 @@ class GameScene extends BaseScene {
     }
 
     // 게임 정상종료 처리
-    gameFinished() {
-        alert("'gameFinished' is not implemented.");
+    gameFinished(isFailed) {
+        try {
+            let kor = "", eng = "";
+            let gameExitType;
+            if (isFailed === true) { // case failed
+                kor = "- 게임 실패 -";
+                eng = "- Game failure -";
+                gameExitType = GameExitType.Failure;
+            } else {    // case success
+                let gold = numberWithCommas(_gameData.EntryGameLevelInfo.compensation);
+                kor = stringFormat("- 게임 성공 -\r\n보상: {0}G", gold);
+                eng = stringFormat("- Game success -\r\nReward: {0}G", gold);
+                gameExitType = GameExitType.Success;
+
+                this.addGold(_gameData.EntryGameLevelInfo.compensation);
+            }
+
+            let selfIt = this;
+            this.getTimerPool().setTimeout(()=>{
+                selfIt.msgboxOk(_gameOption.selectText("결과", "Result"), _gameOption.selectText(kor, eng), ()=>selfIt.gameEnd(gameExitType));
+            }, 1500);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".gameFinished.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
     //// game end -->

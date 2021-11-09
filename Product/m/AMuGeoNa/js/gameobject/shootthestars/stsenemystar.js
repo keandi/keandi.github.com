@@ -197,7 +197,7 @@ class STSEnemyStar extends STSBaseEnemy {
                 let v = this.#_PV;
                 return {
                     x: v.sprite.x + ( (this.#IsPatrolToLeft === true) ? Phaser.Math.Between(-max, -min) : Phaser.Math.Between(min, max) ),
-                    y: v.sprite.y + Phaser.Math.Between(-2, 20)
+                    y: v.sprite.y + Phaser.Math.Between(-2, (_gameData.EntryGameLevelInfo.gamelevel * 2) + 2)
                 };
             } else if (state === 'attack') {
                 console.log("need logic!");

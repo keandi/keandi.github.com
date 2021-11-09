@@ -433,7 +433,8 @@ class SceneShootTheStars extends GameScene {
                 const contentRc = this.ContentRc;
                 let pb = new ProgressBar('progressbar_goal', this, contentRc.Left + 10, contentRc.Top + 10, contentRc.Width - 20, 8,
                         0, this.Goal, 0xff0000, 0xffffff, 0, 0.2, 0.5, ()=>{
-                            console.log("ok~~~~~~~~~~~~~~~~~~~~~~~~~!!!!");
+                            //console.log("ok~~~~~~~~~~~~~~~~~~~~~~~~~!!!!");
+                            selfIt.gameFinished(false);
                         });
                 v.goalProgress = pb;
             }
@@ -653,9 +654,9 @@ class SceneShootTheStars extends GameScene {
     }
 
     // 게임 정상종료 처리
-    gameFinished() {
+    /*gameFinished() {
         this.gameEnd(false);
-    }
+    } */
 
     //
     getCanonOfArea(x, y) {
@@ -814,9 +815,11 @@ class SceneShootTheStars extends GameScene {
 
                 if (this.#LiveCanonCount <= 0) {
                     // 실패
-                    console.log("mission failed !!!");
+                    //console.log("mission failed !!!");
 
                     this.#_SPV.menus.hp_up.Enable = false; // 파괴된 캐논이 있으면 사용할 수 없다.
+
+                    this.gameFinished(true);
                 } else if (this.#DestroyedCanonCount > 0) {
                     this.#_SPV.menus.hp_up.Enable = true; // 파괴된 캐논이 있으면 사용할 수 있다.
                 }

@@ -262,7 +262,7 @@ class SceneRollDice extends GameScene {
     // 게임 강제종료 처리
     gameUserExit() {
         try {
-            this.gameEnd(true);
+            this.gameEnd(GameExitType.GiveUp);
         } catch(e) {
             var errMsg = this.getKey() + ".gameUserExit.catched: " + e;
             console.log(errMsg);
@@ -273,15 +273,15 @@ class SceneRollDice extends GameScene {
     // 게임 정상종료 처리
     gameFinished() {
         try {
-            let gold = numberWithCommas(3);
+            let gold = numberWithCommas(_gameData.EntryGameLevelInfo.compensation);
             let kor = stringFormat("- 게임 완료 -\r\n보상: {0}G", gold);
             let eng = stringFormat("- Complete the game -\r\nReward: {0}G", gold);
 
-            this.addGold(3);
+            this.addGold(_gameData.EntryGameLevelInfo.compensation);
 
             let selfIt = this;
             this.getTimerPool().setTimeout(()=>{
-                selfIt.msgboxOk(_gameOption.selectText("완료", "Finish"), _gameOption.selectText(kor, eng), ()=>selfIt.gameEnd(false));
+                selfIt.msgboxOk(_gameOption.selectText("완료", "Finish"), _gameOption.selectText(kor, eng), ()=>selfIt.gameEnd(GameExitType.Success));
             }, 1500);
             
         } catch(e) {
