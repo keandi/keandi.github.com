@@ -355,6 +355,9 @@ class SceneLevel extends GameScene {
     // 게임 진입 클릭
     onEntryTry(entryBlock) {
         try {
+            let v = this.#_SPV;
+            if (v.entryTryLock === true) { return; }
+
             let selfIt = this;
             this.playSound('twink');
             let levelInfo = entryBlock.LevelInfo;
@@ -380,6 +383,7 @@ class SceneLevel extends GameScene {
             };
 
             if (levelInfo.needgold > 0) {
+                v.entryTryLock = true;
                 var entryFee = stringFormat("{0}G", levelInfo.needgold);
                 var kor = stringFormat("입장료: {0}\r\n지불하시겠습니까?", entryFee);
                 var eng = stringFormat("Admission: {0}\r\nWould you like to pay?", entryFee);
@@ -387,9 +391,12 @@ class SceneLevel extends GameScene {
                     () => { 
                         selfIt.useGold(levelInfo.needgold);
                         _gameData.save();
+                        v.entryTryLock = false;
                         entryGame(levelInfo);
                     },
-                    () => {}
+                    () => {
+                        v.entryTryLock = false;
+                    }
                 );
             } else {
                 entryGame(levelInfo);

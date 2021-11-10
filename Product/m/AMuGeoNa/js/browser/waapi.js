@@ -35,8 +35,23 @@ class WAApi extends ClsObject {
 
     // vibration
     cmdVib(level) {
-        if (level == 1) {
-            this.command(BCMD_VIBRATION1, "");
+        switch (level)
+        {
+            case 1:
+                this.command(BCMD_VIBRATION1, "");
+                break;
+            case 2:
+                this.command(BCMD_VIBRATION2, "");
+                break;
+            case 3:
+                this.command(BCMD_VIBRATION3, "");
+                break;
+            case 4:
+                this.command(BCMD_VIBRATION4, "");
+                break;
+            default:
+                console.log("unknown vibration level: " + level);
+                return;
         }
     }
 

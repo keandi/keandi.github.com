@@ -48,7 +48,7 @@ class WebApi extends ClsObject {
 
     // vibration
     cmdVib(level) {
-        //nothing
+        console.log("web vibration: " + level);
     }
 
     // ad

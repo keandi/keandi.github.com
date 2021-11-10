@@ -64,4 +64,14 @@ class BrowserComm extends ClsObject {
     goAd() {
         this.#_PV.api.cmdAd();
     }
+
+    goVibration(level) {
+        try {
+            this.#_PV.api.cmdVib(level);
+        } catch (e) {
+            var errMsg = this.getExpMsg("goVibration", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
 }

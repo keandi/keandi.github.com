@@ -35,6 +35,9 @@ const DATANAME_GAME = "0xG0";
 
 // browser command
 const BCMD_VIBRATION1 = "DxV1";
+const BCMD_VIBRATION2 = "DxV2";
+const BCMD_VIBRATION3 = "DxV3";
+const BCMD_VIBRATION4 = "DxV4";
 const BCMD_AD = "DxA0";
 const BCMD_APP_ONPAUSE = "DxA1";    // app onPause
 const BCMD_APP_ONRESUME = "DxA2";   // app onResume

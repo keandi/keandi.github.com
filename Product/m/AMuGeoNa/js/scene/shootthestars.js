@@ -812,6 +812,7 @@ class SceneShootTheStars extends GameScene {
                     this.explosionEffect01(Phaser.Math.Between(body.SpriteRect.Left, body.SpriteRect.Right), Phaser.Math.Between(body.SpriteRect.Top, body.SpriteRect.Bottom));
                 }
                 this.playSound('explosion_middle');
+                apiVibration(2);
 
                 if (this.#LiveCanonCount <= 0) {
                     // 실패
@@ -830,6 +831,7 @@ class SceneShootTheStars extends GameScene {
             {
                 if (body.GroupTag === 'star') {
                     this.reserveSleep(200);
+                    apiVibration(1);
                     body.decreaseHP(attacker.Strength);
                     if (body.visible === true) { // 죽었나?
                         body.setSuperArmor();
@@ -859,6 +861,7 @@ class SceneShootTheStars extends GameScene {
                     explosion.run(attacker.X, attacker.Y);
 
                     this.playSound('explosion_loud');
+                    apiVibration(4);
                 }
             }
         } catch(e) {
