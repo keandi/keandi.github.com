@@ -803,7 +803,7 @@ class SceneShootTheStars extends GameScene {
 
             if (attacker.GroupTag === 'star' && body.GroupTag === 'canon')
             {
-                this.reserveSleep(100);
+                this.reserveSleep(200);
                 body.enter('explosion');   // 폭발시켜버림
                 attacker.getOut();  // 사라짐
 
@@ -829,7 +829,7 @@ class SceneShootTheStars extends GameScene {
             else 
             {
                 if (body.GroupTag === 'star') {
-                    this.reserveSleep(50);
+                    this.reserveSleep(200);
                     body.decreaseHP(attacker.Strength);
                     if (body.visible === true) { // 죽었나?
                         body.setSuperArmor();
