@@ -751,7 +751,7 @@ class SceneShootTheStars extends GameScene {
                     this.getCollisionGroup().displayGroupElementName('star');
                 }
                 v.lastDieName = who.Name;*/
-                console.log("i'm die");
+                //console.log("i'm die");
 
                 let explosionTimer = new TimerOnPool('timeronpool_explosion_effect' + this.Name, this.getTimerPool());
                 let whoRect = who.SpriteRect;
