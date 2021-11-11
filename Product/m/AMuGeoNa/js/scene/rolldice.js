@@ -165,6 +165,8 @@ class SceneRollDice extends GameScene {
                 selfIt.getTimerPool().setTimeout(()=>{ 
                     v.diceSelector.visible = true
                 } , 1500);
+
+                apiVibration(1);
             });
 
             // cup

@@ -48,7 +48,52 @@ class WebApi extends ClsObject {
 
     // vibration
     cmdVib(level) {
-        console.log("web vibration: " + level);
+        try {
+            // vibration
+            let onVib = function(marginLeft, marginTop) {
+                _sceneDiv.div.style.marginLeft = marginLeft + 'px';
+                _sceneDiv.div.style.marginTop = marginTop + 'px';
+            };
+
+            // vibration 예약
+            let reserveVib = function() {
+                let min, max = 0;
+                if (level === 1){
+                    max = 3;
+                } else if (level === 2){
+                    max = 5;
+                } else if (level === 3){
+                    max = 8;
+                } else if (level === 4){
+                    max = 12;
+                } else {
+                    throw "unknown level: " + level;
+                }
+
+                min = -max;
+                const increaseInterval = 60;
+                let interval = increaseInterval;
+
+                for (var i = 0; i < 4; i++) {
+                    setTimeout(()=>{
+                        onVib(_sceneDiv.marginLeft + Phaser.Math.Between(min, max), _sceneDiv.marginTop + Phaser.Math.Between(min, max));
+                    }, interval);
+                    interval += increaseInterval;
+                }
+
+                setTimeout(()=>{
+                    onVib(_sceneDiv.marginLeft, _sceneDiv.marginTop);
+                }, interval);
+            };
+
+            //
+            reserveVib();
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("cmdVib", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
     // ad

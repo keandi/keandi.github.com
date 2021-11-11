@@ -116,6 +116,7 @@ class Loader extends ClsObject {
             
             let w, h;
             let sceneDiv = document.getElementById('scene');
+            _sceneDiv.div = sceneDiv;
 
             if (_browser.isApp === true)
             {
@@ -124,6 +125,9 @@ class Loader extends ClsObject {
                 h = window.innerHeight;
                 sceneDiv.style.width = w + 'px';
                 sceneDiv.style.height = h + 'px';
+
+                _sceneDiv.width = w;
+                _sceneDiv.height = h;
 
             }
             else
@@ -138,10 +142,15 @@ class Loader extends ClsObject {
                 //w = parseInt(h * (2/3));
                 w = parseInt((9 * h) / 16);
 
+                _sceneDiv.width = w;
+                _sceneDiv.height = h;
+                _sceneDiv.marginLeft = - parseInt(w / 2);
+                _sceneDiv.marginTop = - parseInt(h / 2);
+
                 sceneDiv.style.width = w + 'px';
                 sceneDiv.style.height = h + 'px';
-                sceneDiv.style.marginLeft = '-' + (parseInt(w / 2)) + 'px';
-                sceneDiv.style.marginTop = '-' + (parseInt(h / 2)) + 'px';
+                sceneDiv.style.marginLeft = _sceneDiv.marginLeft + 'px';
+                sceneDiv.style.marginTop = _sceneDiv.marginTop + 'px';
 
                 console.log( stringFormat("canvas size w: {0} px, h: {1} px", w, h));
             }

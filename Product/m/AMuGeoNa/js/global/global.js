@@ -1,4 +1,5 @@
 let _browser = undefined;
+let _sceneDiv = {}; // game output div
 let _gameHost = undefined;
 let _sceneData = undefined;
 let _scenes = {};

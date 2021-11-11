@@ -90,7 +90,7 @@ function onVibCmd() {
     try {
         _webapp_api.cmdVib();
     } catch (e) {
-        var errMsg = "onSetData.catched: " + e;
+        var errMsg = "onVibCmd.catched: " + e;
         console.log(errMsg);
         alert(errMsg);
     }  
@@ -101,7 +101,7 @@ function onAd() {
     try {
         _webapp_api.cmdAd();
     } catch (e) {
-        var errMsg = "onSetData.catched: " + e;
+        var errMsg = "onAd.catched: " + e;
         console.log(errMsg);
         alert(errMsg);
     }  
