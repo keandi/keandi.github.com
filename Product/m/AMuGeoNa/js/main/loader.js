@@ -98,6 +98,15 @@ class Loader extends ClsObject {
                         }
                         return _scenes.rolldice;
                     }
+                },
+                {
+                    key: KEY_GAME_MOLE,
+                    getScene: function() {
+                        if (_scenes.mole == undefined) {
+                            _scenes.mole = new SceneMole(60, _gameHost);
+                        }
+                        return _scenes.mole;
+                    }
                 }
             ];
 

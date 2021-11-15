@@ -7,6 +7,7 @@ const KEY_LEVEL = "level";
 const KEY_OPTION = "option";
 const KEY_GAME_SHOOTTHESTARS = "shootthestars";
 const KEY_GAME_ROLLDICE = "rolldice";
+const KEY_GAME_MOLE = "mole";
 
 // depth
 const DEPTH_MENU = 500;
@@ -27,6 +28,7 @@ const DEPTH_SHOOTTHESTARS_CANON = 2;
 const DEPTH_SHOOTTHESTARS_UPBULLET = 3;
 const DEPTH_SHOOTTHESTARS_ENEMY = 4;
 const DEPTH_SHOOTTHESTARS_BULLET = 1;
+const DEPTH_MOLE_GROUND_BASE = 1; // step 에 +4 을 더하여 계산
 const DEPTH_GAMEINFO_UI = 400;
 const DEPTH_MSGBOX = 500;
 
@@ -81,6 +83,9 @@ const COLOR_STAR_TINTS = [
     0x990000, 0xbb0000, 0xff0000, 0xf95555,
     0x6c5589, 0x901568, 0x48ec87, 0x15b59c, 
     0x8888ff, 0xff55ff, 0xffff55, 0xffffff  ];*/    
+const COLOR_MOLE_BACKGROUND = 0X2DC474; // 두더지
+
+
 
 // time
 const TIMEOUT_ASSET_DOWNLOAD = 10000;
