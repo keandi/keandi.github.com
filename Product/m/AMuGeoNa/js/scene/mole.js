@@ -63,6 +63,7 @@ class SceneMole extends GameScene {
             // json data
             v.frameInfo = {
                 mole: _resourcePool.getJsonFrameMap('mole_sprite'),
+                branca: _resourcePool.getJsonFrameMap('text_branca'),
             };
 
         } catch(e) {
@@ -98,7 +99,7 @@ class SceneMole extends GameScene {
             this.setBackgroundColor( COLOR_MOLE_BACKGROUND );
 
             //
-            let ttt = new BrancaChar('test_branca', this);
+            /* let ttt = new BrancaChar('test_branca', this);
             let timer = new TimerOnPool('branca_timer', this.getTimerPool());
             let number = 0;
             let setTTT = function(c) {
@@ -110,7 +111,10 @@ class SceneMole extends GameScene {
 
             timer.startInterval(()=>{
                 setTTT(number);
-            }, 1000);
+            }, 1000); */
+
+            //
+            let pm = new MolePointManager('mole_point_manager', this, v.frameInfo.branca);
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;

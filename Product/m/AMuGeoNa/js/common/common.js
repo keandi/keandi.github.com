@@ -113,3 +113,8 @@ function makePrefixNumNames(prefix, start, end, midChar, maxLength) {
 
     return array;
 }
+
+// max 기준 일정 percent 에 해당되는 값을 integer 형태로 반환
+function getRateValue(max, percent) {
+    return parseInt((percent / 100) * max);
+  };
