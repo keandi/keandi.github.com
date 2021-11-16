@@ -97,6 +97,21 @@ class SceneMole extends GameScene {
             // background
             this.setBackgroundColor( COLOR_MOLE_BACKGROUND );
 
+            //
+            let ttt = new BrancaChar('test_branca', this);
+            let timer = new TimerOnPool('branca_timer', this.getTimerPool());
+            let number = 0;
+            let setTTT = function(c) {
+                ttt.setPosition(100, 100).setChar(number + '');
+                number++;
+                if (number > 9) { number = 0; }
+            }
+            setTTT(number);
+
+            timer.startInterval(()=>{
+                setTTT(number);
+            }, 1000);
+
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);
