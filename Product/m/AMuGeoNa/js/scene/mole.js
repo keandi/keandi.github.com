@@ -133,6 +133,11 @@ class SceneMole extends GameScene {
             //
             v.pointManager = new MolePointManager('mole_point_manager', this, v.frameInfo.branca, v.targetColor);
 
+            this.addPointerEvent('down', (pointer) => {
+                v.pointManager.increaseCurrentPoint();
+                v.pointManager.increaseHitPoint();
+            });
+
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);

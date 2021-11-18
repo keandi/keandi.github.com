@@ -269,7 +269,7 @@ class MolePointManager extends DestroyableObject {
         try {
             const gameLevel = _gameData.EntryGameLevelInfo.gamelevel;
             const defaultTotal = 16;
-            let goal = { mission: 0, total: 0, current: 0 };
+            let goal = { mission: 0, total: 0, hit: 0, current: 0 };
 
             goal.total = (gameLevel * 3) + defaultTotal;
 
@@ -294,11 +294,61 @@ class MolePointManager extends DestroyableObject {
         try {
 
             let v = this.#_PV;
-            v.sprites.current.Point = v.goal.current;
+            v.sprites.current.Point = v.goal.hit;
             v.sprites.total.Point = v.goal.total;
 
         } catch (e) {
             var errMsg = this.getExpMsg("displayPoint", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 현재 진행 증가
+    increaseCurrentPoint() {
+        try {
+            this.#_PV.goal.current++;
+            this.#displayPoint();
+        } catch (e) {
+            var errMsg = this.getExpMsg("increaseCurrent", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 성공 포인트 증가
+    increaseHitPoint() {
+        try {
+            this.#_PV.goal.hit++;
+            this.#displayPoint();
+        } catch (e) {
+            var errMsg = this.getExpMsg("increaseHitPoint", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 진행 가능? 끝?
+    get IsFinished() {
+        try {
+            let v = this.#_PV;
+
+            return (v.goal.current >= v.goal.total) ? true : false;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsFinished", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 미션 성공?
+    get IsMissionSuccess() {
+        try {
+            let v = this.#_PV;
+
+            return (v.goal.hit >= v.goal.mission) ? true : false;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsMissionSuccess", e);
             console.log(errMsg);
             alert(errMsg);
         }
