@@ -66,6 +66,20 @@ class SceneMole extends GameScene {
                 branca: _resourcePool.getJsonFrameMap('text_branca'),
             };
 
+            // mole
+            {
+                // blue
+
+                // green
+
+                // purple
+
+                // red
+
+                // yellow
+
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
@@ -113,8 +127,11 @@ class SceneMole extends GameScene {
                 setTTT(number);
             }, 1000); */
 
+            // 대상 색상 결정
+            v.targetColor = Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW);
+
             //
-            let pm = new MolePointManager('mole_point_manager', this, v.frameInfo.branca);
+            v.pointManager = new MolePointManager('mole_point_manager', this, v.frameInfo.branca, v.targetColor);
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;

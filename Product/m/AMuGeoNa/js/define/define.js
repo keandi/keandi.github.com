@@ -137,3 +137,10 @@ const FONTSIZE_SHOOTTHESTARS_CANONICON_GOLD = 16;
 // count limit
 const COUNTLIMIT_ROLLDICE_TRY = 10;
 const COUNTLIMIT_INFINITY = -9999;
+
+// index
+const INDEX_MOLE_COLOR_BLUE         = 0;
+const INDEX_MOLE_COLOR_GREEN        = 1;
+const INDEX_MOLE_COLOR_PURPLE       = 2;
+const INDEX_MOLE_COLOR_RED          = 3;
+const INDEX_MOLE_COLOR_YELLOW       = 4;

@@ -2,7 +2,7 @@ class BrancaChar extends DestroyableObject {
     #_PV = {}
 
     // ctor
-    constructor(name, scene) {
+    constructor(name, scene, limitSize) {
         try {
             super(name, scene);
 
@@ -10,6 +10,7 @@ class BrancaChar extends DestroyableObject {
 
             v.scene = scene;
             v.char = undefined;
+            v.limitSize = limitSize; // { cx:, cy: }
             v.position = {
                 x: 0,
                 y: 0
@@ -17,18 +18,16 @@ class BrancaChar extends DestroyableObject {
 
             // char table
             v.charTable = new Map();
-            v.charTable.set('0', { key: '0', name: '0', sprite: undefined} );
-            v.charTable.set('1', { key: '1', name: '1', sprite: undefined} );
-            v.charTable.set('2', { key: '2', name: '2', sprite: undefined} );
-            v.charTable.set('3', { key: '3', name: '3', sprite: undefined} );
-            v.charTable.set('4', { key: '4', name: '4', sprite: undefined} );
-            v.charTable.set('5', { key: '5', name: '5', sprite: undefined} );
-            v.charTable.set('6', { key: '6', name: '6', sprite: undefined} );
-            v.charTable.set('7', { key: '7', name: '7', sprite: undefined} );
-            v.charTable.set('8', { key: '8', name: '8', sprite: undefined} );
-            v.charTable.set('9', { key: '9', name: '9', sprite: undefined} );
+            let addCharTable = function() {
+                for (var i = 0; i < arguments.length; i++) {
+                    v.charTable.set(arguments[i], { key: arguments[i], name: arguments[i], sprite: undefined} );
+                }
+            };
+            addCharTable('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 
+                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
             v.charTable.set(',', { key: ',', name: 'COMMA', sprite: undefined} );
             v.charTable.set('/', { key: '/', name: 'SLASH', sprite: undefined} );
+
 
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
@@ -86,11 +85,18 @@ class BrancaChar extends DestroyableObject {
                 v.char = undefined;
             }
 
-            if (v.charTable.has(c) === false) { throw "unknown char: " + c; }
+            if (v.charTable.has(c) === false) { 
+                if (v.char != undefined && v.char.sprite != undefined) {
+                    v.char.sprite.visible = false;
+                }
+                return;
+            }
 
             let element = v.charTable.get(c);
             if (element.sprite == undefined) {
                 element.sprite = v.scene.add.sprite(0, 0, 'text_branca', element.name);
+                setLimitPixelScale(element.sprite, v.limitSize.cx, v.limitSize.cy);
+                element.sprite.setOrigin(0.5);
             }
 
             element.sprite.x = v.position.x;

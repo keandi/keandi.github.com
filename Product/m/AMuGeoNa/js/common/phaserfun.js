@@ -148,6 +148,24 @@ function setPixelScale(obj, pixelX, pixelY) {
     setPixelScaleY(obj, pixelY);
 }
 
+// image scale limit
+function setLimitPixelScale(obj, limitPixelX, limitPixelY) {
+    let scaleX = 1, scaleY = 1;
+
+    if (obj.width > limitPixelX) {
+        scaleX = equation(obj.width, limitPixelX, 1);
+    }
+
+    if (obj.height > limitPixelY) {
+        scaleY = equation(obj.height, limitPixelY, 1);
+        setPixelScaleY(obj, limitPixelY, true);
+    }
+
+    if (scaleX >= 1 && scaleY >= 1) { return; } // no change
+
+    setScale(obj, (scaleX < scaleY) ? scaleX : scaleY);
+}
+
 // game object set position
 function setPosition(obj, x, y) {
     obj.x = x;

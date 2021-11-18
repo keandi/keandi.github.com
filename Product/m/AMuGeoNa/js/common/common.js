@@ -118,3 +118,28 @@ function makePrefixNumNames(prefix, start, end, midChar, maxLength) {
 function getRateValue(max, percent) {
     return parseInt((percent / 100) * max);
   };
+
+  // 1차 방정식. 기준값 x가  v 일 때 기준값 y 의 v 에 대응하는 값은?
+let equation = function(x, v, y) {
+    return (v * y) / x;
+}
+
+// 문자열 left
+String.prototype.left = function(length) {
+    if (this.length <= length) {
+       return this;
+    }
+    else {
+       return this.substring(0, length);
+    }
+}
+
+// 문자열 right
+String.prototype.right = function(length) {
+    if (this.length <= length) {
+       return this;
+    }
+    else {
+       return this.substring(this.length - length, this.length);
+    }
+}
