@@ -353,4 +353,9 @@ class MolePointManager extends DestroyableObject {
             alert(errMsg);
         }
     }
+
+    // point manager rect
+    get Area() {
+        return this.#_PV.displayArea;
+    }
 }

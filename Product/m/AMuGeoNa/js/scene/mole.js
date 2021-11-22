@@ -112,31 +112,33 @@ class SceneMole extends GameScene {
             // background
             this.setBackgroundColor( COLOR_MOLE_BACKGROUND );
 
-            //
-            /* let ttt = new BrancaChar('test_branca', this);
-            let timer = new TimerOnPool('branca_timer', this.getTimerPool());
-            let number = 0;
-            let setTTT = function(c) {
-                ttt.setPosition(100, 100).setChar(number + '');
-                number++;
-                if (number > 9) { number = 0; }
-            }
-            setTTT(number);
-
-            timer.startInterval(()=>{
-                setTTT(number);
-            }, 1000); */
-
             // 대상 색상 결정
             v.targetColor = Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW);
 
             //
             v.pointManager = new MolePointManager('mole_point_manager', this, v.frameInfo.branca, v.targetColor);
 
-            this.addPointerEvent('down', (pointer) => {
-                v.pointManager.increaseCurrentPoint();
-                v.pointManager.increaseHitPoint();
-            });
+            // draw ground
+            {
+                const contentRc = this.ContentRc;
+                const pointRc = v.pointManager.Area;
+                const groundPartHeight = parseInt((contentRc.Height - pointRc.Height) / 3);
+
+                let groundPartRc = new Rect(contentRc.Left, pointRc.Bottom, contentRc.Width, groundPartHeight);
+                let groundDepth = DEPTH_MOLE_GROUND_BASE;
+
+                for (var i = 0; i < 3; i++) {
+                    var g = this.addDestroyableObject( this.add.graphics() );
+                    g.setDepth(groundDepth);
+
+                    g.fillStyle(0xfe2427, 1);
+                    g.fillRect(groundPartRc.Left, groundPartRc.Top, groundPartRc.Width, groundPartRc.Height);
+
+                    // 
+                    groundDepth += 4;
+                    groundPartRc.Top = groundPartRc.Bottom;
+                }
+            }
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
