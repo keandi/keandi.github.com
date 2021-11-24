@@ -127,4 +127,18 @@ class BrancaChar extends DestroyableObject {
         }
     }
 
+    // set Depth
+    set Depth(value) {
+        try {
+            let v = this.#_PV;
+            if (v.char == undefined || v.char.sprite == undefined) { return; }
+            
+            v.char.sprite.setDepth(value);
+        } catch (e) {
+            var errMsg = this.getExpMsg("Depth", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
 }

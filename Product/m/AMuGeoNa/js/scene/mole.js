@@ -118,25 +118,46 @@ class SceneMole extends GameScene {
             //
             v.pointManager = new MolePointManager('mole_point_manager', this, v.frameInfo.branca, v.targetColor);
 
-            // draw ground
+            // draw ground + mole spawn position
             {
                 const contentRc = this.ContentRc;
                 const pointRc = v.pointManager.Area;
-                const groundPartHeight = parseInt((contentRc.Height - pointRc.Height) / 3);
+                const groundPartHeight = parseInt((contentRc.Height - pointRc.Height) / 4);
 
                 let groundPartRc = new Rect(contentRc.Left, pointRc.Bottom, contentRc.Width, groundPartHeight);
                 let groundDepth = DEPTH_MOLE_GROUND_BASE;
 
-                for (var i = 0; i < 3; i++) {
+                // draw ground
+                for (var i = 0; i < 4; i++) {
                     var g = this.addDestroyableObject( this.add.graphics() );
                     g.setDepth(groundDepth);
 
-                    g.fillStyle(0xfe2427, 1);
+                    g.fillStyle(COLOR_MOLE_BACKGROUND, 1);
                     g.fillRect(groundPartRc.Left, groundPartRc.Top, groundPartRc.Width, groundPartRc.Height);
 
                     // 
                     groundDepth += 4;
                     groundPartRc.Top = groundPartRc.Bottom;
+                }
+
+                // compute mole spawn positon
+                v.spawnPosition = Array.from(Array(3), () => new Array(3));
+                const spawnGap = parseInt(groundPartRc.Width / 4);
+                let x = 0;
+                let y = pointRc.Bottom + groundPartRc.Height;
+                for (var r = 0; r < 3; r++) {
+                    x = spawnGap;
+                    for (var c = 0; c < 3; c++) {
+                        v.spawnPosition[c][r] = { x: x, y: y};
+                        x += spawnGap;
+                        
+                        //console.log( stringFormat("col: {0}, row: {1}, x: {2}, y: {3}", c, r, v.spawnPosition[c][r].x, v.spawnPosition[c][r].y) );
+                        var btext = new BrancaChar('temp_braca', this, {cx: 12, cy: 12, border: 2});
+                        btext.setPosition(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y)
+                            .setChar('X');
+                        btext.Depth = groundDepth + 10;
+                    }
+                    y += groundPartRc.Height;
                 }
             }
 
