@@ -127,12 +127,15 @@ class SceneMole extends GameScene {
                 let groundPartRc = new Rect(contentRc.Left, pointRc.Bottom, contentRc.Width, groundPartHeight);
                 let groundDepth = DEPTH_MOLE_GROUND_BASE;
 
+                var tmpClr = [0xff894a, 0x449582, 0xfbe700, 0x23a091];
+
                 // draw ground
                 for (var i = 0; i < 4; i++) {
                     var g = this.addDestroyableObject( this.add.graphics() );
                     g.setDepth(groundDepth);
 
-                    g.fillStyle(COLOR_MOLE_BACKGROUND, 1);
+                    //g.fillStyle(COLOR_MOLE_BACKGROUND, 1);
+                    g.fillStyle(tmpClr[i], 1);
                     g.fillRect(groundPartRc.Left, groundPartRc.Top, groundPartRc.Width, groundPartRc.Height);
 
                     // 
@@ -145,19 +148,36 @@ class SceneMole extends GameScene {
                 const spawnGap = parseInt(groundPartRc.Width / 4);
                 let x = 0;
                 let y = pointRc.Bottom + groundPartRc.Height;
+                let spawnDepth = DEPTH_MOLE_GROUND_BASE + 2;
                 for (var r = 0; r < 3; r++) {
                     x = spawnGap;
                     for (var c = 0; c < 3; c++) {
-                        v.spawnPosition[c][r] = { x: x, y: y};
+                        v.spawnPosition[c][r] = { x: x, y: y, depth: spawnDepth };
                         x += spawnGap;
+                        spawnDepth += 4;
                         
                         //console.log( stringFormat("col: {0}, row: {1}, x: {2}, y: {3}", c, r, v.spawnPosition[c][r].x, v.spawnPosition[c][r].y) );
-                        var btext = new BrancaChar('temp_braca', this, {cx: 12, cy: 12, border: 2});
+                        /*var btext = new BrancaChar('temp_braca', this, {cx: 12, cy: 12, border: 2});
                         btext.setPosition(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y)
                             .setChar('X');
-                        btext.Depth = groundDepth + 10;
+                        btext.Depth = groundDepth + 10; */
                     }
                     y += groundPartRc.Height;
+                }
+            }
+
+            // create edges
+            {
+                for (var r = 0; r < 3; r++) {
+                    for (var c = 0; c < 3; c++) {
+                        var edge_back = this.addDestroyableObject( this.add.sprite(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y, 'mole_sprite', 'EDGE_BACK') );
+                        edge_back.setOrigin(0.5, 0.58);
+                        edge_back.setDepth(v.spawnPosition[c][r].depth - 1);
+
+                        var edge_fore = this.addDestroyableObject( this.add.sprite(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y, 'mole_sprite', 'EDGE_FORE') );
+                        edge_fore.setOrigin(0.5, 0.42);
+                        edge_fore.setDepth(v.spawnPosition[c][r].depth + 1);
+                    }
                 }
             }
 
