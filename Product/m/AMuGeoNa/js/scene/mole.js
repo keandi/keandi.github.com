@@ -154,7 +154,6 @@ class SceneMole extends GameScene {
                     for (var c = 0; c < 3; c++) {
                         v.spawnPosition[c][r] = { x: x, y: y, depth: spawnDepth };
                         x += spawnGap;
-                        spawnDepth += 4;
                         
                         //console.log( stringFormat("col: {0}, row: {1}, x: {2}, y: {3}", c, r, v.spawnPosition[c][r].x, v.spawnPosition[c][r].y) );
                         /*var btext = new BrancaChar('temp_braca', this, {cx: 12, cy: 12, border: 2});
@@ -163,6 +162,7 @@ class SceneMole extends GameScene {
                         btext.Depth = groundDepth + 10; */
                     }
                     y += groundPartRc.Height;
+                    spawnDepth += 4;
                 }
             }
 
@@ -176,7 +176,13 @@ class SceneMole extends GameScene {
 
                         var edge_fore = this.addDestroyableObject( this.add.sprite(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y, 'mole_sprite', 'EDGE_FORE') );
                         edge_fore.setOrigin(0.5, 0.42);
-                        edge_fore.setDepth(v.spawnPosition[c][r].depth + 1);
+                        edge_fore.setDepth(v.spawnPosition[c][r].depth + 3);
+
+                        /*var edge_fore = this.addDestroyableObject( this.add.sprite(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y, 'mole_sprite', 'MOLE_BLUE') );
+                        edge_fore.setOrigin(0.5, 0.5);
+                        edge_fore.setDepth(v.spawnPosition[c][r].depth);
+                        console.log( stringFormat("c: {0}, r: {1}, depth: {2}", c, r, v.spawnPosition[c][r].depth) );
+                        */
                     }
                 }
             }
