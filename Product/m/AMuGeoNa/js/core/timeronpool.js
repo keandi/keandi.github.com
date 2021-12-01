@@ -34,6 +34,7 @@ class TimerOnPool extends ClsObject {
             if (v.id == undefined) { return; }
             v.timerPool.remove(v.id);
             v.id = undefined;
+            v.isStopped = true;
         } catch (e) {
             var errMsg = this.getExpMsg("stop", e);
             console.log(errMsg);
@@ -65,8 +66,12 @@ class TimerOnPool extends ClsObject {
             this.stop();
 
             let v = this.#_PV;
-            
-            if (isEarlyStart === true) { cb(); }
+
+            if (isEarlyStart === true) { 
+                v.isStopped = false;
+                cb(); 
+                if (v.isStopped === true) { return; } // cb() 선처리에서 stop이 되어버림
+            }
             v.id = v.timerPool.setInterval(()=>cb(), interval);
         } catch (e) {
             var errMsg = this.getExpMsg("startInterval", e);

@@ -187,6 +187,19 @@ class SceneMole extends GameScene {
                 }
             }
 
+            // game watch timer
+            {
+                v.watchTimer = new TimerOnPool('timeronpool_watchtimer_' + this.Name, this.getTimerPool());
+                v.watchTimer.startInterval(()=>{
+                    if (v.pointManager.IsFinished === true) {
+                        console.log( stringFormat("게임끝 - 미션 {0}", v.pointManager.IsMissionSuccess));
+                        v.watchTimer.stop();
+                    } else {
+                        console.log("게임 진행 중");
+                    }
+                }, 500);
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);
