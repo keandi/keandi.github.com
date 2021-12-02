@@ -61,9 +61,12 @@ class SceneMole extends GameScene {
             const contentRc = this.ContentRc;
 
             // json data
-            v.frameInfo = {
-                mole: _resourcePool.getJsonFrameMap('mole_sprite'),
-                branca: _resourcePool.getJsonFrameMap('text_branca'),
+            v.moleFrameInfo = {
+                frames: _resourcePool.getJsonFrameMap('mole_sprite'),
+            };
+
+            v.brancaFrameInfo = {
+                frames: _resourcePool.getJsonFrameMap('text_branca'),
             };
 
             // mole
@@ -116,7 +119,7 @@ class SceneMole extends GameScene {
             v.targetColor = Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW);
 
             //
-            v.pointManager = new MolePointManager('mole_point_manager', this, v.frameInfo.branca, v.targetColor);
+            v.pointManager = new MolePointManager('mole_point_manager', this, v.brancaFrameInfo, v.targetColor);
 
             // draw ground + mole spawn position
             {
@@ -189,7 +192,7 @@ class SceneMole extends GameScene {
 
             // game watch timer
             {
-                v.watchTimer = new TimerOnPool('timeronpool_watchtimer_' + this.Name, this.getTimerPool());
+                /*v.watchTimer = new TimerOnPool('timeronpool_watchtimer_' + this.Name, this.getTimerPool());
                 v.watchTimer.startInterval(()=>{
                     if (v.pointManager.IsFinished === true) {
                         console.log( stringFormat("게임끝 - 미션 {0}", v.pointManager.IsMissionSuccess));
@@ -197,7 +200,23 @@ class SceneMole extends GameScene {
                     } else {
                         console.log("게임 진행 중");
                     }
-                }, 500);
+                }, 500);*/
+            }
+
+            // hammer 준비
+            {
+                v.hammer = new MoleHammer('MoleHammer', this, v.moleFrameInfo, this.ContentRc);
+            }
+
+            // screen down event
+            {
+                const contentRc = this.ContentRc;
+                this.addPointerEvent('down', (pointer)=>{
+                    if (contentRc.ptInRect(pointer.x, pointer.y) != true) { return; }
+                    console.log( stringFormat("x: {0}, y: {1}", pointer.x, pointer.y));
+
+                    v.hammer.run(pointer.x, pointer.y);
+                });
             }
 
         } catch(e) {
@@ -221,7 +240,8 @@ class SceneMole extends GameScene {
     // create collision group event
     onCreateCollisionGroup(collisionGroup) {
         try {
-
+            collisionGroup.addGroups('hammer', 'mole')
+                .setTargetGroups('hammer', 'mole');
         } catch(e) {
             var errMsg = this.getKey() + ".onCreateCollisionGroup.catched: " + e;
             console.log(errMsg);

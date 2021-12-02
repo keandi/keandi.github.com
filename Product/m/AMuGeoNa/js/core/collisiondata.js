@@ -13,7 +13,7 @@ class CollisionData extends ClsObject {
             v.frameNames = frameNames;
             v.gameObject = gameObject;
 
-            v.showDebugDisplay = false;
+            v.showDebugDisplay = true;
 
             v.frameMap = new Map();
 

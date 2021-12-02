@@ -219,7 +219,7 @@ class MolePointManager extends DestroyableObject {
 
             let v = this.#_PV;
 
-            let frameInfo = v.brancaFrameInfo;
+            let frameInfo = v.brancaFrameInfo.frames;
             let size = { cx: 0, cy: 0, border: 0 };
             frameInfo.forEach(element => {
                 if (element.sourceSize.w > size.cx) {
