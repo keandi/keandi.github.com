@@ -14,6 +14,43 @@ class MoleTarget extends GameSprite {
             v.targetMoleIndex = targetMoleIndex;
             v.endCallback = endCallback;
 
+            // sprite text
+            {
+                v.spriteText = '';
+                if (targetMoleIndex == INDEX_MOLE_COLOR_BLUE) {
+                    v.spriteText = 'MOLE_BLUE';
+                } else if (targetMoleIndex == INDEX_MOLE_COLOR_GREEN) {
+                    v.spriteText = 'MOLE_GREEN';
+                } else if (targetMoleIndex == INDEX_MOLE_COLOR_PURPLE) {
+                    v.spriteText = 'MOLE_PURPLE';
+                } else if (targetMoleIndex == INDEX_MOLE_COLOR_RED) {
+                    v.spriteText = 'MOLE_RED';
+                } else if (targetMoleIndex == INDEX_MOLE_COLOR_YELLOW) {
+                    v.spriteText = 'MOLE_YELLOW';
+                }
+            }
+
+            // run y compute value set
+            {
+                var sourceSize = frameData.frames.get(v.spriteText).sourceSize;
+                v.runYValues = {
+                    computeStart: sourceSize.h / 2,
+                    computeEnd: - sourceSize.h,
+                    moveSpeed: 0,
+                    stayDuration: 0,
+                    top: 0,
+                    bottom: 0,
+                };
+
+                var level = _gameData.EntryGameLevelInfo.gamelevel;
+                
+                v.runYValues.moveSpeed = 2000 - ((level - 1) * 45);
+                if (v.runYValues.moveSpeed < 80) { v.runYValues.moveSpeed = 80; }
+
+                v.runYValues.stayDuration = 1500 - ((level - 1) * 42);
+                if (v.runYValues.stayDuration < 25) { v.runYValues.stayDuration = 25; }
+            }
+
             super.initialize();
 
             v.collisionGroup = this.CollisionGroup;
@@ -64,29 +101,13 @@ class MoleTarget extends GameSprite {
             let selfIt = this;
             const frameDuration = fps(60);
 
-            for (var i = INDEX_MOLE_COLOR_BLUE; i <= INDEX_MOLE_COLOR_YELLOW; i++) {
-                var state = 'ready' + i;
-                var texture = '';
-                if (i == INDEX_MOLE_COLOR_BLUE) {
-                    texture = 'MOLE_BLUE';
-                } else if (i == INDEX_MOLE_COLOR_GREEN) {
-                    texture = 'MOLE_GREEN';
-                } else if (i == INDEX_MOLE_COLOR_PURPLE) {
-                    texture = 'MOLE_PURPLE';
-                } else if (i == INDEX_MOLE_COLOR_RED) {
-                    texture = 'MOLE_RED';
-                } else if (i == INDEX_MOLE_COLOR_YELLOW) {
-                    texture = 'MOLE_YELLOW';
-                }
-
-                animatorManager.add(state, {
-                    asset: 'mole_sprite',
-                    textures: [texture],
-                    duration: frameDuration,
-                    repeat: 1,
-                    endCallback: ()=>selfIt.onAnimationEnd(),
-                });
-            }
+            animatorManager.add('appear', {
+                asset: 'mole_sprite',
+                textures: [v.spriteText],
+                duration: frameDuration,
+                repeat: 1,
+                endCallback: ()=>selfIt.onAnimationEnd(),
+            });
         } catch (e) {
              var errMsg = this.getExpMsg("onRegisterAnimatorManager", e);
              console.log(errMsg);
@@ -100,7 +121,7 @@ class MoleTarget extends GameSprite {
             let v = this.#_PV;
 
             if (v.sprite == undefined) {
-                v.sprite = v.scene.add.sprite(0, 0, 'mole_sprite', 'HAMMER_0001');
+                v.sprite = v.scene.add.sprite(0, 0, 'mole_sprite', v.spriteText);
             }
 
             return v.sprite;
@@ -113,7 +134,7 @@ class MoleTarget extends GameSprite {
 
     // get all framenames
     get AllFrameNames() {
-        return ['HAMMER_0001', 'HAMMER_0002', 'HAMMER_0003', 'HAMMER_0004', 'HAMMER_0005'];
+        return [this.#_PV.spriteText];
     }
 
     // state machine 등록
@@ -122,12 +143,20 @@ class MoleTarget extends GameSprite {
             let v = this.#_PV;
             v.stateMachine = this.getStateMachine();
 
-            v.stateMachine.add('ready', true)
-                .addEntry('hammerdown', ()=>this.hammerdown());
+            v.stateMachine.add('appear', true)
+                .addEntry('play', ()=>this.play());
 
-            v.stateMachine.add('hammerdown')
-                .addEntry('hammerdown', ()=>this.hammerdown())
-                .addEntry('ready', ()=>this.ready());
+            v.stateMachine.add('play')
+                .addEntry('up', ()=>this.up());
+
+            v.stateMachine.add('up')
+                .addEntry('stay', ()=>this.stay())
+                .addEntry('down', ()=>this.down());
+
+            v.stateMachine.add('stay')
+                .addEntry('down', ()=>this.down());
+
+            v.stateMachine.add('down');
 
         } catch (e) {
             var errMsg = this.getExpMsg("onRegisterStateMachine", e);
@@ -136,39 +165,82 @@ class MoleTarget extends GameSprite {
         }
      }
 
-    // ready
-    ready() {
+    // appear
+    appear() {
+        try {
+            //let v = this.#_PV;
+            this.play('appear');
+        } catch (e) {
+            var errMsg = this.getExpMsg("appear", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // play
+    play() {
+        try {
+            let v = this.#_PV;
+            
+            
+        } catch (e) {
+            var errMsg = this.getExpMsg("play", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // up
+    up() {
         try {
             //let v = this.#_PV;
 
-            this.play('ready');
-            this.setPosition(-200, -1000);
         } catch (e) {
-            var errMsg = this.getExpMsg("ready", e);
+            var errMsg = this.getExpMsg("up", e);
             console.log(errMsg);
             alert(errMsg);
         }
     }
 
-    // hammerdown
-    hammerdown() {
+    // stay
+    stay() {
         try {
-            this.play('hammerdown');
+            //let v = this.#_PV;
+
         } catch (e) {
-            var errMsg = this.getExpMsg("ready", e);
+            var errMsg = this.getExpMsg("stay", e);
             console.log(errMsg);
             alert(errMsg);
         }
     }
 
-    // down run
-    run(x, y) {
+    // down
+    down() {
+        try {
+            //let v = this.#_PV;
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("down", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // run
+    run(x, y, depth) {
         try {
             let v = this.#_PV;
-            if (v.stateMachine.enter('hammerdown') === false) { return; }
+
+            v.sprite.setDepth(depth);
+
+            y += v.runYValues.computeStart;
+            v.runYValues.top = y + v.runYValues.computeEnd;
+            v.runYValues.bottom = y;
 
             this.setPosition(x, y);
             this.visible = true;
+
+            if (v.stateMachine.enter('play') === false) { return; }
         } catch (e) {
             var errMsg = this.getExpMsg("run", e);
             console.log(errMsg);
@@ -179,11 +251,8 @@ class MoleTarget extends GameSprite {
     // frame changed event
     onFrameChanged(frameIndex, frameName) {
         try {
-            let v = this.#_PV;
-            if (v.stateMachine.Current === 'hammerdown') {
-                this.ActiveFrameName = frameName;
-                this.recomputeSpriteRect();
-            }
+            //let v = this.#_PV;
+            
         } catch (e) {
             var errMsg = this.getExpMsg("onFrameChanged", e);
             console.log(errMsg);
@@ -366,5 +435,10 @@ class MoleTarget extends GameSprite {
     // get collision data
     get CollisionData() {
         return this.#_PV.collisionData;
+    }
+
+    // get index
+    get MoleIndex() {
+        return this.#_PV.targetMoleIndex;
     }
 }

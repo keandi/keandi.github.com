@@ -219,6 +219,17 @@ class SceneMole extends GameScene {
                 });
             }
 
+            // mole test
+            {
+                v.mole = new MoleTarget('mole_' + INDEX_MOLE_COLOR_GREEN, this, v.moleFrameInfo, INDEX_MOLE_COLOR_GREEN, this.ContentRc, ()=>{
+
+                });
+
+                var c = 1;
+                var r = 0;
+                v.mole.run(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y, v.spawnPosition[c][r].depth);
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
             console.log(errMsg);
