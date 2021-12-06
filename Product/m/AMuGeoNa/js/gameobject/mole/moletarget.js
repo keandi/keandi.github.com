@@ -44,9 +44,8 @@ class MoleTarget extends GameSprite {
 
                 var level = _gameData.EntryGameLevelInfo.gamelevel;
                 
-                v.runYValues.moveSpeed = 2000 - ((level - 1) * 45);
-                if (v.runYValues.moveSpeed < 80) { v.runYValues.moveSpeed = 80; }
-
+                v.runYValues.moveSpeed = 3 + (level - 1);
+                if (v.runYValues.moveSpeed > 20) { v.runYValues.moveSpeed = 20; }
                 v.runYValues.stayDuration = 1500 - ((level - 1) * 42);
                 if (v.runYValues.stayDuration < 25) { v.runYValues.stayDuration = 25; }
             }
@@ -69,6 +68,8 @@ class MoleTarget extends GameSprite {
         let v = this.#_PV;
         destroyObjects( v.sprite );
         v.sprite = undefined;
+
+        this.#clearMoveTimer();
     }
 
     // onInitialize
@@ -156,7 +157,11 @@ class MoleTarget extends GameSprite {
             v.stateMachine.add('stay')
                 .addEntry('down', ()=>this.down());
 
-            v.stateMachine.add('down');
+            v.stateMachine.add('down')
+                .addEntry('disappear', ()=>this.disappear());
+
+            v.stateMachine.add('disappear')
+            .addEntry('appear', ()=>this.appear());
 
         } catch (e) {
             var errMsg = this.getExpMsg("onRegisterStateMachine", e);
@@ -181,8 +186,7 @@ class MoleTarget extends GameSprite {
     play() {
         try {
             let v = this.#_PV;
-            
-            
+            if (v.stateMachine.enter('up') === false) { return; }
         } catch (e) {
             var errMsg = this.getExpMsg("play", e);
             console.log(errMsg);
@@ -193,7 +197,28 @@ class MoleTarget extends GameSprite {
     // up
     up() {
         try {
-            //let v = this.#_PV;
+            let v = this.#_PV;
+            console.log("let's up");
+            let selfIt = this;
+            let timer = this.#getMoveTimer();
+            const duration = fps(60);
+            const velocity = Phaser.Math.Between(v.runYValues.moveSpeed, v.runYValues.moveSpeed + 7);
+            //console.log("move velocity: " + velocity);
+
+            timer.startInterval(()=>{
+
+                //if (objectMoveTowardsY(v.sprite, v.runYValues.top, v.runYValues.moveSpeed) == true)
+                if (objectMoveTowardsY(v.sprite, v.runYValues.top, velocity) == true)
+                {
+                    selfIt.#clearMoveTimer();
+                    console.log("up ended");
+                    v.stateMachine.enter('stay');
+                    return;
+                }
+
+                //console.log("up y: " + v.sprite.y);
+            }, duration);
+            
 
         } catch (e) {
             var errMsg = this.getExpMsg("up", e);
@@ -205,7 +230,17 @@ class MoleTarget extends GameSprite {
     // stay
     stay() {
         try {
-            //let v = this.#_PV;
+            let v = this.#_PV;
+            let selfIt = this;
+            console.log("let's stay");
+            let timer = this.#getMoveTimer();
+            const duration = Phaser.Math.Between(v.runYValues.stayDuration, v.runYValues.stayDuration + 50);
+
+            timer.startTimeout(()=>{
+                selfIt.#clearMoveTimer();
+                console.log("stay ended");
+                v.stateMachine.enter('down');
+            }, duration);
 
         } catch (e) {
             var errMsg = this.getExpMsg("stay", e);
@@ -217,10 +252,46 @@ class MoleTarget extends GameSprite {
     // down
     down() {
         try {
-            //let v = this.#_PV;
+            let v = this.#_PV;
+            console.log("let's down");
+            let selfIt = this;
+            let timer = this.#getMoveTimer();
+            const duration = fps(60);
+            const velocity = Phaser.Math.Between(v.runYValues.moveSpeed, v.runYValues.moveSpeed + 7);
+            //console.log("move velocity: " + velocity);
+
+            timer.startInterval(()=>{
+
+                //if (objectMoveTowardsY(v.sprite, v.runYValues.top, v.runYValues.moveSpeed) == true)
+                if (objectMoveTowardsY(v.sprite, v.runYValues.bottom, velocity) == true)
+                {
+                    selfIt.#clearMoveTimer();
+                    console.log("down ended.");
+                    v.stateMachine.enter('disappear');
+                    return;
+                }
+
+                //console.log("up y: " + v.sprite.y);
+            }, duration);
 
         } catch (e) {
             var errMsg = this.getExpMsg("down", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // disappear
+    disappear() {
+        try {
+            let v = this.#_PV;
+            console.log("let's disappear");
+            this.#clearMoveTimer();
+            this.setPosition(-100, -1000);
+            this.visible = false;
+            v.endCallback(this);
+        } catch (e) {
+            var errMsg = this.getExpMsg("disappear", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -230,6 +301,8 @@ class MoleTarget extends GameSprite {
     run(x, y, depth) {
         try {
             let v = this.#_PV;
+
+            v.stateMachine.reset();
 
             v.sprite.setDepth(depth);
 
@@ -440,5 +513,34 @@ class MoleTarget extends GameSprite {
     // get index
     get MoleIndex() {
         return this.#_PV.targetMoleIndex;
+    }
+
+    #clearMoveTimer() {
+        try {
+            let v = this.#_PV;
+            destroyObject( v.moveTimer );
+            v.moveTimer = undefined;
+        } catch (e) {
+            var errMsg = this.getExpMsg("clearMoveTimer", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    #getMoveTimer() {
+        try {
+            this.#clearMoveTimer();
+
+            let v = this.#_PV;
+            if (v.moveTimer == undefined) {
+                v.moveTimer = new TimerOnPool('timeronpool_' + this.Name, v.scene.getTimerPool());
+            }
+
+            return v.moveTimer;
+        } catch (e) {
+            var errMsg = this.getExpMsg("getMoveTimer", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

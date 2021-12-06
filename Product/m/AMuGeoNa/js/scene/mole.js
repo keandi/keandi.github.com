@@ -35,6 +35,11 @@ class SceneMole extends GameScene {
             super.onStop();
 
             this._isStopped = true;
+
+            let v = this.#_SPV;
+
+            destroyObjects( v.watchTimer );
+            v.watchTimer = undefined;
             
         } catch(e) {
             var errMsg = this.getKey() + ".onStop.catched: " + e;
@@ -71,16 +76,15 @@ class SceneMole extends GameScene {
 
             // mole
             {
-                // blue
-
-                // green
-
-                // purple
-
-                // red
-
-                // yellow
-
+                for (var i = INDEX_MOLE_COLOR_BLUE; i <= INDEX_MOLE_COLOR_YELLOW; i++) {
+                    let moleName = 'mole_' + i;
+                    let moleIndex = i;
+                    this.registerGameObjectCreateCallback(moleName, ()=>{
+                        return new MoleTarget(moleName, selfIt, v.moleFrameInfo, moleIndex, selfIt.ContentRc, (obj)=>{
+                            selfIt.#onMoleDisappear(obj);
+                        });
+                    });
+                }
             }
 
         } catch(e) {
@@ -192,20 +196,31 @@ class SceneMole extends GameScene {
 
             // game watch timer
             {
-                /*v.watchTimer = new TimerOnPool('timeronpool_watchtimer_' + this.Name, this.getTimerPool());
+                v.watchTimer = new TimerOnPool('timeronpool_watchtimer_' + this.Name, this.getTimerPool());
                 v.watchTimer.startInterval(()=>{
                     if (v.pointManager.IsFinished === true) {
                         console.log( stringFormat("게임끝 - 미션 {0}", v.pointManager.IsMissionSuccess));
                         v.watchTimer.stop();
                     } else {
-                        console.log("게임 진행 중");
+                        //console.log("게임 진행 중");
+                        if (v.mole != undefined) { return; }
+                        selfIt.#appearMole();
                     }
-                }, 500);*/
+                }, 500);
             }
 
             // hammer 준비
             {
                 v.hammer = new MoleHammer('MoleHammer', this, v.moleFrameInfo, this.ContentRc);
+            }
+
+            // mole 준비
+            {
+                v.moles = new Array();
+                for (var i = INDEX_MOLE_COLOR_BLUE; i <= INDEX_MOLE_COLOR_YELLOW; i++) {
+                    v.moles[i] = this.getGameObject('mole_' + i);
+                    v.moles[i].setPosition(-100, -1000);
+                }
             }
 
             // screen down event
@@ -221,13 +236,19 @@ class SceneMole extends GameScene {
 
             // mole test
             {
-                v.mole = new MoleTarget('mole_' + INDEX_MOLE_COLOR_GREEN, this, v.moleFrameInfo, INDEX_MOLE_COLOR_GREEN, this.ContentRc, ()=>{
+                /*
+                v.moles = new Array();
+                for (var i = INDEX_MOLE_COLOR_BLUE; i <= INDEX_MOLE_COLOR_YELLOW; i++) {
+                    v.moles[i] = this.getGameObject('mole_' + i);
+                    v.moles[i].setPosition(-100, -1000);
+                }
 
-                });
+                v.mole = v.moles[Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW)];
 
-                var c = 1;
-                var r = 0;
+                var c = Phaser.Math.Between(0, 2);
+                var r = Phaser.Math.Between(0, 2);
                 v.mole.run(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y, v.spawnPosition[c][r].depth);
+                */
             }
 
         } catch(e) {
@@ -285,4 +306,35 @@ class SceneMole extends GameScene {
         } 
     }
 
+    // mole disappear callback
+    #onMoleDisappear(obj) {
+        try {
+            let v = this.#_SPV;
+
+            obj.visible = false;
+            v.mole = undefined;
+        } catch(e) {
+            var errMsg = this.getKey() + ".onMoleDisappear.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // mole appear try
+    #appearMole() {
+        try {
+            let v = this.#_SPV;
+            if (v.mole != undefined) { return; }
+
+            v.mole = v.moles[Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW)];
+
+            var c = Phaser.Math.Between(0, 2);
+            var r = Phaser.Math.Between(0, 2);
+            v.mole.run(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y, v.spawnPosition[c][r].depth);
+        } catch(e) {
+            var errMsg = this.getKey() + ".appearMole.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
 }
