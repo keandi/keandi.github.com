@@ -223,6 +223,15 @@ class SceneMole extends GameScene {
                 }
             }
 
+            // mole index random table 준비
+            {
+                const level = _gameData.EntryGameLevelInfo.gamelevel;
+                let rate = parseInt(level / 10) * 10;
+                if (rate > 45) { rate = 45; }
+                else if (rate < 10) { rate = 10; }
+                v.moleAppearTable = new PercentTable(rate);
+            }
+
             // screen down event
             {
                 const contentRc = this.ContentRc;
@@ -326,7 +335,11 @@ class SceneMole extends GameScene {
             let v = this.#_SPV;
             if (v.mole != undefined) { return; }
 
-            v.mole = v.moles[Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW)];
+            if (v.moleAppearTable.Rand === true) {
+                v.mole = v.moles[Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW)];
+            } else {
+                v.mole = v.moles[v.targetColor];
+            }
 
             var c = Phaser.Math.Between(0, 2);
             var r = Phaser.Math.Between(0, 2);
