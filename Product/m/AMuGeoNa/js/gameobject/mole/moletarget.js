@@ -198,7 +198,7 @@ class MoleTarget extends GameSprite {
     up() {
         try {
             let v = this.#_PV;
-            console.log("let's up");
+            //console.log("let's up");
             let selfIt = this;
             let timer = this.#getMoveTimer();
             const duration = fps(60);
@@ -212,7 +212,7 @@ class MoleTarget extends GameSprite {
                 if (res == true)
                 {
                     selfIt.#clearMoveTimer();
-                    console.log("up ended");
+                    //console.log("up ended");
                     v.stateMachine.enter('stay');
                     return;
                 }
@@ -233,13 +233,13 @@ class MoleTarget extends GameSprite {
         try {
             let v = this.#_PV;
             let selfIt = this;
-            console.log("let's stay");
+            //console.log("let's stay");
             let timer = this.#getMoveTimer();
             const duration = Phaser.Math.Between(v.runYValues.stayDuration, v.runYValues.stayDuration + 50);
 
             timer.startTimeout(()=>{
                 selfIt.#clearMoveTimer();
-                console.log("stay ended");
+                //console.log("stay ended");
                 v.stateMachine.enter('down');
             }, duration);
 
@@ -254,7 +254,7 @@ class MoleTarget extends GameSprite {
     down() {
         try {
             let v = this.#_PV;
-            console.log("let's down");
+            //console.log("let's down");
             let selfIt = this;
             let timer = this.#getMoveTimer();
             const duration = fps(60);
@@ -268,7 +268,7 @@ class MoleTarget extends GameSprite {
                 if (res == true)
                 {
                     selfIt.#clearMoveTimer();
-                    console.log("down ended.");
+                    //console.log("down ended.");
                     v.stateMachine.enter('disappear');
                     return;
                 }
@@ -287,7 +287,7 @@ class MoleTarget extends GameSprite {
     disappear() {
         try {
             let v = this.#_PV;
-            console.log("let's disappear");
+            //console.log("let's disappear");
             this.#clearMoveTimer();
             this.setPosition(-100, -1000);
             this.visible = false;

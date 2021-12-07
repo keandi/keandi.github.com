@@ -364,4 +364,9 @@ class MoleHammer extends GameSprite {
     get CollisionData() {
         return this.#_PV.collisionData;
     }
+
+    // get last collision rect
+    get LastCollisionRect() {
+        return this.#_PV.collisionData.LastCollisionRect;
+    }
 }

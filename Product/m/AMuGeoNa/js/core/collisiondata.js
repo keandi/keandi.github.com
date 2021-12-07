@@ -228,7 +228,10 @@ class CollisionData extends ClsObject {
                 for (var j = 0; j < targetArray.length; j++) {
                     if (targetArray[j].recompute === true) { target.CollisionData.recomputeArea(targetArray[j]); };
 
-                    if (myArray[i].rect.isCollision(targetArray[j].rect) === true) { return true; }
+                    if (myArray[i].rect.isCollision(targetArray[j].rect) === true) { 
+                        v.lastCollisionRect = targetArray[j].rect;
+                        return true; 
+                    }
                 }
             }
 
@@ -397,5 +400,10 @@ class CollisionData extends ClsObject {
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // get last collision rect
+    get LastCollisionRect() {
+        return this.#_PV.lastCollisionRect;
     }
 }

@@ -87,6 +87,23 @@ class SceneMole extends GameScene {
                 }
             }
 
+            // hit flash effect
+            {
+                // valid hit effect
+                this.registerGameObjectCreateCallback('ValidHitEffect', ()=>{
+                    return new FlashSprite('ValidHitEffect', selfIt, v.moleFrameInfo, 'mole_sprite', 'HITEFFECT_VALID', (obj)=>{
+                        selfIt.releaseGameObject(obj);
+                    });
+                });
+
+                // invalid hit effect
+                this.registerGameObjectCreateCallback('InvalidHitEffect', ()=>{
+                    return new FlashSprite('InvalidHitEffect', selfIt, v.moleFrameInfo, 'mole_sprite', 'HITEFFECT_INVALID', (obj)=>{
+                        selfIt.releaseGameObject(obj);
+                    });
+                });
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
@@ -225,7 +242,7 @@ class SceneMole extends GameScene {
 
             // mole index random table 준비
             {
-                const level = _gameData.EntryGameLevelInfo.gamelevel;
+                const level = 50;//_gameData.EntryGameLevelInfo.gamelevel;
                 let rate = parseInt(level / 10) * 10;
                 if (rate > 45) { rate = 45; }
                 else if (rate < 10) { rate = 10; }
@@ -297,6 +314,21 @@ class SceneMole extends GameScene {
     onCollisionAttackerXBody(attacker, body) {
         try {
             console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
+
+            let v = this.#_SPV;
+            const collisionRect = attacker.LastCollisionRect;
+            let effectX = body.X;
+            let effectY = body.Y;
+            const vibLevel = (body.MoleIndex === v.targetColor) ? 1 : 3;
+
+            if (collisionRect != undefined) {
+                effectX = collisionRect.CenterX;
+                effectY = collisionRect.CenterY;
+            }
+
+            this.getGameObject( (body.MoleIndex === v.targetColor) ? 'ValidHitEffect' : 'InvalidHitEffect').flash(effectX, effectY);
+            apiVibration(vibLevel);
+
             this.#_SPV.mole.enter('down');
            
         } catch(e) {
