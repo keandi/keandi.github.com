@@ -236,7 +236,10 @@ class SceneMole extends GameScene {
             {
                 const contentRc = this.ContentRc;
                 this.addPointerEvent('down', (pointer)=>{
-                    if (contentRc.ptInRect(pointer.x, pointer.y) != true) { return; }
+                    if (contentRc.ptInRect(pointer.x, pointer.y) != true
+                        || selfIt.isPause() == true) { 
+                        return; 
+                    }
                     //console.log( stringFormat("x: {0}, y: {1}", pointer.x, pointer.y));
 
                     v.hammer.run(pointer.x, pointer.y);
