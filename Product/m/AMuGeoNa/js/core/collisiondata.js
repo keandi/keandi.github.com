@@ -2,7 +2,7 @@ class CollisionData extends ClsObject {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, frameData, frameNames, gameObject, isFullX, isFullY) {
+    constructor(name, scene, frameData, frameNames, gameObject, isFullX, isFullY, originMap) {
         super(name);
 
         try {
@@ -17,10 +17,18 @@ class CollisionData extends ClsObject {
 
             v.frameMap = new Map();
 
+            // return sprite origin
+            let getOrgin = function(frameName) {
+                if (originMap == undefined || originMap.has(frameName) === false ) { return {x: 0.5, y: 0.5 }; }
+
+                return originMap.get(frameName);
+            };
+
             // create collision data
             {
                 for (var i = 0; i < frameNames.length; i++) {
-                    var frame = frameData.frames.get(frameNames[i]);
+                    var curFrameName = frameNames[i];
+                    var frame = frameData.frames.get(curFrameName);
                     var hitFrames = frame.hitframes;
                     if (hitFrames == undefined || hitFrames == null) { continue; }
 
@@ -28,11 +36,12 @@ class CollisionData extends ClsObject {
                         attackers: [],
                         bodies: []
                     };
-                    v.frameMap.set(frameNames[i], collisions)
+                    v.frameMap.set(curFrameName, collisions)
 
+                    const frameOrigin = getOrgin(curFrameName);
                     var frameArea = frame.frame;
-                    var frameX = frameArea.x + (frameArea.w / 2);
-                    var frameY = frameArea.y + (frameArea.h / 2);
+                    var frameX = frameArea.x + (frameArea.w * frameOrigin.x);//(frameArea.w / 2);
+                    var frameY = frameArea.y + (frameArea.h * frameOrigin.y);//(frameArea.h / 2);
 
                     hitFrames.forEach(element => {
                         var target = (element.isAttacker === true) ? collisions.attackers : collisions.bodies;
@@ -47,8 +56,8 @@ class CollisionData extends ClsObject {
                         };
                         target.push(area);
 
-                        area.distance.x = frameX - (area.rect.CenterX);
-                        area.distance.y = frameY - (area.rect.CenterY);
+                        area.distance.x = frameX - (area.rect.Left + (area.rect.Width * frameOrigin.x));//(area.rect.CenterX);
+                        area.distance.y = frameY - (area.rect.Top + (area.rect.Height * frameOrigin.y));//(area.rect.CenterY);
 
                         if (isFullX === true) {
                             area.rect.Width = v.gameObject.W;

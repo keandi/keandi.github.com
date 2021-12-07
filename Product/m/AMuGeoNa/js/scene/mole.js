@@ -297,7 +297,7 @@ class SceneMole extends GameScene {
     onCollisionAttackerXBody(attacker, body) {
         try {
             console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
-
+            this.#_SPV.mole.enter('down');
            
         } catch(e) {
             var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;

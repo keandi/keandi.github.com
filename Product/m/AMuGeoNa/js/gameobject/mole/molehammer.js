@@ -41,6 +41,7 @@ class MoleHammer extends GameSprite {
             if (v.sprite == undefined) {
                 v.sprite = this.getSprite();
                 v.sprite.setOrigin(0.4, 0.9);
+                //v.sprite.setOrigin(0.5, 0.5);
                 v.sprite.setDepth(DEPTH_MOLE_HAMMER);
             }
             this.onRegisterAnimatorManager(this.getAnimatorManager(v.sprite));
@@ -48,7 +49,12 @@ class MoleHammer extends GameSprite {
             let isFullX = (config == undefined) ? false : config.isFullX;
             let isFullY = (config == undefined) ? false : config.isFullY;
 
-            v.collisionData = new CollisionData('collisionData_' + this.Name, v.scene, v.frameData, this.AllFrameNames, this, isFullX, isFullY);
+            // collision data 생성
+            {
+                var originMap = new Map();
+                originMap.set('HAMMER_0005', {x: 0.4, y: 0.9});
+                v.collisionData = new CollisionData('collisionData_' + this.Name, v.scene, v.frameData, this.AllFrameNames, this, isFullX, isFullY, originMap);
+            }
         } catch (e) {
             var errMsg = this.getExpMsg("onInitialize", e);
             console.log(errMsg);

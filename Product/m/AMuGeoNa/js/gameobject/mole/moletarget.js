@@ -207,8 +207,9 @@ class MoleTarget extends GameSprite {
 
             timer.startInterval(()=>{
 
-                //if (objectMoveTowardsY(v.sprite, v.runYValues.top, v.runYValues.moveSpeed) == true)
-                if (objectMoveTowardsY(v.sprite, v.runYValues.top, velocity) == true)
+                var res = objectMoveTowardsY(v.sprite, v.runYValues.top, velocity);
+                this.recomputeSpriteRect();
+                if (res == true)
                 {
                     selfIt.#clearMoveTimer();
                     console.log("up ended");
@@ -262,8 +263,9 @@ class MoleTarget extends GameSprite {
 
             timer.startInterval(()=>{
 
-                //if (objectMoveTowardsY(v.sprite, v.runYValues.top, v.runYValues.moveSpeed) == true)
-                if (objectMoveTowardsY(v.sprite, v.runYValues.bottom, velocity) == true)
+                var res = objectMoveTowardsY(v.sprite, v.runYValues.bottom, velocity);
+                this.recomputeSpriteRect();
+                if (res == true)
                 {
                     selfIt.#clearMoveTimer();
                     console.log("down ended.");
@@ -302,6 +304,8 @@ class MoleTarget extends GameSprite {
         try {
             let v = this.#_PV;
 
+            this.ActiveFrameName = v.spriteText;
+
             v.stateMachine.reset();
 
             v.sprite.setDepth(depth);
@@ -336,12 +340,23 @@ class MoleTarget extends GameSprite {
     // end animation
     onAnimationEnd() {
         try {
-            let v = this.#_PV;
-            if (v.stateMachine.Current === 'hammerdown') {
-                v.stateMachine.enter('ready');
-            }
+            /*let v = this.#_PV;
+            if (v.stateMachine.Current === 'appear') {
+                this.ActiveFrameName = v.spriteText;
+            }*/
         } catch (e) {
             var errMsg = this.getExpMsg("onAnimationEnd", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // set active collision frame
+    set ActiveFrameName(value) {
+        try {
+            this.#_PV.collisionData.ActiveFrameName = value;
+        } catch (e) {
+            var errMsg = this.getExpMsg("ActiveFrameName", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -426,7 +441,7 @@ class MoleTarget extends GameSprite {
 
             v.collisionData.setRecomputeFlag();
             //v.collisionData.forcedRecomputeActiveFrame();
-            v.collisionGroup.checkCollisionAttackerXBody(this);
+            //v.collisionGroup.checkCollisionAttackerXBody(this);
 
         } catch (e) {
             var errMsg = this.getExpMsg("recomputeSpriteRect", e);
