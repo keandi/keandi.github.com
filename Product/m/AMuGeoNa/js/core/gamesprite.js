@@ -310,4 +310,9 @@ class GameSprite extends GameObject {
     get ObjectKind() {
         return undefined;
     }
+
+    // 강제 collision 대상 제외 - virtual (상속하여 사용.)
+    setCollisionSkip() {
+        //nothing
+    }
 }

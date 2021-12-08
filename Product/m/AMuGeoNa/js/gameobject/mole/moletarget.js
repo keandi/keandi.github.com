@@ -35,7 +35,7 @@ class MoleTarget extends GameSprite {
                 var sourceSize = frameData.frames.get(v.spriteText).sourceSize;
                 v.runYValues = {
                     computeStart: sourceSize.h / 2,
-                    computeEnd: - sourceSize.h,
+                    computeEnd: - ( (sourceSize.h / 3) * 2 ),
                     moveSpeed: 0,
                     stayDuration: 0,
                     top: 0,
@@ -523,6 +523,11 @@ class MoleTarget extends GameSprite {
     // get collision data
     get CollisionData() {
         return this.#_PV.collisionData;
+    }
+
+    // 강제 collision 대상 제외
+    setCollisionSkip() {
+        this.#_PV.collisionData.IsSkip = true;
     }
 
     // get index

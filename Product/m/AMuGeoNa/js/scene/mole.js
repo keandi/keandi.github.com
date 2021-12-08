@@ -242,7 +242,7 @@ class SceneMole extends GameScene {
 
             // mole index random table 준비
             {
-                const level = 50;//_gameData.EntryGameLevelInfo.gamelevel;
+                const level = _gameData.EntryGameLevelInfo.gamelevel;
                 let rate = parseInt(level / 10) * 10;
                 if (rate > 45) { rate = 45; }
                 else if (rate < 10) { rate = 10; }
@@ -315,19 +315,26 @@ class SceneMole extends GameScene {
         try {
             console.log(stringFormat("[충돌] attacker: {0}/{1}, body: {2}/{3}", attacker.GroupTag, attacker.Name, body.GroupTag, body.Name));
 
+            body.setCollisionSkip();
+
             let v = this.#_SPV;
             const collisionRect = attacker.LastCollisionRect;
             let effectX = body.X;
             let effectY = body.Y;
-            const vibLevel = (body.MoleIndex === v.targetColor) ? 1 : 3;
+            const isValidHit = (body.MoleIndex === v.targetColor) ? true : false;
 
             if (collisionRect != undefined) {
                 effectX = collisionRect.CenterX;
                 effectY = collisionRect.CenterY;
             }
 
-            this.getGameObject( (body.MoleIndex === v.targetColor) ? 'ValidHitEffect' : 'InvalidHitEffect').flash(effectX, effectY);
-            apiVibration(vibLevel);
+            this.getGameObject( (isValidHit == true) ? 'ValidHitEffect' : 'InvalidHitEffect').flash(effectX, effectY);
+            apiVibration( (isValidHit == true) ? 1 : 3 );
+
+            // point control
+            if (isValidHit === true) {
+                v.pointManager.increaseHitPoint();
+            }
 
             this.#_SPV.mole.enter('down');
            
@@ -370,15 +377,23 @@ class SceneMole extends GameScene {
             let v = this.#_SPV;
             if (v.mole != undefined) { return; }
 
+            let moleIndex = v.targetColor;
+
             if (v.moleAppearTable.Rand === true) {
-                v.mole = v.moles[Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW)];
+                moleIndex = Phaser.Math.Between(INDEX_MOLE_COLOR_BLUE, INDEX_MOLE_COLOR_YELLOW);
             } else {
-                v.mole = v.moles[v.targetColor];
+                moleIndex = v.targetColor;
             }
+
+            v.mole = v.moles[moleIndex];
 
             var c = Phaser.Math.Between(0, 2);
             var r = Phaser.Math.Between(0, 2);
             v.mole.run(v.spawnPosition[c][r].x, v.spawnPosition[c][r].y, v.spawnPosition[c][r].depth);
+
+            if (v.targetColor === moleIndex) {
+                v.pointManager.increaseCurrentPoint();
+            }
         } catch(e) {
             var errMsg = this.getKey() + ".appearMole.catched: " + e;
             console.log(errMsg);
