@@ -152,6 +152,7 @@ class SceneMole extends GameScene {
                 let groundDepth = DEPTH_MOLE_GROUND_BASE;
 
                 var tmpClr = [0xff894a, 0x449582, 0xfbe700, 0x23a091];
+                suffleArray(tmpClr);
 
                 // draw ground
                 for (var i = 0; i < 4; i++) {
@@ -259,6 +260,7 @@ class SceneMole extends GameScene {
                     v.moles[i] = this.getGameObject('mole_' + i);
                     v.moles[i].setPosition(-100, -1000);
                 }
+                v.mole = undefined; //초기화
             }
 
             // mole index random table 준비

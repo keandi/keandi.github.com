@@ -223,3 +223,18 @@ function drawRect(g, color, rc)
     g.fillStyle(color, 1);
     g.fillRect(rc.Left, rc.Top, rc.Width, rc.Height);
 }
+
+// suffle array
+function suffleArray(arr)
+{
+    if (arr == undefined || arr.length <= 0) { return; }
+
+    for (var i = 0; i < arr.length; i++) {
+        var t = Phaser.Math.Between(0, arr.length - 1);
+        if (i == t) { continue; }
+
+        var temp = arr[t];
+        arr[t] = arr[i];
+        arr[i] = temp;
+    }
+}

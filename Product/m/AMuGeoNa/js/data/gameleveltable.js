@@ -80,10 +80,10 @@ class GameLevelTable extends ClsObject {
                     return this.#getEnableInfo(level, 1, 0, 20, 3, GameKind.ROLLDICE);
 
                 case 2:
-                    return this.#getEnableInfo(level, 1, 3, 0, 20, GameKind.SHOOTTHESTARS);
+                    return this.#getEnableInfo(level, 1, 3, 0, 12, GameKind.SHOOTTHESTARS);
 
                 case 3:
-                    return this.#getEnableInfo(level, 1, 6, 0, 30, GameKind.MOLE);
+                    return this.#getEnableInfo(level, 1, 6, 0, 20, GameKind.MOLE);
 
                 default:
                     return this.#getEnableInfo(level, 0, 0, 0, 0, GameKind.UNKNOWN);
