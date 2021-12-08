@@ -218,11 +218,17 @@ class SceneMole extends GameScene {
                     if (v.mole != undefined) { return; }
 
                     if (v.pointManager.IsFinished === true) {
-                        console.log( stringFormat("게임끝 - 미션 {0}", v.pointManager.IsMissionSuccess));
-                        if (v.pointManager.IsMissionPerfectSuccess === true) {
-                            console.log( '- perfect -' );
-                        }
                         v.watchTimer.stop();
+
+                        if (v.pointManager.IsMissionSuccess == true) {
+                            if (v.pointManager.IsMissionPerfectSuccess === true) {
+                                this.addGold(10);
+                            }
+                            this.gameFinished(false);
+                        } else {
+                            this.gameFinished(true);
+                        }
+                        
                     } else {
                         //console.log("게임 진행 중");
                         selfIt.#appearMole();
