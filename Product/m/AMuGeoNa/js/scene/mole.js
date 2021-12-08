@@ -219,14 +219,25 @@ class SceneMole extends GameScene {
 
                     if (v.pointManager.IsFinished === true) {
                         v.watchTimer.stop();
+                        selfIt.removePointerEvent( v.hammerCallback );
 
                         if (v.pointManager.IsMissionSuccess == true) {
                             if (v.pointManager.IsMissionPerfectSuccess === true) {
-                                this.addGold(10);
+                                // perfect notice
+                                let gold = 10;
+                                let kor = stringFormat("보상: {0}G", gold);
+                                let eng = stringFormat("Reward: {0}G", gold);
+                                selfIt.addGold(gold);
+                                this.getTimerPool().setTimeout(()=>{
+                                    selfIt.msgboxOk(_gameOption.selectText("Perfect", "Perfect"), _gameOption.selectText(kor, eng), ()=>{
+                                        selfIt.gameFinished(false);        
+                                    });
+                                }, 500);
+                                return;
                             }
-                            this.gameFinished(false);
+                            selfIt.gameFinished(false);
                         } else {
-                            this.gameFinished(true);
+                            selfIt.gameFinished(true);
                         }
                         
                     } else {
@@ -262,7 +273,7 @@ class SceneMole extends GameScene {
             // screen down event
             {
                 const contentRc = this.ContentRc;
-                this.addPointerEvent('down', (pointer)=>{
+                v.hammerCallback = this.addPointerEvent('down', (pointer)=>{
                     if (contentRc.ptInRect(pointer.x, pointer.y) != true
                         || selfIt.isPause() == true) { 
                         return; 
