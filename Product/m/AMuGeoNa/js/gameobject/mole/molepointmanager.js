@@ -354,6 +354,19 @@ class MolePointManager extends DestroyableObject {
         }
     }
 
+    // 미션 perfect 성공?
+    get IsMissionPerfectSuccess() {
+        try {
+            let v = this.#_PV;
+
+            return (v.goal.hit >= v.goal.total) ? true : false;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsMissionPerfectSuccess", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // point manager rect
     get Area() {
         return this.#_PV.displayArea;

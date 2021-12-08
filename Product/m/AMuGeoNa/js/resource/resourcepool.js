@@ -169,6 +169,18 @@ class ResourcePool extends ClsObject {
                     this.#addOgg(key);
                     break;
 
+                case 'scream_1':
+                case 'impactsplat01':
+                case 'impactsplat02':
+                case 'impactsplat03':
+                case 'impactsplat04':
+                case 'impactsplat05':
+                case 'impactsplat06':
+                case 'impactsplat07':
+                case 'impactsplat08':
+                    this.#addMp3(key);
+                    break;
+
                 case 'dice-1':
                 case 'dice-8':
                 case 'dice-18':

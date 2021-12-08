@@ -52,7 +52,7 @@ class SceneMole extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('mole_sprite', 'text_branca');
+            .addArgs('mole_sprite', 'text_branca', 'scream_1', 'impactsplat02');
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
@@ -215,12 +215,16 @@ class SceneMole extends GameScene {
             {
                 v.watchTimer = new TimerOnPool('timeronpool_watchtimer_' + this.Name, this.getTimerPool());
                 v.watchTimer.startInterval(()=>{
+                    if (v.mole != undefined) { return; }
+
                     if (v.pointManager.IsFinished === true) {
                         console.log( stringFormat("게임끝 - 미션 {0}", v.pointManager.IsMissionSuccess));
+                        if (v.pointManager.IsMissionPerfectSuccess === true) {
+                            console.log( '- perfect -' );
+                        }
                         v.watchTimer.stop();
                     } else {
                         //console.log("게임 진행 중");
-                        if (v.mole != undefined) { return; }
                         selfIt.#appearMole();
                     }
                 }, 500);
@@ -333,7 +337,11 @@ class SceneMole extends GameScene {
 
             // point control
             if (isValidHit === true) {
+                this.playSound('scream_1');
                 v.pointManager.increaseHitPoint();
+            } else {
+                this.playSound('impactsplat02');
+                this.useGold(3, false);
             }
 
             this.#_SPV.mole.enter('down');
