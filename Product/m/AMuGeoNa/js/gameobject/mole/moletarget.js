@@ -45,9 +45,9 @@ class MoleTarget extends GameSprite {
                 var level = _gameData.EntryGameLevelInfo.gamelevel;
                 
                 v.runYValues.moveSpeed = 3 + (level - 1);
-                if (v.runYValues.moveSpeed > 20) { v.runYValues.moveSpeed = 20; }
+                if (v.runYValues.moveSpeed > 8) { v.runYValues.moveSpeed = 8; }
                 v.runYValues.stayDuration = 1500 - ((level - 1) * 42);
-                if (v.runYValues.stayDuration < 25) { v.runYValues.stayDuration = 25; }
+                if (v.runYValues.stayDuration < 250) { v.runYValues.stayDuration = 250; }
             }
 
             super.initialize();
