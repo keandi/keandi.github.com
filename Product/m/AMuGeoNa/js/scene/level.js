@@ -362,6 +362,8 @@ class SceneLevel extends GameScene {
             this.playSound('twink');
             let levelInfo = entryBlock.LevelInfo;
 
+            if (levelInfo.gamelevel <= 0) { return; } // no enter
+
             if (_gameData.Gold < levelInfo.needgold) {
                 var entryFee = stringFormat("{0}G", levelInfo.needgold);
                 this.msgboxOk(_gameOption.selectText("알림", "Notice"),
