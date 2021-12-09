@@ -67,6 +67,7 @@ class STSCanon1 extends STSBaseCanon {
                     textures: ['CANON1_0000'],
                     duration: fps,
                     repeat: 1,
+                    frameCallback: (idx, name)=>selfIt.onReadyFrameChanged(idx, name),
                     endCallback: ()=>selfIt.onAnimationEnd(),
                 })
                 .add('fire', {
@@ -102,6 +103,20 @@ class STSCanon1 extends STSBaseCanon {
     // 대기 시간 설정. 상속 구현하여 canon 별로 처리
     get WaitTime() {
         return 6000;
+    }
+
+    // ready frame changed event
+    onReadyFrameChanged(frameIndex, frameName) {
+        try {
+
+            this.ActiveFrameName = frameName;
+            this.recomputeSpriteRect();
+            
+        } catch (e) {
+            var errMsg = this.getExpMsg("onReadyFrameChanged", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 
     // frame changed event

@@ -203,7 +203,7 @@ class SceneShootTheStars extends GameScene {
                                 let oldCanonInfo = selfIt.getCanonOfArea(canonRect.CenterX, canonRect.CenterY);
                                 if (oldCanonInfo != undefined) {
                                     //console.log("object state: " + oldCanonInfo.object.CurrentState);
-                                    if (oldCanonInfo.object.CurrentState !== 'fire') 
+                                    if (oldCanonInfo.object.CurrentState !== 'fire' && oldCanonInfo.object.CurrentState !== 'explosion') 
                                     {
                                         oldCanonInfo.object.remove();
                                         selfIt.releaseGameObject(oldCanonInfo.object);
