@@ -229,7 +229,7 @@ class CollisionData extends ClsObject {
                     if (targetArray[j].recompute === true) { target.CollisionData.recomputeArea(targetArray[j]); };
 
                     if (myArray[i].rect.isCollision(targetArray[j].rect) === true) { 
-                        v.lastCollisionRect = targetArray[j].rect;
+                        v.lastCollisionRect = myArray[i].rect;
                         return true; 
                     }
                 }
