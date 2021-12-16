@@ -143,3 +143,9 @@ String.prototype.right = function(length) {
        return this.substring(this.length - length, this.length);
     }
 }
+
+// v 값이 x와 y 안에 있는지 여부
+function between(v, x, y) {
+    return (v >= x && v <= y) ? true : false;
+}
+  

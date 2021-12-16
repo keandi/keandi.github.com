@@ -68,7 +68,7 @@ class STSBaseEnemy extends GameSprite {
             v.stateMachine = this.getStateMachine();
 
             v.stateMachine.add('patrol', true)
-                .addEntry('attack', ()=>this.fire())
+                .addEntry('attack', ()=>this.attack())
                 .addEntry('explosion', ()=>this.explosion());
 
             v.stateMachine.add('attack')

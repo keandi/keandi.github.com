@@ -146,6 +146,7 @@ class ResourcePool extends ClsObject {
                 case 'explosion_sprite_02':
                 case 'mole_sprite':
                 case 'text_branca':
+                case 'rock_1_sprite':
                     this.#addAtlas(key, 8);
                     this.#addJson(key, 8); // atlas json 도 같이 load
                     break;

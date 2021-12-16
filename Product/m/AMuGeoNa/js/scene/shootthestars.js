@@ -51,7 +51,8 @@ class SceneShootTheStars extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('shootthestars_sprite', 'explosion_sprite_01', 'explosion_sprite_02', 'explosion_low', 'explosion_middle', 'explosion_loud', 'gun_bullet', 'laser1', 'missile' );
+            .addArgs('shootthestars_sprite', 'explosion_sprite_01', 'explosion_sprite_02', 'rock_1_sprite',
+                'explosion_low', 'explosion_middle', 'explosion_loud', 'gun_bullet', 'laser1', 'missile');
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
@@ -70,6 +71,9 @@ class SceneShootTheStars extends GameScene {
             };
             v.bulletExplosionframeInfo = {
                 frames: _resourcePool.getJsonFrameMap('explosion_sprite_02'),
+            };
+            v.rock1frameInfo = {
+                frames: _resourcePool.getJsonFrameMap('rock_1_sprite'),
             };
 
             // menu icon coords
@@ -385,6 +389,14 @@ class SceneShootTheStars extends GameScene {
                         getout: (who)=>selfIt.getOut(who)
                     });
                 });
+
+                // rock_1
+                this.registerGameObjectCreateCallback('enemy_rock_1', ()=>{
+                    return new STSEnemyRock1('enemyRock1_' + _gameHost.Time, selfIt, v.rock1frameInfo, selfIt.ContentRc, {
+                        die: (who)=>selfIt.die(who),
+                        getout: (who)=>selfIt.getOut(who)
+                    });
+                });
             }
 
             // explosion effect
@@ -510,11 +522,22 @@ class SceneShootTheStars extends GameScene {
                 const contentRc = this.ContentRc;
                 const gameLevel = _gameData.EntryGameLevelInfo.gamelevel;
 
+                let createEnemy = function(x, y, name) {
+                    var enemy = selfIt.getGameObject(name);
+                    enemy.reset();
+                    enemy.setPosition(x, y);
+                    enemy.visible = true;
+                };
+
                 let createStar = function(x, y) {
-                    var star = selfIt.getGameObject('enemy_star');
-                    star.reset();
-                    star.setPosition(x, y);
-                    star.visible = true;
+                    createEnemy(x, y, 'enemy_star');
+                };
+
+                let createRock1 = function(x, y) {
+                    var enemy = selfIt.getGameObject('enemy_rock_1');
+                    enemy.setPosition(x, y);
+                    enemy.reset();
+                    enemy.visible = true;
                 };
 
                 // enemy spawn
@@ -529,17 +552,24 @@ class SceneShootTheStars extends GameScene {
                     };
 
                     let getEnemyCallback = function() {
-                        let count_star = 1;
 
-                        if (gameLevel >= 80) {}
-                        else if (gameLevel >= 80) {}
-                        else if (gameLevel >= 80) {}
-                        else if (gameLevel >= 80) {}
-                        else if (gameLevel >= 80) {}
-                        else if (gameLevel >= 80) {}
-                        else if (gameLevel >= 80) {}
+                        let getConfigStar = function(count) {
+                            return { cb: (x, y)=>createStar(x, y), count: count};
+                        }
+                        let getConfigRock1 = function(count) {
+                            return { cb: (x, y)=>createRock1(x, y), count: count};
+                        }
+                        let config = new Array();
 
-                        return [{ cb: (x, y)=>createStar(x, y), count: count_star}];
+                        // enemy 추가하면서 점점 늘려야
+                        if (gameLevel >= 4) {
+                            config.push(getConfigStar(2));
+                            config.push(getConfigRock1(1));
+                        } else {
+                            config.push(getConfigStar(1));
+                        }
+
+                        return config;
                     };
 
                     v.enemySpawn = new SpawnManager('enemy_spawn', this, 
