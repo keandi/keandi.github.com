@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>1vs1</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+        <!-- scale 이 고정되게 해준다 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+    
+        <!-- 화면이 너무 크게 보여질 경우 scale 값을 변경해주면 됨
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.1, maximum-scale=0.75, user-scalable=yes">
+        -->
+
+        <link rel="shortcut icon" href="#">
+
+        <script type="text/javascript" src="../../../js/phaser.min.3.55.2.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/ostype.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/apptype.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/flasheffectoption.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/swipedirection.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/language.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/levelblocktype.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/gamekind.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/msgboxtype.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/timertype.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/gameobjecttype.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/dragprocess.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/animatestate.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/enum/gameexittype.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/core/clsObject.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/queue.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/size.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/point.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/rect.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/RINum.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/countzero.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/percenttable.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/sleepcounter.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/callbackMap.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/cameraDrag.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/cameraDragManager.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/destroyCallBacks.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/destroyMap.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/elapsedTime.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/pointerEventManager.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/serialLoadHistory.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/serialLoaderProgress.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/destroyableobject.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/GOImageButton.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/GOSelectImageButton.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/gameobject.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/gamesprite.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/progressbar.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/soundspooler.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/gamesoundpool.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/gameobjectpool.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/updatesubscriber.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/timeout.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/gametime.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/gameinterval.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/gametimeout.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/gametimerpool.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/timeronpool.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/objectdown.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/statemachine.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/animator.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/animatormanager.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/pointmanager.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/spawnmanager.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/collisiondata.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/collisiongroup.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/core/basescene.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/common/common.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/common/phaserfun.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/common/optionapi.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/common/gamecommon.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/browser/browser.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/browser/webapi.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/browser/waapi.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/browser/browsercomm.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/global/global.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/resource/resourcepool.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/gamehost/gamehost.js"></script>
+
+<!--
+
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/optionmenu.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/horizontaloptionmenu.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/msgbox.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/goldnotifygameobject.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/explosionsprite.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/brancachar.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/flashsprite.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/level/representationimage.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/level/levelblock.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/level/levelarrow.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/level/levelentryblock.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/rolldice/diceselect.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/rolldice/diceselector.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/rolldice/dice.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/rolldice/dicecup.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/rolldice/cointextaction.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsbasebullet.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsbulletnormal.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/canonmenuicon.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsbasecanon.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stscanon1.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stscanon2.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stscanon3.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsbulletlaserv.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsbulletlaserv2.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsmissile.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsbulletexplosion.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stscontinouscanon.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stslaserv.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stslaserv2.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsrocket.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsbaseenemy.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsenemystar.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/shootthestars/stsenemyrock1.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/mole/molepointmanager.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/mole/molehammer.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/gameobject/mole/moletarget.js"></script>
+
+        <script type="text/javascript" src="../../../lib/whsgdk/scene/gamescene.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/scene/option.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/scene/level.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/scene/intro.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/scene/rolldice.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/scene/shootthestars.js"></script>
+        <script type="text/javascript" src="../../../lib/whsgdk/scene/mole.js"></script>
+
+    -->
+
+        <script type="text/javascript" src="./js/define/define.js"></script>
+
+        <script type="text/javascript" src="./js/scene/testscene.js"></script>
+
+        <script type="text/javascript" src="./js/main/load.js"></script>
+        <script type="text/javascript" src="./js/main/loader.js"></script>
+
+    </head>
+
+    <style>
+        .backBorder {
+            background-color: rgb(25, 25, 25);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; height: 600px;
+            margin-left: -400px;
+            margin-top: -300px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .appBackBorder {
+            background-color: rgb(25, 25, 25);
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 800px; height: 600px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .outerBorder {
+            background-color: rgb(245, 53, 203);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%; height: 100%;
+            margin-left: 0px;
+            margin-top: 0px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+
+        @font-face {
+			font-family: "gameFont";
+			src: url('assets/font/NanumBarunGothic.ttf');
+		}
+    </style>
+
+<body>
+    <div id="scene" class="backBorder" style="display: block;">
+    </div>
+</body>
+</html>
