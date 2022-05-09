@@ -16,7 +16,7 @@ class Loader extends ClsObject {
 
             this.#createGlobalData();
             if (this.#createGame() !== true) {
-                alert(_gameOption.selectText("게임 생성에 실패하였습니다.", "Failed to create game."));
+                alert("게임 생성에 실패하였습니다.");
                 return;
             }
 
@@ -34,7 +34,7 @@ class Loader extends ClsObject {
         try {
             
             _wgl_browserComm = new BrowserComm("browser_comm");
-            _wgl_resourcePool = new ResourcePool("resourcePool");
+            _resources = new Resources("1vs1_resources");
             _wgl_serialLoadHistory = new SerialLoadHistory("global_serial_asset_load_history");
             _wgl_gameHost = new GameHost("gamehost", this.#_PV.sceneSize.w, this.#_PV.sceneSize.h, COLOR_BACKGROUND, 0);
 

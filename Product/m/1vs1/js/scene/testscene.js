@@ -46,6 +46,8 @@ class TestScene extends BaseScene {
     }
 
     onSerialLoadAssets() {
+        _resources.setScene(this)
+            .addArgs('enemy_test');
         /*this.addSerialLoadAsset( 'firework_yellow',
         () => {
             this.load.atlas(
@@ -77,48 +79,11 @@ class TestScene extends BaseScene {
             /*var aaaa = this.cache.json.get('aaaa');
             console.log(aaaa.frames[0].filename); */
 
+            var testEnemy = new TestEnemy("testenemy", this, _resources.getJsonObject('enemy_test'));
+            var myValue = 0;
+
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
-            console.log(errMsg);
-            alert(errMsg);
-        }
-    }
-
-    #addText() {
-        try {
-            const sceneCenterY = this.getSceneCenterY();
-            const sceneCenterX = this.getSceneCenterX();
-            const sceneWidth = this.getSceneWidth();
-
-            // 아무거나
-            const logoTextY = sceneCenterY - (sceneWidth / 3);
-            this.addDestroyableObject( addText(this, sceneCenterX, logoTextY, _gameOption.selectText("아.무.거.나", "A.Mu.Geo.Na"), 50, 0x73BAE7) );
-
-            // touch please
-            const touchTextY = sceneCenterY + 35;
-            let touch = this.addDestroyableObject( addText(this, sceneCenterX, touchTextY, "Touch for 'start'", 16, COLOR_INTRO_TOUCHBLINK_ON) );
-            let touchOff = false;
-            let touchBlink = function() {
-                if (touchOff == false) {
-                    touch.setTint(COLOR_INTRO_TOUCHBLINK_OFF);
-                    touchOff = true;
-                } else {
-                    touch.setTint(COLOR_INTRO_TOUCHBLINK_ON);
-                    touchOff = false;
-                }
-            };
-            //setInterval(()=>touchBlink(), 500);
-            let touchInterval = new GameInterval("touch_interval", this, 500, ()=>touchBlink());
-
-            // W.H.Soft
-            const companyTextY = sceneCenterY + (sceneWidth / 2);
-            this.addDestroyableObject( addText(this, sceneCenterX, companyTextY, "W.H.Soft (2021)", 16, COLOR_INTRO_COMPANY) );
-
-            // Thank you
-            const thankyouTextY = companyTextY + 30;
-            this.addDestroyableObject( addText(this, sceneCenterX, thankyouTextY, "Thank you, opengameart.org", 12, COLOR_INTRO_THANKYOU) );
-        } catch(e) {
-            var errMsg = this.getKey() + ".addText.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
