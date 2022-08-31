@@ -107,6 +107,15 @@ class Loader extends ClsObject {
                         }
                         return _scenes.mole;
                     }
+                },
+                {
+                    key: KEY_GAME_NUMBERS,
+                    getScene: function() {
+                        if (_scenes.numbers == undefined) {
+                            _scenes.numbers = new SceneNumbers(60, _gameHost);
+                        }
+                        return _scenes.numbers;
+                    }
                 }
             ];
 

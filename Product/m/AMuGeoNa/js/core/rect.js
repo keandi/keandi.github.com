@@ -19,6 +19,10 @@ class Rect {
         this.#_height = height;
     }
 
+    duplicate() {
+        return new Rect(this.X, this.Y, this.Width, this.Height);
+    }
+
     setLTRB(l, t, r, b) {
         this.Left = l;
         this.Top = t;

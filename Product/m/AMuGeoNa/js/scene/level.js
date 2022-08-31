@@ -454,7 +454,7 @@ class SceneLevel extends GameScene {
 
         // gold test
         {
-            this.addGold(3);
+            this.addGold(500);
             /*if (this.#_SPV.isGoldTest === true) {
                 this.addGold(100);
                 this.#_SPV.isGoldTest = false;

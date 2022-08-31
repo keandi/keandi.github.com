@@ -8,6 +8,7 @@ const KEY_OPTION = "option";
 const KEY_GAME_SHOOTTHESTARS = "shootthestars";
 const KEY_GAME_ROLLDICE = "rolldice";
 const KEY_GAME_MOLE = "mole";
+const KEY_GAME_NUMBERS = "numbers";
 
 // depth
 const DEPTH_MENU = 500;
@@ -51,6 +52,7 @@ const ACMD_AD = "DxA0";
 
 // color
 const COLOR_BACKGROUND = "#252525";
+const COLOR_BACKGROUND_PHASER = 0x252525;
 const COLOR_INTRO_TOUCHBLINK_ON = 0xA0A0A0;
 const COLOR_INTRO_TOUCHBLINK_OFF = 0x454545;
 const COLOR_INTRO_COMPANY = 0xA0A0A0;
@@ -84,8 +86,8 @@ const COLOR_STAR_TINTS = [
     0x990000, 0xbb0000, 0xff0000, 0xf95555,
     0x6c5589, 0x901568, 0x48ec87, 0x15b59c, 
     0x8888ff, 0xff55ff, 0xffff55, 0xffffff  ];*/    
-const COLOR_MOLE_BACKGROUND = 0X2DC474; // 두더지
-
+const COLOR_MOLE_BACKGROUND = 0x2DC474;     // 두더지
+const COLOR_NUMBERS_BASECOLOR = 0x679df5;   // Numbers 기본 컬러
 
 
 // time

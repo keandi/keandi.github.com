@@ -161,7 +161,7 @@ class MoleTarget extends GameSprite {
                 .addEntry('disappear', ()=>this.disappear());
 
             v.stateMachine.add('disappear')
-            .addEntry('appear', ()=>this.appear());
+                .addEntry('appear', ()=>this.appear());
 
         } catch (e) {
             var errMsg = this.getExpMsg("onRegisterStateMachine", e);

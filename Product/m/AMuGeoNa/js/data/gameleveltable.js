@@ -43,6 +43,7 @@ class GameLevelTable extends ClsObject {
                     1: {texture: 'STAR', sceneKey: KEY_GAME_SHOOTTHESTARS}, // GameKind.SHOOTTHESTARS.value == 1
                     2: {texture: 'DICE', sceneKey: KEY_GAME_ROLLDICE}, // GameKind.ROLLDICE.value == 2
                     3: {texture: 'MOLE', sceneKey: KEY_GAME_MOLE}, // GameKind.ROLLDICE.value == 3
+                    4: {texture: 'NUMBERS', sceneKey: KEY_GAME_NUMBERS}, // GameKind.NUMBERS.value == 4
                 }[gamekind.value],
                 /*texture: {
                     1: 'STAR',       // GameKind.SHOOTTHESTARS.value == 1
@@ -86,7 +87,7 @@ class GameLevelTable extends ClsObject {
                     return this.#getEnableInfo(level, 1, 6, 0, 20, GameKind.MOLE);
 
                 case 4:
-                    return this.#getEnableInfo(level, 50, 3, 0, 200, GameKind.SHOOTTHESTARS);
+                    return this.#getEnableInfo(level, 1, 9, 0, 25, GameKind.NUMBERS);
 
                 default:
                     return this.#getEnableInfo(level, 0, 0, 0, 0, GameKind.UNKNOWN);
