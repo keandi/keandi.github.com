@@ -1,5 +1,5 @@
-// scene.input 의 pointer down, up, move 관리
-class PointerEventManager extends ClsObject {
+// scene.input 의 keyboard down, up 관리
+class KeyboardEventManager extends ClsObject {
     #_PV = {};
 
     //ctor
@@ -8,10 +8,9 @@ class PointerEventManager extends ClsObject {
             super(name);
 
             this.#_PV.scene = scene;
-            this.#_PV.pointerCb = {
+            this.#_PV.keyboardCb = {
                 down: new CallbackMap("down_cbmap"),
                 up: new CallbackMap("up_cbmap"),
-                move: new CallbackMap("move_cbmap")
             };
 
             this.#_PV.callbackType = new Map();
@@ -26,19 +25,19 @@ class PointerEventManager extends ClsObject {
     // destroy
     destroy() {
         try {
-            if (this.#_PV.pointerCb.down.Count > 0) {
+            if (this.#_PV.keyboardCb.down.Count > 0) {
                 this.#_PV.scene.input.off('pointerdown');
             }
-            if (this.#_PV.pointerCb.up.Count > 0) {
+            if (this.#_PV.keyboardCb.up.Count > 0) {
                 this.#_PV.scene.input.off('pointerup');
             }
-            if (this.#_PV.pointerCb.move.Count > 0) {
+            if (this.#_PV.keyboardCb.move.Count > 0) {
                 this.#_PV.scene.input.off('pointermove');
             }
 
-            this.#_PV.pointerCb.down.destroy();
-            this.#_PV.pointerCb.up.destroy();
-            this.#_PV.pointerCb.move.destroy();
+            this.#_PV.keyboardCb.down.destroy();
+            this.#_PV.keyboardCb.up.destroy();
+            this.#_PV.keyboardCb.move.destroy();
 
             this.#_PV.callbackType.clear();
 
@@ -66,13 +65,13 @@ class PointerEventManager extends ClsObject {
             };
 
             if (kind === "down") {
-                addEvent(this.#_PV.pointerCb.down, 'pointerdown');
+                addEvent(this.#_PV.keyboardCb.down, 'pointerdown');
                 this.#_PV.callbackType.set(cb, 'down');
             } else if (kind === "up") {
-                addEvent(this.#_PV.pointerCb.up, 'pointerup');
+                addEvent(this.#_PV.keyboardCb.up, 'pointerup');
                 this.#_PV.callbackType.set(cb, 'up');
             } else if (kind === "move") {
-                addEvent(this.#_PV.pointerCb.move, 'pointermove');
+                addEvent(this.#_PV.keyboardCb.move, 'pointermove');
                 this.#_PV.callbackType.set(cb, 'move');
             }
         } catch (e) {
@@ -100,11 +99,11 @@ class PointerEventManager extends ClsObject {
             let kind = this.#_PV.callbackType.get(cb);
 
             if (kind === "down") {
-                removeEvent(this.#_PV.pointerCb.down, 'pointerdown');
+                removeEvent(this.#_PV.keyboardCb.down, 'pointerdown');
             } else if (kind === "up") {
-                removeEvent(this.#_PV.pointerCb.up, 'pointerup');
+                removeEvent(this.#_PV.keyboardCb.up, 'pointerup');
             } else if (kind === "move") {
-                removeEvent(this.#_PV.pointerCb.move, 'pointermove');
+                removeEvent(this.#_PV.keyboardCb.move, 'pointermove');
             }
         } catch (e) {
             var errMsg = this.getExpMsg("remove", e);

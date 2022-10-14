@@ -33,6 +33,8 @@ const DEPTH_MOLE_GROUND_BASE = 1; // step 에 +4 을 더하여 계산
 const DEPTH_MOLE_HAMMER = 30;
 const DEPTH_GAMEINFO_UI = 400;
 const DEPTH_MSGBOX = 500;
+const DEPTH_NUMBERS_GENERAL = 1;    // 일반 박스
+const DEPTH_NUMBERS_MOVING = 2;     // 이동 중 박스
 
 // data name
 const DATANAME_GAME = "0xG0";
@@ -127,11 +129,12 @@ const INTERVAL_DICECUP_UP_MOVE = 50;
 const INTERVAL_DICECUP_DOWN_MOVE = 50;
 
 // velocity
-const VELOCITY_COINTEXT = 5;
-const VELOCITY_DICE_MOVE_MIN = 65;
-const VELOCITY_DICE_MOVE_MAX = 110;
-const VELOCITY_DICECUP_UP = 80;
-const VELOCITY_DICECUP_DOWN = 160;
+const VELOCITY_COINTEXT         = 5;
+const VELOCITY_DICE_MOVE_MIN    = 65;
+const VELOCITY_DICE_MOVE_MAX    = 110;
+const VELOCITY_DICECUP_UP       = 80;
+const VELOCITY_DICECUP_DOWN     = 160;
+const VELOCITY_NUMBERBOX_MOVE   = 10;       // Number Box 이동
 
 // font size
 const FONTSIZE_COINACTIONTEXT = 14;

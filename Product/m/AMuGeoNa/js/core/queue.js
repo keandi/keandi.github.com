@@ -21,6 +21,11 @@ class Queue {
         return this.#_arr.length;
     }
 
+    // array 
+    get Data() {
+        return this.#_arr;
+    }
+
     // clear
     clear(cb) {
         if (cb != undefined) {

@@ -51,6 +51,12 @@ class Loader extends ClsObject {
                     _gameData.save();
                     alert("게임 데이터를 초기화 하였습니다.");
                 }
+
+                /*
+                _gameData.LastLevel = 3;
+                _gameData.addGold(999999);
+                _gameData.save();
+                */
             }
 
             _sceneData = [

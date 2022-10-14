@@ -26,6 +26,14 @@ class SceneNumbers extends GameScene {
     onCreate() {
         //alert("create " + this.getKey());
 
+        /* this.addPointerEvent('down', ()=>{
+            if (this.box == undefined) {
+                this.box = new NumberBox("debug_box", this, 200,200, 100);
+            } else {
+                this.box.increaseNumber();
+            }
+        }); */
+
         this._isStopped = false;
     }
 
@@ -285,7 +293,9 @@ class SceneNumbers extends GameScene {
 
     #none() {
         try {
-            console.log("state is none");
+            //console.log("state is none");
+
+            //this.#_SPV.numberGrid.printActiveBoxs();
         } catch(e) {
             var errMsg = this.getKey() + ".none.catched: " + e;
             console.log(errMsg);
@@ -296,7 +306,12 @@ class SceneNumbers extends GameScene {
     #appearNumber() {
         try {
             let v = this.#_SPV;
-            console.log("state is appearNumber");
+            //console.log("state is appearNumber");
+
+            if (v.numberGrid.createBox() === false) {
+                console.log("box create failed");
+            }
+
             v.stateMachine.enter('none');
         } catch(e) {
             var errMsg = this.getKey() + ".appearNumber.catched: " + e;
@@ -311,16 +326,25 @@ class SceneNumbers extends GameScene {
 
             // test
             {
+                /*
                 if (v.box == undefined) {
                     v.box = new NumberBox("testbox", this, 100, 100, v.boxSize);
                 } else {
                     v.box.redraw(v.box.X, v.box.Y - 2);
                 }
+                */
+
+                /*if (v.numberGrid.createBox() === false) {
+                    console.log("box create failed");
+                }*/
             }
 
-            console.log("state is up");
+            //console.log("state is up");
             v.goalProgress.Value = Math.floor(Math.random() * 120) + 1;
-            v.stateMachine.enter('appearNumber');
+            //v.stateMachine.enter('appearNumber');
+            v.numberGrid.moveToUp((moved)=>{
+                v.stateMachine.enter('appearNumber');
+            });
 
         } catch(e) {
             var errMsg = this.getKey() + ".up.catched: " + e;
@@ -332,8 +356,11 @@ class SceneNumbers extends GameScene {
     #down() {
         try {
             let v = this.#_SPV;
-            console.log("state is down");
-            v.stateMachine.enter('appearNumber');
+            //console.log("state is down");
+            //v.stateMachine.enter('appearNumber');
+            v.numberGrid.moveToDown((moved)=>{
+                v.stateMachine.enter('appearNumber');
+            });
         } catch(e) {
             var errMsg = this.getKey() + ".down.catched: " + e;
             console.log(errMsg);
@@ -344,8 +371,10 @@ class SceneNumbers extends GameScene {
     #left() {
         try {
             let v = this.#_SPV;
-            console.log("state is left");
-            v.stateMachine.enter('appearNumber');
+            //console.log("state is left");
+            v.numberGrid.moveToLeft((moved)=>{
+                v.stateMachine.enter('appearNumber');
+            });
         } catch(e) {
             var errMsg = this.getKey() + ".left.catched: " + e;
             console.log(errMsg);
@@ -356,8 +385,11 @@ class SceneNumbers extends GameScene {
     #right() {
         try {
             let v = this.#_SPV;
-            console.log("state is right");
-            v.stateMachine.enter('appearNumber');
+            //console.log("state is right");
+            //v.stateMachine.enter('moving');
+            v.numberGrid.moveToRight((moved)=>{
+                v.stateMachine.enter('appearNumber');
+            });
         } catch(e) {
             var errMsg = this.getKey() + ".right.catched: " + e;
             console.log(errMsg);

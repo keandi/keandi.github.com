@@ -28,6 +28,17 @@ function inAny(any, from, to) {
     return (any >= from && any <= to) ? true : false;
 }
 
+// get random bool
+function getRandomBool() {
+    return ((Math.floor(Math.random() * 2)) == 1) ? true : false;
+}
+
+// get suffle number 
+function getRandomNumber(min, max) {
+    var range = max - min + 1;
+    return Math.floor(Math.random() * range) + min;
+}
+
 // log + alert
 function logAlert(msg) {
     console.log(msg);
