@@ -168,6 +168,17 @@ class ProgressBar extends ClsObject {
         return (this.#_PV.progress.value >= this.#_PV.progress.max) ? true : false;
     }
 
+    // return rect
+    get ProgressBarRect() {
+        try {
+            return this.#_PV.rect.background;
+        } catch (e) {
+            var errMsg = this.getExpMsg("ProgressBarRect", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // increase
     increase() {
         try {

@@ -13,6 +13,7 @@ class NumberGrid extends ClsObject {
 
             v.scene = scene;
             v.boxRowCount = boxRowCount;
+            v.boxTotal = boxRowCount * boxRowCount;
             v.boxSize = boxSize;
             v.centerX = centerX;
             v.centerY = centerY;
@@ -138,9 +139,9 @@ class NumberGrid extends ClsObject {
         return false;
     }
 
-    moveToLeft(onFinished) {
+    // move to any
+    moveAnyDirection(direction, onFinished, onFusion) {
         try {
-
             let v = this.#_PV;
 
             /*var bbb = v.boxs[0][4].box;
@@ -150,9 +151,55 @@ class NumberGrid extends ClsObject {
 
             v.movingInfo = {
                 onFinished: onFinished,
-                direction: Direction.LEFT,
+                onFusion: onFusion,
+                direction: direction,
                 targets: new Queue(),
             };
+
+            switch (direction)
+            {
+                case Direction.LEFT:
+                    this.#moveToLeft(v);
+                    break;
+
+                case Direction.RIGHT:
+                    this.#moveToRight(v);
+                    break;
+
+                case Direction.UP:
+                    this.#moveToUp(v);
+                    break;
+
+                case Direction.DOWN:
+                    this.#moveToDown(v);
+                    break;
+
+                default:
+                    throw "Invalid direction: " + direction;
+            }
+
+            // 이동 대상 없으면 종료 필요
+            if (v.movingInfo.targets.count <= 0)
+            {
+                console.log("No more movable box");
+                onFinished(false);
+                v.movingInfo = undefined;
+                return;
+            }
+            
+            this.moveNext();
+        } catch (e) {
+            var errMsg = this.getExpMsg("moveAnyDirection", e);
+            console.log(errMsg);
+            alert(errMsg);
+
+            v.movingInfo = undefined;
+            onFinished(false);
+        }
+    }
+
+    #moveToLeft(v) {
+        try {
 
             // 이동 대상 순서 생성
             let targets = v.movingInfo.targets;
@@ -171,30 +218,15 @@ class NumberGrid extends ClsObject {
                 }
             }
 
-            /*console.log(targets.Data);
-            v.movingInfo.onFinished(true);
-            v.movingInfo = undefined; */   
-            
-            this.moveNext();
-
         } catch (e) {
-            var errMsg = this.getExpMsg("moveToLeft", e);
+            var errMsg = this.getExpMsg("#moveToLeft", e);
             console.log(errMsg);
             alert(errMsg);
         }
     }
 
-    moveToRight(onFinished) {
+    #moveToRight(v) {
         try {
-
-            let v = this.#_PV;
-            
-            v.movingInfo = {
-                onFinished: onFinished,
-                direction: Direction.RIGHT,
-                targets: new Queue(),
-            };
-
             // 이동 대상 순서 생성
             let targets = v.movingInfo.targets;
             {
@@ -211,27 +243,16 @@ class NumberGrid extends ClsObject {
                     }
                 }
             } 
-            
-            this.moveNext();
 
         } catch (e) {
-            var errMsg = this.getExpMsg("moveToRight", e);
+            var errMsg = this.getExpMsg("#moveToRight", e);
             console.log(errMsg);
             alert(errMsg);
         }
     }
 
-    moveToUp(onFinished) {
+    #moveToUp(v) {
         try {
-
-            let v = this.#_PV;
-            
-            v.movingInfo = {
-                onFinished: onFinished,
-                direction: Direction.UP,
-                targets: new Queue(),
-            };
-
             // 이동 대상 순서 생성
             let targets = v.movingInfo.targets;
             {
@@ -248,26 +269,16 @@ class NumberGrid extends ClsObject {
                     }
                 }
             }
-            
-            this.moveNext();
 
         } catch (e) {
-            var errMsg = this.getExpMsg("moveToUp", e);
+            var errMsg = this.getExpMsg("#moveToUp", e);
             console.log(errMsg);
             alert(errMsg);
         }
     }
 
-    moveToDown(onFinished) {
+    #moveToDown(v) {
         try {
-
-            let v = this.#_PV;
-            
-            v.movingInfo = {
-                onFinished: onFinished,
-                direction: Direction.DOWN,
-                targets: new Queue(),
-            };
 
             // 이동 대상 순서 생성
             let targets = v.movingInfo.targets;
@@ -286,10 +297,8 @@ class NumberGrid extends ClsObject {
                 }
             } 
 
-            this.moveNext();
-
         } catch (e) {
-            var errMsg = this.getExpMsg("moveToDown", e);
+            var errMsg = this.getExpMsg("#moveToDown", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -471,6 +480,7 @@ class NumberGrid extends ClsObject {
                 } else {
                     let orgBox = v.boxs[mi.moveToCell.row][mi.moveToCell.col].box;
                     if (orgBox.fusion(box) === false) { throw "other number fusion-try !!!"; }
+                    mi.onFusion(orgBox);
 
                     box.destroy();
                     mi.target = undefined;
@@ -507,6 +517,43 @@ class NumberGrid extends ClsObject {
         }
     }
 
+    // box loop
+    forEachBox(caller) {
+        try {
+            let v = this.#_PV;
+            for (var i = 0; i < v.boxRowCount; i++) 
+            {
+                for (var j = 0; j < v.boxRowCount; j++)
+                {
+                    if (v.boxs[i][j].box == undefined) { continue; }
+                    caller(v.boxs[i][j].box);
+                }
+            }
+        } catch (e) {
+            var errMsg = this.getExpMsg("forEachBox", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // get box number sum
+    get Sum() {
+        try {
+            let number = 0;
+            this.forEachBox((box) => {
+                number += box.Number;
+            });
+
+            return number;
+        } catch (e) {
+            var errMsg = this.getExpMsg("Sum", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+
+        return 0;
+    }
+
     // box count
     get BoxCount() {
         try {
@@ -529,5 +576,19 @@ class NumberGrid extends ClsObject {
         }
 
         return -1;
+    }
+
+    // check movalbe
+    get IsMovable() {
+        try {
+            let v = this.#_PV;
+            return (this.BoxCount >= v.boxTotal) ? false : true;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsMovable", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+
+        return false;
     }
 }

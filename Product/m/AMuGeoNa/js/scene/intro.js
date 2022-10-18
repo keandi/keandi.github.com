@@ -103,6 +103,21 @@ class SceneIntro extends BaseScene {
             /*var aaaa = this.cache.json.get('aaaa');
             console.log(aaaa.frames[0].filename); */
 
+            /*let v = this.#_SPV;
+            v.count = 0;
+            let downCb = this.addKeyboardEvent('W', 'down', ()=>{
+                console.log("W down");
+                v.count++;
+                if (v.count > 3) {
+                    console.log("try release");
+                    this.removeKeyboardEvent(downCb);
+                    this.removeKeyboardEvent(upCb);
+                }
+            });
+            let upCb = this.addKeyboardEvent('W', 'up', ()=>{
+                console.log("W up");
+            }); */
+
         } catch(e) {
             var errMsg = this.getKey() + ".onCompleteSerialLoadAllAssets.catched: " + e;
             console.log(errMsg);

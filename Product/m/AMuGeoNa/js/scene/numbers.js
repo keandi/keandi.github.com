@@ -6,8 +6,6 @@ class SceneNumbers extends GameScene {
         try {
             super(fps, gameHost);
 
-            this.#createStateMachine();
-
             let v = this.#_SPV;
             v.boxCount = 5; // 박스 행렬 개수
 
@@ -50,8 +48,10 @@ class SceneNumbers extends GameScene {
             this._isStopped = true;
 
             let v = this.#_SPV;
-            destroyObjects( v.goalProgress, v.numberGrid );
+            destroyObjects( v.goalProgress, v.numberGrid, v.stateMachine );
             v.goalProgress = undefined;
+            v.numberGrid = undefined;
+            v.stateMachine = undefined;
 
         } catch(e) {
             var errMsg = this.getKey() + ".onStop.catched: " + e;
@@ -182,6 +182,9 @@ class SceneNumbers extends GameScene {
             let selfIt = this;
             let v = this.#_SPV;
 
+            // create statemachine
+            this.#createStateMachine();
+
             // progressbar
             {
                 const contentRc = this.ContentRc;
@@ -196,8 +199,20 @@ class SceneNumbers extends GameScene {
             // number grid 생성
             v.numberGrid = new NumberGrid("numberGrid", this, v.boxCount, v.boxSize, v.allBoxRc.CenterX, v.allBoxRc.CenterY );
 
+            // score text 생성
+            {
+                const progressBarRect = v.goalProgress.ProgressBarRect;
+                const scoreTextSize = Math.floor( v.boxSize / 3 );
+                const scoreTextCenterX = this.ContentRc.CenterX;
+                const scoreTextCenterY = progressBarRect.Bottom + Math.floor( scoreTextSize / 2) + 3;
+                v.scoreText = new CommonScoreText("number_score_text", this, scoreTextCenterX, scoreTextCenterY, this.Goal, scoreTextSize, COLOR_NUMBERS_SCORETEXT);
+            }
+
             // 강제 생성 시작
             this.#appearNumber();
+
+            // 키보드 이벤트 등록
+            this.#registerKeyEvent();
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
@@ -291,6 +306,17 @@ class SceneNumbers extends GameScene {
         return this.#_SPV.goal;
     }
 
+    #onFusion(box) {
+        try {
+            console.log("onFusion - " + box.RectCenterX + ", " + box.RectCenterY + ", " + box.Number);
+            apiVibration(1);
+        } catch(e) {
+            var errMsg = this.getKey() + ".#onFusion.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
     #none() {
         try {
             //console.log("state is none");
@@ -310,7 +336,15 @@ class SceneNumbers extends GameScene {
 
             if (v.numberGrid.createBox() === false) {
                 console.log("box create failed");
+                v.stateMachine.enter('gameover');
+                return;
             }
+
+            // sum check
+            const currentSum = v.numberGrid.Sum;
+            v.goalProgress.Value = currentSum;
+            v.scoreText.setCurrent(currentSum);
+            console.log("SUM: " + currentSum);
 
             v.stateMachine.enter('none');
         } catch(e) {
@@ -323,6 +357,7 @@ class SceneNumbers extends GameScene {
     #up() {
         try {
             let v = this.#_SPV;
+            let selfIt = this;
 
             // test
             {
@@ -340,11 +375,11 @@ class SceneNumbers extends GameScene {
             }
 
             //console.log("state is up");
-            v.goalProgress.Value = Math.floor(Math.random() * 120) + 1;
+            //
             //v.stateMachine.enter('appearNumber');
-            v.numberGrid.moveToUp((moved)=>{
+            v.numberGrid.moveAnyDirection(Direction.UP, (moved)=>{
                 v.stateMachine.enter('appearNumber');
-            });
+            }, (box)=>{selfIt.#onFusion(box);});
 
         } catch(e) {
             var errMsg = this.getKey() + ".up.catched: " + e;
@@ -356,11 +391,12 @@ class SceneNumbers extends GameScene {
     #down() {
         try {
             let v = this.#_SPV;
+            let selfIt = this;
             //console.log("state is down");
             //v.stateMachine.enter('appearNumber');
-            v.numberGrid.moveToDown((moved)=>{
+            v.numberGrid.moveAnyDirection(Direction.DOWN, (moved)=>{
                 v.stateMachine.enter('appearNumber');
-            });
+            }, (box)=>{selfIt.#onFusion(box);});
         } catch(e) {
             var errMsg = this.getKey() + ".down.catched: " + e;
             console.log(errMsg);
@@ -371,10 +407,11 @@ class SceneNumbers extends GameScene {
     #left() {
         try {
             let v = this.#_SPV;
+            let selfIt = this;
             //console.log("state is left");
-            v.numberGrid.moveToLeft((moved)=>{
+            v.numberGrid.moveAnyDirection(Direction.LEFT, (moved)=>{
                 v.stateMachine.enter('appearNumber');
-            });
+            }, (box)=>{selfIt.#onFusion(box);});
         } catch(e) {
             var errMsg = this.getKey() + ".left.catched: " + e;
             console.log(errMsg);
@@ -385,11 +422,12 @@ class SceneNumbers extends GameScene {
     #right() {
         try {
             let v = this.#_SPV;
+            let selfIt = this;
             //console.log("state is right");
             //v.stateMachine.enter('moving');
-            v.numberGrid.moveToRight((moved)=>{
+            v.numberGrid.moveAnyDirection(Direction.RIGHT, (moved)=>{
                 v.stateMachine.enter('appearNumber');
-            });
+            }, (box)=>{selfIt.#onFusion(box);});
         } catch(e) {
             var errMsg = this.getKey() + ".right.catched: " + e;
             console.log(errMsg);
@@ -399,7 +437,7 @@ class SceneNumbers extends GameScene {
 
     #gameover() {
         try {
-            
+            this.gameFinished(true);
         } catch(e) {
             var errMsg = this.getKey() + ".gameover.catched: " + e;
             console.log(errMsg);
@@ -407,4 +445,28 @@ class SceneNumbers extends GameScene {
         }         
     }
 
+    // 키보드 이벤트 등록
+    #registerKeyEvent() {
+        try {
+            let v = this.#_SPV;
+            let selfIt = this;
+
+            //
+            const register = function(key, state) {
+                selfIt.addKeyboardEvent(key, 'down', ()=>{
+                    v.stateMachine.enter(state);
+                });
+            };
+
+            register('W', 'up');
+            register('A', 'left');
+            register('S', 'down');
+            register('D', 'right');
+            
+        } catch(e) {
+            var errMsg = this.getKey() + ".#registerKeyEvent.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
 }

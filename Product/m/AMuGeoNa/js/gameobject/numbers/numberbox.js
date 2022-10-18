@@ -108,6 +108,21 @@ class NumberBox extends ClsObject {
         return this.#_PV.rect.CenterY;
     }
 
+    // return rect
+    get Rect() {
+        return this.#_PV.rect;
+    }
+
+    // return rect center X
+    get RectCenterX() {
+        return this.#_PV.rect.CenterX;
+    }
+
+    // return rect center Y
+    get RectCenterY() {
+        return this.#_PV.rect.CenterY;
+    }
+
     // return number
     get Number() {
         return this.#_PV.number;

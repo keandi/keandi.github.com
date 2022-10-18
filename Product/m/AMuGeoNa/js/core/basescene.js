@@ -20,6 +20,7 @@ var BaseScene = function(fps, gameHost, config) {
     this._destroyCB = new DestroyCallbacks();
     this._sleepCounter = new SleepCounter('sleep_counter_' + this.getKey());
     this._pointerEventManager = new PointerEventManager("pem_" + this.getKey(), this);
+    this._keyboardEventManager = new KeyboardEventManager("keyem_" + this.getKey(), this);
     this._cameraDragManager = new CameraDragManager("cdm_" + this.getKey());
 
     this._timerPool = new GameTimerPool("scene_timerpool_" + this.getKey(), this);
@@ -140,6 +141,7 @@ BaseScene.prototype.stop = function() {
         // stop flash effect
         this.stopFlashEffect();
         this._pointerEventManager.destroy();
+        this._keyboardEventManager.destroy();
         this._cameraDragManager.destroy();
         this._sleepCounter.destroy();
 
@@ -1052,6 +1054,20 @@ BaseScene.prototype.removePointerEvent = function(cb) {
 }
 
 ///  pointer event manager -->
+
+/// <!-- keyboard event manager
+// add
+BaseScene.prototype.addKeyboardEvent = function(key, kind, cb) {
+    this._keyboardEventManager.add(key, kind, cb);
+    return cb;
+}
+
+// remove
+BaseScene.prototype.removeKeyboardEvent = function(cb) {
+    this._keyboardEventManager.remove(cb);
+}
+
+///  keyboard event manager -->
 
 /// <!-- camera
 

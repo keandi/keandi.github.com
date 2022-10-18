@@ -7,13 +7,13 @@ class KeyboardEventManager extends ClsObject {
         try {
             super(name);
 
-            this.#_PV.scene = scene;
-            this.#_PV.keyboardCb = {
-                down: new CallbackMap("down_cbmap"),
-                up: new CallbackMap("up_cbmap"),
+            let v = this.#_PV;
+            v.scene = scene;
+            v.events = {
+                down: new Map(),    // key map - CallbackMap
+                up: new Map(),      // key map - CallbackMap
             };
-
-            this.#_PV.callbackType = new Map();
+            v.callbackInfo = new Map();
 
         } catch (e) {
             var errMsg = this.getExpMsg("ctor", e);
@@ -22,24 +22,61 @@ class KeyboardEventManager extends ClsObject {
         }
     }
 
+    // valid check - kind
+    isValidKind(kind) {
+        try {
+            return (kind !== 'down' && kind !== 'up') ? false : true;
+        } catch (e) {
+            var errMsg = this.getExpMsg("isValidKind", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // valid check - key
+    isValidKey(key) {
+        try {
+            return (key.length <= 0) ? false : true;
+        } catch (e) {
+            var errMsg = this.getExpMsg("isValidKey", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    isValid(kind, key) {
+        return (this.isValidKind(kind) === false || this.isValidKey(key) === false) ? false : true;
+    }
+
     // destroy
     destroy() {
         try {
-            if (this.#_PV.keyboardCb.down.Count > 0) {
-                this.#_PV.scene.input.off('pointerdown');
-            }
-            if (this.#_PV.keyboardCb.up.Count > 0) {
-                this.#_PV.scene.input.off('pointerup');
-            }
-            if (this.#_PV.keyboardCb.move.Count > 0) {
-                this.#_PV.scene.input.off('pointermove');
-            }
+            let v = this.#_PV;
 
-            this.#_PV.keyboardCb.down.destroy();
-            this.#_PV.keyboardCb.up.destroy();
-            this.#_PV.keyboardCb.move.destroy();
+            //
+            v.callbackInfo.forEach((inf) => {
+                if (this.isValid(inf.kind, inf.key) === false) { return; }
 
-            this.#_PV.callbackType.clear();
+                let keyEventName = this.#getEventName(inf.kind, inf.key);
+                v.scene.input.keyboard.off(keyEventName);
+            });
+
+            //
+            const destroyMap = function(eventMap) {
+                eventMap.forEach(keyMap => {
+                    keyMap.forEach(cbMap => {
+                        cbMap.destroy();
+                    });
+                    keyMap.clear();
+                });
+                eventMap.clear();
+            };
+
+            //
+            destroyMap(v.events.down);
+            destroyMap(v.events.up);
+
+            v.callbackInfo.clear();
 
         } catch (e) {
             var errMsg = this.getExpMsg("destroy", e);
@@ -48,32 +85,72 @@ class KeyboardEventManager extends ClsObject {
         }
     }
 
+    #getEventName(kind, key) {
+        return ((kind === "down") ? "keydown-" : "keyup-") + key;
+    }
+
     // add callback
-    add(kind, cb) {
+    add(key, kind, cb, removeIfExist) {
         try {
-            let scene = this.#_PV.scene;
-            let addEvent = function(cbMap, eventName) {
+            // 검증
+            if (key.length <= 0) { throw "invalid key: " + key; }
+            else if (kind != "down" && kind != "up") { throw "invalid kind: " + kind; }
+
+            key = key.toUpperCase();
+
+            //
+            let v = this.#_PV;
+
+            let scene = v.scene;
+            /*let addEvent = function(cbMap, eventName) {
                 if (cbMap.Count <= 0) {
-                    scene.input.on(eventName, function(pointer, x, y, event) {
+                    scene.input.on(eventName, function(event) {
                         if (scene.isPause === true) { return; }
                         cbMap.forEach((call)=>{
-                            call(pointer);
+                            call();
                         });
                     });
                 }
                 cbMap.add(cb);
-            };
+            };*/
 
-            if (kind === "down") {
-                addEvent(this.#_PV.keyboardCb.down, 'pointerdown');
-                this.#_PV.callbackType.set(cb, 'down');
-            } else if (kind === "up") {
-                addEvent(this.#_PV.keyboardCb.up, 'pointerup');
-                this.#_PV.callbackType.set(cb, 'up');
-            } else if (kind === "move") {
-                addEvent(this.#_PV.keyboardCb.move, 'pointermove');
-                this.#_PV.callbackType.set(cb, 'move');
+            // get event map
+            let targetMap = (kind === 'down') ? v.events.down : v.events.up;
+
+            // get key map
+            let keyMap = undefined;
+            if (targetMap.size === 0 || targetMap.has(key) === false) {
+                keyMap = new Map();
+                targetMap.set(key, keyMap);
+            } else {
+                keyMap = targetMap.get(key);
             }
+
+            // get callback map
+            let cbMap = undefined;
+            if (keyMap.has(key) === false) { 
+                cbMap = new CallbackMap("kcbm_" + key + "_" + kind + "_" + getTimestampInSeconds());
+                keyMap.set(key, cbMap);
+
+                // 처음이라 이벤트 등록
+                let keyEventName = this.#getEventName(kind, key);
+                scene.input.keyboard.on(keyEventName, function (event) { 
+                    if (scene.isPause === true) { return; }
+                    cbMap.forEach((call)=>{
+                        call();
+                    });
+                 });
+            } else {
+                cbMap = keyMap.get(key);
+            }
+            cbMap.add(cb);
+
+            v.callbackInfo.set(cb, {
+                key: key,
+                kind: kind,
+                cb: cb,
+            });
+
         } catch (e) {
             var errMsg = this.getExpMsg("add", e);
             console.log(errMsg);
@@ -84,10 +161,11 @@ class KeyboardEventManager extends ClsObject {
     // remove callback
     remove(cb) {
         try {
-            if (this.#_PV.callbackType.has(cb) == false) { return; }
+            let v = this.#_PV;
+            if (v.callbackInfo.has(cb) == false) { return; }
 
             //
-            let scene = this.#_PV.scene;
+            let scene = v.scene;
             let removeEvent = function(cbMap, eventName) {
                 cbMap.remove(cb);
                 if (cbMap.Count <= 0) {
@@ -96,15 +174,47 @@ class KeyboardEventManager extends ClsObject {
             };
 
             //
-            let kind = this.#_PV.callbackType.get(cb);
+            let inf = v.callbackInfo.get(cb);
+            if (inf.kind !== 'down' && inf.kind !== 'up') { 
+                console.log("비대상 kind: " + inf.kind);
+                return; 
+            } // 비대상 정보
+            else if (inf.key.length <= 0) { 
+                console.log("비대상 key: " + inf.key);
+                return; 
+            } // 비대상 정보
 
-            if (kind === "down") {
-                removeEvent(this.#_PV.keyboardCb.down, 'pointerdown');
-            } else if (kind === "up") {
-                removeEvent(this.#_PV.keyboardCb.up, 'pointerup');
-            } else if (kind === "move") {
-                removeEvent(this.#_PV.keyboardCb.move, 'pointermove');
+            // get event map
+            let targetMap = (inf.kind === 'down') ? v.events.down : v.events.up;
+
+            // get key map
+            if (targetMap.size === 0 || targetMap.has(inf.key) === false) {
+                return; // 없음
             }
+            let keyMap = targetMap.get(inf.key);
+
+            // get callback map
+            if (keyMap.has(inf.key) === false) { 
+                return; // 없음
+            } 
+            let cbMap = keyMap.get(inf.key);
+
+            cbMap.remove(cb);
+
+            // count == 0 => 이벤트 등록 해제
+            let cbCount = 0;
+            keyMap.forEach((element) => {
+                cbCount += element.Count;
+            });
+            if (cbCount <= 0) {
+                // 등록된 콜백이 없어서 이벤트 등록 해제
+                let keyEventName = this.#getEventName(inf.kind, inf.key);
+                scene.input.keyboard.off(keyEventName);
+            }
+
+            // 
+            v.callbackInfo.delete(cb);
+
         } catch (e) {
             var errMsg = this.getExpMsg("remove", e);
             console.log(errMsg);

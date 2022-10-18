@@ -160,3 +160,7 @@ function between(v, x, y) {
     return (v >= x && v <= y) ? true : false;
 }
   
+// get timestamp
+function getTimestampInSeconds () {
+    return Math.floor(Date.now() / 1000)
+  }

@@ -14,7 +14,8 @@ const KEY_GAME_NUMBERS = "numbers";
 const DEPTH_MENU = 500;
 const DEPTH_MENU_BUTTON = 501;
 const DEPTH_MENU_GAMETITLE = 502;
-const DEPTH_COIN_ACTION_TEXT = 503
+const DEPTH_COIN_ACTION_TEXT = 503;
+const DEPTH_SCORE_TEXT = 504;           // common score text
 const DEPTH_GAMEBACKGROUND = 1;
 const DEPTH_GAMEOBJECT = 2;
 const DEPTH_GAMEEFFECT_TOP = 199;
@@ -89,7 +90,8 @@ const COLOR_STAR_TINTS = [
     0x6c5589, 0x901568, 0x48ec87, 0x15b59c, 
     0x8888ff, 0xff55ff, 0xffff55, 0xffffff  ];*/    
 const COLOR_MOLE_BACKGROUND = 0x2DC474;     // 두더지
-const COLOR_NUMBERS_BASECOLOR = 0x679df5;   // Numbers 기본 컬러
+const COLOR_NUMBERS_BASECOLOR = 0X679DF5;   // Numbers 기본 컬러
+const COLOR_NUMBERS_SCORETEXT = 0X9EDAF7;   // Numbers Score Text
 
 
 // time
