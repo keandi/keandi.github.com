@@ -64,7 +64,7 @@ class SceneNumbers extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('numbers_sprite');
+            .addArgs('numbers_sprite', 'explosion_sprite_01', 'explosion_low');
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
@@ -153,11 +153,32 @@ class SceneNumbers extends GameScene {
                 }
             }
 
+            // fusion(explosion) effect
+            {
+                this.registerGameObjectCreateCallback('explosion_01', ()=>{
+                    return new ExplosionSprite('explosion_01_' + _gameHost.Time, selfIt, v.frameInfo, 'explosion_sprite_01', 'EXP_01_01', (who)=>{
+                        selfIt.removeObject(who);
+                    });
+                });
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".onRegisterObjectCreateCallback.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
+    }
+
+    // object remove
+    removeObject(object) {
+        try {
+            object.remove();
+            this.releaseGameObject(object);
+        } catch(e) {
+            var errMsg = this.getKey() + ".removeObject.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
     }
 
      // game start
@@ -310,6 +331,16 @@ class SceneNumbers extends GameScene {
         try {
             console.log("onFusion - " + box.RectCenterX + ", " + box.RectCenterY + ", " + box.Number);
             apiVibration(1);
+
+            // effect
+            {
+                var explosion = this.getGameObject('explosion_01');
+                explosion.setPosition(box.RectCenterX, box.RectCenterY);
+                explosion.visible = true;
+                explosion.reset();
+
+                this.playSound('explosion_low');
+            }
         } catch(e) {
             var errMsg = this.getKey() + ".#onFusion.catched: " + e;
             console.log(errMsg);

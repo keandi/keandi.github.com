@@ -923,7 +923,7 @@ class SceneShootTheStars extends GameScene {
             object.remove();
             this.releaseGameObject(object);
         } catch(e) {
-            var errMsg = this.getKey() + ".onCollisionAttackerXBody.catched: " + e;
+            var errMsg = this.getKey() + ".removeObject.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         } 
