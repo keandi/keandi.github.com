@@ -59,6 +59,13 @@ class Loader extends ClsObject {
                 */
             }
 
+            // test scene
+            {
+                let url = window.location.href;
+                let pos = url.indexOf("#test");
+                _globalData.isTest = (pos > 0) ? true : false;
+            }
+
             _sceneData = [
                 {
                     key: KEY_INTRO,
@@ -85,6 +92,15 @@ class Loader extends ClsObject {
                             _scenes.option = new SceneOption(15, _gameHost);
                         }
                         return _scenes.option;
+                    }
+                },
+                {
+                    key: KEY_SCENE_TEST,
+                    getScene: function() {
+                        if (_scenes.test == undefined) {
+                            _scenes.test = new SceneTest(60, _gameHost);
+                        }
+                        return _scenes.test;
                     }
                 },
                 {

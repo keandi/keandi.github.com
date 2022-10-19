@@ -96,7 +96,7 @@ class SceneIntro extends BaseScene {
             
             // pointer event register
             this.addPointerEvent('down', (pointer)=>{
-                _gameHost.switchScene(KEY_LEVEL);
+                _gameHost.switchScene( (_globalData.isTest === false) ? KEY_LEVEL : KEY_SCENE_TEST );
             });
 
 

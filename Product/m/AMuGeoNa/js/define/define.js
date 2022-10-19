@@ -5,6 +5,7 @@ const APPID = "AMUGEONAAPP";
 const KEY_INTRO = "intro";
 const KEY_LEVEL = "level";
 const KEY_OPTION = "option";
+const KEY_SCENE_TEST = "test";
 const KEY_GAME_SHOOTTHESTARS = "shootthestars";
 const KEY_GAME_ROLLDICE = "rolldice";
 const KEY_GAME_MOLE = "mole";
