@@ -216,9 +216,46 @@ class CollisionData extends ClsObject {
         }
     }
 
+    // return last my rect
+    get LastMyRect() {
+        return this.#_PV.lastMyRect;
+    }
+
+    // return last target rect
+    get LastTargetRect() {
+        return this.#_PV.lastTargetRect;
+    }
+
+    // return Collision Rect
+    get CollisionRect() {
+        try {
+
+            let v = this.#_PV;
+            if (v.lastMyRect == undefined || v.lastTargetRect == undefined) { return undefined; }
+
+            if (v.lastCollisionRect == undefined) {
+                v.lastCollisionRect = new Rect();
+            }
+
+            // l t r b
+            v.lastCollisionRect.Left = (v.lastTargetRect.Left < v.lastMyRect.Left) ? v.lastMyRect.Left : v.lastTargetRect.Left;
+            v.lastCollisionRect.Top = (v.lastTargetRect.Top < v.lastMyRect.Top) ? v.lastMyRect.Top : v.lastTargetRect.Top;
+            v.lastCollisionRect.Right = (v.lastTargetRect.Right > v.lastMyRect.Right) ? v.lastMyRect.Right : v.lastTargetRect.Right;
+            v.lastCollisionRect.Bottom = (v.lastTargetRect.Bottom > v.lastMyRect.Bottom) ? v.lastMyRect.Bottom : v.lastTargetRect.Bottom;
+
+            return v.lastCollisionRect;
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("CollisionRect", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     // check collision
     #checkCollision(myArray, targetArray, target) {
         try {
+            this.#_PV.lastMyRect = this.#_PV.lastTargetRect = undefined;
             if (target.IsSkip === true || myArray == undefined || targetArray == undefined || target == undefined) { return false; }
 
             let v = this.#_PV;
@@ -231,6 +268,8 @@ class CollisionData extends ClsObject {
                     if (myArray[i].rect.isCollision(targetArray[j].rect) === true) { 
                         //v.lastCollisionRect = myArray[i].rect;
                         v.lastCollisionInfo = myArray[i];
+                        v.lastMyRect = myArray[i].rect;
+                        v.lastTargetRect = targetArray[j].rect;
                         return true; 
                     }
                 }

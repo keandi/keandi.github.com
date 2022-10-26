@@ -14,10 +14,10 @@ function getDegree(x1, y1, x2, y2) {
     var angleRadians = Math.atan2(y2 - y1, x2 - x1);
 
     // angle in degrees
-    var angleDeg = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+    var angleDeg = ((angleRadians * 180) / Math.PI);
 
     if (angleDeg < 0) {
-        angleDeg = 360 + angleDeg;
+        angleDeg += 360;
     }
 
     return angleDeg;
@@ -50,6 +50,13 @@ function getDistance(x1, y1, x2, y2) {
     return Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
 }
 
+// degree -> radian
+function degreeToRadian(degree)
+{
+    var pi = Math.PI;
+    return degree * (pi/180);
+}
+
 // get point by radian + distance
 function getPointByRadianDistance(x, y, radian, distance) {
     return {
@@ -60,10 +67,7 @@ function getPointByRadianDistance(x, y, radian, distance) {
 
 // get point by angle + distance
 function getPointByAngleDistance(x, y, angle, distance) {
-    return {
-        x: (distance * Math.cos(angle)) + x,
-        y: (distance * Math.sin(angle)) + y
-    };
+    return getPointByRadianDistance(x, y, degreeToRadian(angle), distance);
 }
 
 // get degree by radian
@@ -164,3 +168,10 @@ function between(v, x, y) {
 function getTimestampInSeconds () {
     return Math.floor(Date.now() / 1000)
   }
+
+// return Compare Type 
+function compareType(a, b) {
+    if (a > b) { return CompareType.BIGGER; }
+    else if (a < b) { return CompareType.LESS; }
+    return CompareType.EQUAL
+};

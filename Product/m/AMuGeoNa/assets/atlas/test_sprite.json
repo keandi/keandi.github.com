@@ -1,0 +1,85 @@
+{
+    "frames": [
+        {
+            "filename": "BULLET_ATTACKER",
+            "frame": {
+                "x": 14,
+                "y": 17,
+                "w": 19,
+                "h": 19
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 19,
+                "h": 19
+            },
+            "sourceSize": {
+                "w": 19,
+                "h": 19
+            },
+            "hitframes": [
+                {
+                    "rect": {
+                        "x": 14,
+                        "y": 17,
+                        "w": 19,
+                        "h": 19
+                    },
+                    "isAttacker": true,
+                    "isSuperAttacker": false,
+                    "hitType": 1,
+                    "AGLevel": 0
+                }
+            ]
+        },
+        {
+            "filename": "BULLET_DEFENDER",
+            "frame": {
+                "x": 14,
+                "y": 17,
+                "w": 19,
+                "h": 19
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 19,
+                "h": 19
+            },
+            "sourceSize": {
+                "w": 19,
+                "h": 19
+            },
+            "hitframes": [
+                {
+                    "rect": {
+                        "x": 14,
+                        "y": 17,
+                        "w": 19,
+                        "h": 19
+                    },
+                    "isAttacker": false,
+                    "isSuperAttacker": false,
+                    "hitType": 3,
+                    "AGLevel": 0
+                }
+            ]
+        }
+    ],
+    "animations": [],
+    "meta": {
+        "App": "SpriteJsonGenerator",
+        "AppVersion": "1.1.5.0",
+        "PNGPath": "C:\\Works\\_miel\\SampleWebTest\\Product\\m\\AMuGeoNa\\assets\\image\\test_sprite.png",
+        "PNGName": "test_sprite.png",
+        "PNGWidth": 2048,
+        "PNGHeight": 2048,
+        "PNGPathHistory": [
+            "C:\\Works\\_miel\\SampleWebTest\\Product\\m\\AMuGeoNa\\assets\\image\\test_sprite.png"
+        ]
+    }}

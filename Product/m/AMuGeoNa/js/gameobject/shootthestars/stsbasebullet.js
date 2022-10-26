@@ -26,8 +26,8 @@ class STSBaseBullet extends GameSprite {
         super.destroy();
 
         let v = this.#_PV;
-        destroyObjects( v.sprite );
-        v.sprite = undefined;
+        destroyObjects( v.sprite, v.collisionData );
+        v.sprite = v.collisionData = undefined;
     }
 
     // onInitialize

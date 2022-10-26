@@ -101,13 +101,13 @@ class GameSprite extends GameObject {
     // frame changed event
     onFrameChanged(frameIndex, frameName) {
         // 상속 구현 필요
-        console.log( stringFormat('not implement - onFrameChanged - idx[{0}], name[{1}]', frameIndex, frameName) );
+        throw ( stringFormat('not implement - onFrameChanged - idx[{0}], name[{1}]', frameIndex, frameName) );
     }
 
     // end animation
     onAnimationEnd() {
         // 상속 구현 필요
-        console.log( 'not implement - onAnimationEnd' );
+        throw ( 'not implement - onAnimationEnd' );
     }
 
     //// animator manager -->
@@ -314,5 +314,10 @@ class GameSprite extends GameObject {
     // 강제 collision 대상 제외 - virtual (상속하여 사용.)
     setCollisionSkip() {
         //nothing
+    }
+
+    // return scene
+    get Scene() {
+        return this.#_PV.scene;
     }
 }

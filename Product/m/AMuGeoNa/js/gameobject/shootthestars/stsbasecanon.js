@@ -46,8 +46,8 @@ class STSBaseCanon extends GameSprite {
         this.#unregisterPointerDown();
 
         let v = this.#_PV;
-        destroyObjects( v.waitTimer, v.sprite, v.waitPercent );
-        v.sprite = v.waitPercent = v.waitTimer = undefined;
+        destroyObjects( v.waitTimer, v.sprite, v.waitPercent, v.collisionData );
+        v.sprite = v.waitPercent = v.waitTimer = v.collisionData = undefined;
     }
 
     // onInitialize
@@ -119,7 +119,17 @@ class STSBaseCanon extends GameSprite {
          return undefined;
      }
 
-     // set active collision frame
+    // return scene
+    get Scene() {
+       return this.#_PV.scene;
+    }
+
+    // return frame data
+    get FrameData() {
+        return this.#_PV.frameData;
+     }
+
+    // set active collision frame
     set ActiveFrameName(value) {
         try {
             this.#_PV.collisionData.ActiveFrameName = value;

@@ -235,4 +235,7 @@ class Rect {
     //// collision -->
     //////////////////////////////////////////
 
+    toString() {
+        return "l: " + this.Left + ", t: " + this.Top + ", r: " + this.Right + ", b: " + this.Bottom;
+    }
 }
