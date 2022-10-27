@@ -141,6 +141,7 @@ class ResourcePool extends ClsObject {
                 case 'dice_sprite':
                 case 'exit_button':
                 case 'help_button':
+                case 'pass_button':
                 case 'shootthestars_sprite':
                 case 'explosion_sprite_01':
                 case 'explosion_sprite_02':

@@ -60,7 +60,7 @@ class GameScene extends BaseScene {
             () => this.load.audio('coin_drop', 'assets/audio/coin_drop.mp3'), 1 ); */
 
         _resourcePool.setScene(this)
-            .addArgs('coins', 'msgbox_buttons', 'coin_add', 'coin_use', 'exit_button', 'help_button');
+            .addArgs('coins', 'msgbox_buttons', 'coin_add', 'coin_use', 'exit_button', 'help_button', 'pass_button');
     };    
     
     onCompleteSerialLoadAllAssets() {
@@ -232,6 +232,20 @@ class GameScene extends BaseScene {
             );
             exit_button.setDepth(DEPTH_MENU_BUTTON);
 
+            // pass button
+            if (this.GoldForPass > 0)
+            {
+                const pass_button_x = exit_button_x - 38;
+
+                let pass_button = this.addDestroyableObject( new GOImageButton("pass_button", this, pass_button_x, exit_button_y, 
+                    'pass_button', 'BTN_UP', 'pass_button', 'BTN_DOWN',
+                    () => {
+                        selfIt.gamePassTry();
+                    })
+                );
+                pass_button.setDepth(DEPTH_MENU_BUTTON);
+            }
+
         } catch(e) {
             var errMsg = this.getKey() + ".createExitButton.catched: " + e;
             console.log(errMsg);
@@ -308,6 +322,19 @@ class GameScene extends BaseScene {
 
         } catch(e) {
             var errMsg = this.getKey() + ".createBottomMenu.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    //return gold for pass
+    get GoldForPass() {
+        try {
+            if (_gameData.EntryGameLevelInfo.compensation <= 0 || _gameData.Gold < _gameData.EntryGameLevelInfo.compensation) { return 0; }
+
+            return (_gameData.EntryGameLevelInfo.compensation * 2) + 50;
+        } catch(e) {
+            var errMsg = this.getKey() + ".GoldForPass.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -491,6 +518,8 @@ class GameScene extends BaseScene {
     //// <!-- game end
     //
     gameEnd(gameExitType) {
+        let selfIt = this;
+
         switch (gameExitType.value)
         {
             case GameExitType.GiveUp.value:
@@ -500,13 +529,21 @@ class GameScene extends BaseScene {
             case GameExitType.Success.value:
                 _gameData.setLastLevel(_gameData.EntryGameLevelInfo.level);
                 break;
+
+            case GameExitType.Pass.value:
+                this.useGold(this.GoldForPass, 'pass!!!');
+                _gameData.setLastLevel(_gameData.EntryGameLevelInfo.level);
+                break;
         }
 
         // 현재 정보 저장
         _gameData.save();
 
-        // go level
-        this._gameHost.switchScene(KEY_LEVEL);
+        this.getTimerPool().setTimeout(()=>{
+            // go level
+            selfIt._gameHost.switchScene(KEY_LEVEL);
+        }, 500);
+        
     }
 
     // 게임 강제종료 처리 (반드시 상속 구현 필요)
@@ -535,7 +572,29 @@ class GameScene extends BaseScene {
             let selfIt = this;
             this.getTimerPool().setTimeout(()=>{
                 selfIt.msgboxOk(_gameOption.selectText("결과", "Result"), _gameOption.selectText(kor, eng), ()=>selfIt.gameEnd(gameExitType));
-            }, 1500);
+            }, 250);
+
+        } catch(e) {
+            var errMsg = this.getKey() + ".gameFinished.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 게임 Pass 처리
+    gamePassTry() {
+        try {
+            const needGold = numberWithCommas(this.GoldForPass);
+            const kor = "게임을 통과하시겠습니까?\r\n필요골드: " + needGold + "G";
+            const eng = "Do you want to pass the game?\r\nRequired Gold: " + needGold + "G";
+
+            let selfIt = this;
+            this.getTimerPool().setTimeout(()=>{
+                selfIt.msgboxYesNo(_gameOption.selectText("통과", "Pass"), _gameOption.selectText(kor, eng)
+                    , ()=>selfIt.gameEnd(GameExitType.Pass)
+                    , ()=>{}
+                );
+            }, 500);
 
         } catch(e) {
             var errMsg = this.getKey() + ".gameFinished.catched: " + e;

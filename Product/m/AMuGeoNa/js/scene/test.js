@@ -14,7 +14,7 @@ class SceneTest extends GameScene {
                 gamelevel: 1,
                 needgold: 0,
                 limitgold: 0,
-                compensation: 0,
+                compensation: 25,
                 enable: true,
                 arg: {texture: 'TEST', sceneKey: 'test'},
             };

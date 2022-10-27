@@ -176,10 +176,18 @@ class Rect {
 
     // offset
     offset(x, y) {
-        if (x == undefined) { x = 0; }
-        if (y == undefined) { y = 0; }
+        this.offsetX(x);
+        this.offsetY(y);
+    }
 
-        this.move(this.#_x + x, this.#_y + y);
+    // offset x
+    offsetX(x) {
+        this.X += (x == undefined || x == NaN) ? 0 : x;
+    }
+
+    // offset y
+    offsetY(y) {
+        this.Y += (y == undefined || y == NaN) ? 0 : y;
     }
 
     // move

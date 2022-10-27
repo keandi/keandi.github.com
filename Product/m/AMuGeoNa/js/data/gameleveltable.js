@@ -56,7 +56,7 @@ class GameLevelTable extends ClsObject {
             };
             
         } catch (e) {
-            var errMsg = this.getExpMsg("level", e);
+            var errMsg = this.getExpMsg("#getEnableInfo", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -93,7 +93,7 @@ class GameLevelTable extends ClsObject {
                     return this.#getEnableInfo(level, 0, 0, 0, 0, GameKind.UNKNOWN);
             }
         } catch (e) {
-            var errMsg = this.getExpMsg("level", e);
+            var errMsg = this.getExpMsg("getInfo", e);
             console.log(errMsg);
             alert(errMsg);
         }

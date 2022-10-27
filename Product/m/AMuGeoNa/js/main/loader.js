@@ -47,16 +47,16 @@ class Loader extends ClsObject {
                 let pos = url.indexOf("#reset");
                 if (pos > 0) {
                     _gameData.LastLevel = 0;
-                    _gameData.useGold(10000);
+                    _gameData.useGold(_gameData.Gold);
                     _gameData.save();
                     alert("게임 데이터를 초기화 하였습니다.");
                 }
 
-                /*
-                _gameData.LastLevel = 3;
-                _gameData.addGold(999999);
+                
+                _gameData.LastLevel = 1;
+                _gameData.addGold(200);
                 _gameData.save();
-                */
+                
             }
 
             // test scene
