@@ -8,6 +8,7 @@ class GameScene extends BaseScene {
 
             this.#_PV.isNeedExitButton = true;
             this.#_PV.isNeedUserExitQuery = true;
+
         } catch (e) {
             var errMsg = this.getKey() + ".ctor.catched: " + e;
             console.log(errMsg);
@@ -233,7 +234,7 @@ class GameScene extends BaseScene {
             exit_button.setDepth(DEPTH_MENU_BUTTON);
 
             // pass button
-            if (this.GoldForPass > 0)
+            if (this.GoldForPass > 0 && _gameData.IsPassEnable === true)
             {
                 const pass_button_x = exit_button_x - 38;
 
@@ -528,11 +529,13 @@ class GameScene extends BaseScene {
 
             case GameExitType.Success.value:
                 _gameData.setLastLevel(_gameData.EntryGameLevelInfo.level);
+                _gameData.removePass();
                 break;
 
             case GameExitType.Pass.value:
                 this.useGold(this.GoldForPass, 'pass!!!');
                 _gameData.setLastLevel(_gameData.EntryGameLevelInfo.level);
+                _gameData.setPass();
                 break;
         }
 

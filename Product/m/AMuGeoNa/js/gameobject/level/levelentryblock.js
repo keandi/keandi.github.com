@@ -114,15 +114,28 @@ class LevelEntryBlock extends DestroyableObject {
     // set enable
     setEnable() {
         try {
-            if (this.#_PV.level <= _gameData.LastLevel + 1) {
-                this.#_PV.block.enable.visible = true;
-                this.#_PV.block.disable.visible = false;
+            let v = this.#_PV;
+            if (v.level <= _gameData.LastLevel + 1) {
+                v.block.enable.visible = true;
+                v.block.disable.visible = false;
             } else {
-                this.#_PV.block.enable.visible = false;
-                this.#_PV.block.disable.visible = true;
+                v.block.enable.visible = false;
+                v.block.disable.visible = true;
             }
         } catch (e) {
             var errMsg = this.getExpMsg("setEnable", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // is enable
+    get IsEnable() {
+        try {
+            let v = this.#_PV;            
+            return (v.block.enable.visible === false || v.block.disable.visible === true) ? false : true;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsEnable", e);
             console.log(errMsg);
             alert(errMsg);
         }
@@ -161,6 +174,8 @@ class LevelEntryBlock extends DestroyableObject {
 
             this.setEnable();
 
+            this.#setPassedImage();
+
         } catch (e) {
             var errMsg = this.getExpMsg("setGameLevelInfo", e);
             console.log(errMsg);
@@ -171,5 +186,32 @@ class LevelEntryBlock extends DestroyableObject {
     // get level info
     get LevelInfo() {
         return this.#_PV.levelInfo;
+    }
+
+    // set passed image
+    #setPassedImage() {
+        try {
+            if (this.IsEnable !== true) { return; }
+
+            let v = this.#_PV;
+            if (_gameData.isPassedGameInfo(v.levelInfo) !== true) { return; }
+
+            let imageInfo = v.representationImage.getImage("PASSMARK", v.rpImg.passMarkImgInfo);
+
+            setPixelScaleXorY(imageInfo.obj, v.rect.Width - 20);
+            setPosition(imageInfo.obj, v.rpImg.rect.CenterX, v.rpImg.rect.CenterY);
+            imageInfo.obj.setDepth(DEPTH_LEVEL_PASSED_IMAGE);
+            imageInfo.obj.alpha = 0.8;
+
+            //console.log("img smaller size: " + v.rpImg.smallerSize + ", w: " + imageInfo.obj.width);
+
+            v.rpImg.passMarkImgInfo = imageInfo;
+
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("#setPassedImage", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

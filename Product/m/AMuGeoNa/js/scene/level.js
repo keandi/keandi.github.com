@@ -531,4 +531,9 @@ class SceneLevel extends GameScene {
          const contentRc = this.ContentRc;
          return { x: contentRc.CenterX, y: contentRc.CenterY };
     }
+
+    //return gold for pass
+    get GoldForPass() {
+        return 0;
+    }
 }

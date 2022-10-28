@@ -20,22 +20,28 @@ class GameData extends ClsObject {
     read() {
         try {
             var data = _browserComm.getObject(DATANAME_GAME);
+            let v = this.#_PV;
             if (data == undefined) {
-                this.#_PV.data.gold = 0;
-                this.#_PV.data.lastLevel = 0;
+                v.data.gold = 0;
+                v.data.lastLevel = 0;
             } else {
                 if (data.gold == undefined || data.gold <= 0) {
-                    this.#_PV.data.gold = 0;
+                    v.data.gold = 0;
                 } else {
-                    this.#_PV.data.gold = data.gold;
+                    v.data.gold = data.gold;
                 }
 
                 if (data.lastLevel == undefined || data.lastLevel < 0) {
-                    this.#_PV.data.lastLevel = 0;
+                    v.data.lastLevel = 0;
                 } else {
-                    this.#_PV.data.lastLevel = data.lastLevel;
+                    v.data.lastLevel = data.lastLevel;
                 }
+
+                v.data.passInfo = data.passInfo;
             }
+
+            if (v.data.passInfo == undefined) { v.data.passInfo = []; }
+            this.#initializePassInfoMap();
 
         } catch (e) {
             var errMsg = this.getExpMsg("read", e);
@@ -145,21 +151,12 @@ class GameData extends ClsObject {
 
     // get
     get CurrentLevel() {
-        let v = this.#_PV;
-
-        if (v.currentLevel == undefined) {
-            v.currentLevel = (v.lastLevel == undefined) ? 1 : v.lastLevel;
-        }
-        return v.currentLevel;
+        return this.#_PV.entryGameLevelInfo.level;
     }
 
     // set
     set CurrentLevel(value) {
-        if (value == undefined) {
-            this.#_PV.currentLevel = 1;
-        } else {
-            this.#_PV.currentLevel = value;
-        }
+        this.#_PV.entryGameLevelInfo.level = value;
     }
 
     /// current level -->
@@ -182,6 +179,129 @@ class GameData extends ClsObject {
     }
 
     ////// 진행 게임 레벨 정보 -->
+    ///////////////////////////////
+
+    ///////////////////////////////
+    // <!--  게임 PASS 정보
+
+    get #CurrentPassGameName() {
+        return this.getPassedGameName(this.#_PV.entryGameLevelInfo);
+    }
+
+    // get passed game name by level info
+    getPassedGameName(gameLevelInfo) {
+        try {
+            return gameLevelInfo.gamekind.eng_name + '_' + gameLevelInfo.gamelevel;
+        } catch (e) {
+            var errMsg = this.getExpMsg("getPassedGameName", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // return passed yes/no
+    get IsPassedGame() {
+        try {
+            let v = this.#_PV;
+            return v.refPassedMap.has(this.#CurrentPassGameName);
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsPassedGame", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // return passed yes/no
+    isPassedGameInfo(gameLevelInfo) {
+        try {
+            let v = this.#_PV;
+            return v.refPassedMap.has(this.getPassedGameName(gameLevelInfo));
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsPassedGame", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // set pass info
+    setPass() {
+        try {
+            if (this.IsPassedGame === true) { return; }
+
+            let v = this.#_PV;
+            const passGameLevelName = this.#CurrentPassGameName;
+            v.data.passInfo.push( passGameLevelName );
+            v.refPassedMap.set( passGameLevelName, 1 );
+        } catch (e) {
+            var errMsg = this.getExpMsg("setPass", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // remove pass info
+    removePass() {
+        try {
+            let v = this.#_PV;
+            if (v.data.passInfo == undefined) { v.data.passInfo = []; }
+
+            const passGameLevelName = this.#CurrentPassGameName;
+
+            let idx = v.data.passInfo.indexOf(passGameLevelName);
+            if (idx > -1) { v.data.passInfo.splice(idx, 1); }
+            v.refPassedMap.delete(passGameLevelName);
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("removePass", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    //
+    get IsPassEnable() {
+        try {
+            return (this.CurrentLevel === this.LastLevel + 1) ? true : false;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsPassEnable", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // initialize pass info reference map
+    #initializePassInfoMap() {
+        try {
+            this.#destroyPassInfoMap();
+            let v = this.#_PV;
+            v.refPassedMap = new Map();
+
+            v.data.passInfo.forEach(name => {
+                v.refPassedMap.set(name, 1);
+            });
+        } catch (e) {
+            var errMsg = this.getExpMsg("#initializePassInfoMap", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // destroy pass info reference map
+    #destroyPassInfoMap() {
+        try {
+            let v = this.#_PV;
+            if (v.refPassedMap == undefined) { return; }
+
+            v.refPassedMap.clear();
+            v.refPassedMap = undefined;
+        } catch (e) {
+            var errMsg = this.getExpMsg("#initializePassInfoMap", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // 게임 PASS 정보-->
     ///////////////////////////////
 
 }

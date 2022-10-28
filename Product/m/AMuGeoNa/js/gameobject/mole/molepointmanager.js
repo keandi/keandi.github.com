@@ -267,6 +267,7 @@ class MolePointManager extends DestroyableObject {
     // 목표 포인트 결정
     #getGoal() {
         try {
+           
             const gameLevel = _gameData.EntryGameLevelInfo.gamelevel;
             const defaultTotal = 16;
             let goal = { mission: 0, total: 0, hit: 0, current: 0 };
@@ -281,6 +282,7 @@ class MolePointManager extends DestroyableObject {
 
             goal.mission = getRateValue(goal.total, percent);
 
+            //goal.hit = goal.current = goal.total - 1; 
             return goal;
         } catch (e) {
             var errMsg = this.getExpMsg("getGoal", e);

@@ -44,19 +44,44 @@ class Loader extends ClsObject {
             // 임시 디버깅
             {
                 let url = window.location.href;
-                let pos = url.indexOf("#reset");
-                if (pos > 0) {
-                    _gameData.LastLevel = 0;
-                    _gameData.useGold(_gameData.Gold);
+                const isCall_IT = (param)=>{
+                    return (url.indexOf(param) > 0) ? true : false;
+                };
+                const isCall_RESETALL = ()=>{
+                    return isCall_IT("#reset_all");
+                };
+                const isCall_RESETLEVEL = ()=>{
+                    return isCall_IT("#reset_level");
+                };
+                const isCall_RESETGOLD = ()=>{
+                    return isCall_IT("#reset_gold");
+                };
+
+                //
+                if (isCall_RESETGOLD() === true) { 
+                    _gameData.useGold(_gameData.Gold); 
                     _gameData.save();
-                    alert("게임 데이터를 초기화 하였습니다.");
+                    alert("게임 데이터(GOLD)를 초기화 하였습니다.");
+                }
+                if (isCall_RESETLEVEL() === true) { 
+                    _gameData.LastLevel = 0;
+                    _gameData.save();
+                    alert("게임 데이터(LEVEL)를 초기화 하였습니다.");
+                }
+                if (isCall_RESETALL() === true) { 
+                    _gameData.LastLevel = 0;
+                    _gameData.useGold(_gameData.Gold); 
+                    _gameData.save();
+                    alert("게임 데이터(LEVEL,GOLD)를 초기화 하였습니다.");
                 }
 
-                
-                _gameData.LastLevel = 1;
-                _gameData.addGold(200);
-                _gameData.save();
-                
+                if (isCall_IT('#set_test_data') === true) {
+                    _gameData.LastLevel = 1;
+                    _gameData.useGold(_gameData.Gold); 
+                    _gameData.addGold(200);
+                    _gameData.save();
+                    alert("게임 데이터(LEVEL=1,GOLD=200)를 테스트 데이터로 설정하였습니다.");
+                }                
             }
 
             // test scene

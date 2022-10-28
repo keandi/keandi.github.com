@@ -138,4 +138,9 @@ class SceneOption extends GameScene {
     onUpdate() {
 
     }
+
+    //return gold for pass
+    get GoldForPass() {
+        return 0;
+    }
 }
