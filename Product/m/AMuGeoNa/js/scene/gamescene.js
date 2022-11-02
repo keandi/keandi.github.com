@@ -475,7 +475,7 @@ class GameScene extends BaseScene {
             });
             this.pause();
         } catch(e) {
-            var errMsg = this.getKey() + ".showOk.catched: " + e;
+            var errMsg = this.getKey() + ".msgboxOk.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }
@@ -499,7 +499,7 @@ class GameScene extends BaseScene {
             });
             this.pause();
         } catch(e) {
-            var errMsg = this.getKey() + ".showOk.catched: " + e;
+            var errMsg = this.getKey() + ".msgboxYesNo.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         }

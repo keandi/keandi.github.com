@@ -26,7 +26,9 @@ class LevelEntryBlock extends DestroyableObject {
     destroy() {
         try {
             super.destroy();
-            destroyObjects( this.#_PV.block.enable, this.#_PV.block.disable, this.#_PV.levelText );
+
+            let v = this.#_PV;
+            destroyObjects( v.block.enable, v.block.disable, v.levelText );
         } catch (e) {
             var errMsg = this.getExpMsg("destroy", e);
             console.log(errMsg);
@@ -191,9 +193,16 @@ class LevelEntryBlock extends DestroyableObject {
     // set passed image
     #setPassedImage() {
         try {
+            let v = this.#_PV;
+
+            // 기존 이미지 강제로 off
+            if (v.rpImg.passMarkImgInfo != undefined) {
+                v.representationImage.hideImage(v.rpImg.passMarkImgInfo);
+                v.rpImg.passMarkImgInfo = undefined;
+            }
+
             if (this.IsEnable !== true) { return; }
 
-            let v = this.#_PV;
             if (_gameData.isPassedGameInfo(v.levelInfo) !== true) { return; }
 
             let imageInfo = v.representationImage.getImage("PASSMARK", v.rpImg.passMarkImgInfo);

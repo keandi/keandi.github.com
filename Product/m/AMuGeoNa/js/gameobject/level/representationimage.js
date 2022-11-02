@@ -103,6 +103,19 @@ class RepresentationImage extends DestroyableObject {
         }
     }
 
+    // 기존 이미지 강제 사용 끄기
+    hideImage(imgInfo) {
+        try {
+            if (imgInfo == undefined) { return; }
+            imgInfo.use = false;
+            this.#imgVisible( imgInfo );
+        } catch (e) {
+            var errMsg = this.getExpMsg("hideImage", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     //
     #imgVisible(imgInfo) {
         try {

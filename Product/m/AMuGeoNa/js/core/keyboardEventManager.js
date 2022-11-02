@@ -105,7 +105,7 @@ class KeyboardEventManager extends ClsObject {
             /*let addEvent = function(cbMap, eventName) {
                 if (cbMap.Count <= 0) {
                     scene.input.on(eventName, function(event) {
-                        if (scene.isPause === true) { return; }
+                        if (scene.isPause() === true) { return; }
                         cbMap.forEach((call)=>{
                             call();
                         });
@@ -135,7 +135,7 @@ class KeyboardEventManager extends ClsObject {
                 // 처음이라 이벤트 등록
                 let keyEventName = this.#getEventName(kind, key);
                 scene.input.keyboard.on(keyEventName, function (event) { 
-                    if (scene.isPause === true) { return; }
+                    if (scene.isPause() === true) { return; }
                     cbMap.forEach((call)=>{
                         call();
                     });

@@ -56,7 +56,7 @@ class PointerEventManager extends ClsObject {
             let addEvent = function(cbMap, eventName) {
                 if (cbMap.Count <= 0) {
                     scene.input.on(eventName, function(pointer, x, y, event) {
-                        if (scene.isPause === true) { return; }
+                        if (scene.isPause() === true) { return; }
                         cbMap.forEach((call)=>{
                             call(pointer);
                         });
