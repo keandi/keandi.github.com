@@ -1,6 +1,9 @@
 // appId
 const APPID = "AMUGEONAAPP";
 
+// fps
+const GAME_FPS = 40;
+
 // key
 const KEY_INTRO = "intro";
 const KEY_LEVEL = "level";

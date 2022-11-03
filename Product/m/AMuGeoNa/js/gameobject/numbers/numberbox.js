@@ -171,7 +171,7 @@ class NumberBox extends ClsObject {
             let v = this.#_PV;
 
             //let computed = MoveTowards(v.rect.CenterX, v.rect.CenterY, x, y, VELOCITY_NUMBERBOX_MOVE);
-            let computed = MoveTowards(v.rect.CenterX, v.rect.CenterY, x, y, v.boxSize / 5);
+            let computed = MoveTowards(v.rect.CenterX, v.rect.CenterY, x, y, v.boxSize / 3);
             this.redraw(computed[0], computed[1]);
             return computed[2];
         } catch (e) {

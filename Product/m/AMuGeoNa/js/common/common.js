@@ -8,6 +8,19 @@ function stringFormat() {
     });
 }
 
+// pre, post 사이의 문자 추출
+function peekString(text, pre, post, beginIdx) {
+    if (beginIdx == undefined || beginIdx == NaN) { beginIdx = 0; }
+
+    const preIdx = text.indexOf(pre, beginIdx);
+    if (preIdx < 0) { return ''; }
+    
+    const postIdx = text.indexOf(post, preIdx + pre.length);
+    if (postIdx <= pre) { return ''; }
+    
+    return text.substring(preIdx + pre.length, postIdx);
+} 
+
 // get degree
 function getDegree(x1, y1, x2, y2) {
     // angle in radians

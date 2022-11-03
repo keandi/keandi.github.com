@@ -81,7 +81,18 @@ class Loader extends ClsObject {
                     _gameData.addGold(200);
                     _gameData.save();
                     alert("게임 데이터(LEVEL=1,GOLD=200)를 테스트 데이터로 설정하였습니다.");
-                }                
+                }
+
+                if (isCall_IT('#addgold') === true) {
+                    const gold = peekString(url, '#gs', '#ge');
+                    if (gold.length > 0) {
+                        const nGold = parseInt(gold);
+
+                        _gameData.addGold(nGold);
+                        _gameData.save();
+                        alert( stringFormat("임시 골드({0}G)를 추가하였습니다.", nGold) );
+                    }
+                }
             }
 
             // test scene
@@ -96,7 +107,7 @@ class Loader extends ClsObject {
                     key: KEY_INTRO,
                     getScene: function() {
                         if (_scenes.intro == undefined) {
-                            _scenes.intro = new SceneIntro(60, _gameHost);
+                            _scenes.intro = new SceneIntro(GAME_FPS, _gameHost);
                         }
                         return _scenes.intro;
                     }
@@ -105,7 +116,7 @@ class Loader extends ClsObject {
                     key: KEY_LEVEL,
                     getScene: function() {
                         if (_scenes.level == undefined) {
-                            _scenes.level = new SceneLevel(30, _gameHost);
+                            _scenes.level = new SceneLevel(GAME_FPS, _gameHost);
                         }
                         return _scenes.level;
                     }
@@ -114,7 +125,7 @@ class Loader extends ClsObject {
                     key: KEY_OPTION,
                     getScene: function() {
                         if (_scenes.option == undefined) {
-                            _scenes.option = new SceneOption(15, _gameHost);
+                            _scenes.option = new SceneOption(GAME_FPS, _gameHost);
                         }
                         return _scenes.option;
                     }
@@ -123,7 +134,7 @@ class Loader extends ClsObject {
                     key: KEY_SCENE_TEST,
                     getScene: function() {
                         if (_scenes.test == undefined) {
-                            _scenes.test = new SceneTest(60, _gameHost);
+                            _scenes.test = new SceneTest(GAME_FPS, _gameHost);
                         }
                         return _scenes.test;
                     }
@@ -132,7 +143,7 @@ class Loader extends ClsObject {
                     key: KEY_GAME_SHOOTTHESTARS,
                     getScene: function() {
                         if (_scenes.shootthestars == undefined) {
-                            _scenes.shootthestars = new SceneShootTheStars(60, _gameHost);
+                            _scenes.shootthestars = new SceneShootTheStars(GAME_FPS, _gameHost);
                         }
                         return _scenes.shootthestars;
                     }
@@ -141,7 +152,7 @@ class Loader extends ClsObject {
                     key: KEY_GAME_ROLLDICE,
                     getScene: function() {
                         if (_scenes.rolldice == undefined) {
-                            _scenes.rolldice = new SceneRollDice(60, _gameHost);
+                            _scenes.rolldice = new SceneRollDice(GAME_FPS, _gameHost);
                         }
                         return _scenes.rolldice;
                     }
@@ -150,7 +161,7 @@ class Loader extends ClsObject {
                     key: KEY_GAME_MOLE,
                     getScene: function() {
                         if (_scenes.mole == undefined) {
-                            _scenes.mole = new SceneMole(60, _gameHost);
+                            _scenes.mole = new SceneMole(GAME_FPS, _gameHost);
                         }
                         return _scenes.mole;
                     }
@@ -159,7 +170,7 @@ class Loader extends ClsObject {
                     key: KEY_GAME_NUMBERS,
                     getScene: function() {
                         if (_scenes.numbers == undefined) {
-                            _scenes.numbers = new SceneNumbers(60, _gameHost);
+                            _scenes.numbers = new SceneNumbers(GAME_FPS, _gameHost);
                         }
                         return _scenes.numbers;
                     }
