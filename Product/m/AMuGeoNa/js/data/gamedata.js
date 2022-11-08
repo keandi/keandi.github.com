@@ -258,6 +258,18 @@ class GameData extends ClsObject {
         }
     }
 
+    // remove all pass info
+    removeAllPass() {
+        try {
+            let v = this.#_PV;
+            v.data.passInfo = [];
+        } catch (e) {
+            var errMsg = this.getExpMsg("removeAllPass", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
     //
     get IsPassEnable() {
         try {

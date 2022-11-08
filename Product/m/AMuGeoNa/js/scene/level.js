@@ -370,7 +370,7 @@ class SceneLevel extends GameScene {
                     _gameOption.selectText( stringFormat("입장료({0})가 부족합니다.", entryFee), 
                         stringFormat("Insufficient entrance fee ({0})", entryFee)));
                 return;
-            } else if (_gameData.Gold >= levelInfo.limitgold && levelInfo.limitgold != 0) {
+            } else if (_gameData.Gold >= levelInfo.limitgold && levelInfo.limitgold != 0 && _gameData.LastLevel >= levelInfo.level) {
                 var limitFee = stringFormat("{0}G", levelInfo.limitgold);
                 this.msgboxOk(_gameOption.selectText("알림", "Notice"),
                     _gameOption.selectText( stringFormat("입장 제한 ({0})", limitFee), 

@@ -65,11 +65,13 @@ class Loader extends ClsObject {
                 }
                 if (isCall_RESETLEVEL() === true) { 
                     _gameData.LastLevel = 0;
+                    _gameData.removeAllPass();
                     _gameData.save();
                     alert("게임 데이터(LEVEL)를 초기화 하였습니다.");
                 }
                 if (isCall_RESETALL() === true) { 
                     _gameData.LastLevel = 0;
+                    _gameData.removeAllPass();
                     _gameData.useGold(_gameData.Gold); 
                     _gameData.save();
                     alert("게임 데이터(LEVEL,GOLD)를 초기화 하였습니다.");
@@ -77,6 +79,7 @@ class Loader extends ClsObject {
 
                 if (isCall_IT('#set_test_data') === true) {
                     _gameData.LastLevel = 1;
+                    _gameData.removeAllPass();
                     _gameData.useGold(_gameData.Gold); 
                     _gameData.addGold(200);
                     _gameData.save();
