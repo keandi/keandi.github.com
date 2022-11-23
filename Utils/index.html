@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Utils</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+    </head>
+
+    <style>
+        .backBorder {
+            background-color: rgb(25, 25, 25);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; height: 600px;
+            margin-left: -400px;
+            margin-top: -300px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .appBackBorder {
+            background-color: rgb(25, 25, 25);
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 800px; height: 600px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .outerBorder {
+            background-color: rgb(245, 53, 203);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%; height: 100%;
+            margin-left: 0px;
+            margin-top: 0px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+
+        @font-face {
+			font-family: "gameFont";
+			src: url('assets/font/NanumBarunGothic.ttf');
+		}
+    </style>
+
+<body>
+    <div style="background-color: #AEB3B1;">
+        <strong>한글 조합형/완성형</strong>
+        </br>
+        입력: 
+            <input type="text" id="TextSource" />
+            <input type="button" value="변환" onclick="javascript:onTextConvert();" />
+        </br>
+        결과(조합형)
+        <div id="resIdNFD">???</div>
+        결과(완성형)
+        <div id="resIdNFC">???</div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+function onTextConvert() {
+    try {
+        let resNFC = document.getElementById('TextSource').value.normalize('NFC');
+        let resNFD = resNFC.normalize('NFD');
+
+        document.getElementById('resIdNFD').innerText = resNFD;
+        document.getElementById('resIdNFC').innerText = resNFC;
+    } catch(e) {
+        alert(e);
+    }
+}
+</script>
