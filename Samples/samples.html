@@ -8,18 +8,34 @@
 
         <style>
             /* 세로 방향 스타일 */
-            @media screen and (orientation: portrait) {
+            /*@media screen and (orientation: portrait) {
                 body {
                 transform: rotate(0deg);
                 transform-origin: top left;
                 }
-            }
+            }*/
 
             /* 가로 방향 스타일 */
-            @media screen and (orientation: landscape) {
+            /*@media screen and (orientation: landscape) {
                 body {
-                transform: rotate(90deg);
-                transform-origin: top left;
+                transform: rotate(-90deg);
+                transform-origin: bottom left;
+                }
+            }*/
+
+            body {
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            @media (max-width: 768px) { /* 모바일 화면 크기에 따라 조정 */
+                body {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
                 }
             }
         </style>
@@ -80,7 +96,7 @@
     </style>
 
 <body>
-    -- 0.4
+    -- 0.5
     <div style="background-color: #53618e;">
         <h2 style="color:#eff1f5">전체화면</h2>
         </br>
