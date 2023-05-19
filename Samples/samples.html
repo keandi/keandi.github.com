@@ -24,9 +24,7 @@
                 }
             }*/
 
-            @media only screen and (orientation: landscape) and (max-aspect-ratio: 1/1) {
-                /* 세로 방향이면서 가로와 세로의 비율이 1 이하인 경우에 동작하는 스타일 */
-                @media( orientation: landscape ){
+            /*@media( orientation: landscape ){
                     html {
                     transform: rotate(90deg);
                     transform-origin: top right;
@@ -36,10 +34,66 @@
                     width: 100vh;
                     height: 100vw;
                     }
+                }*/
+
+            .android-only {
+            /* 안드로이드 전용 스타일 */
+
+            }
+            
+            .ios-only {
+            /* iOS 전용 스타일 */
+
+            }
+
+            .windows-only {
+            /* windows 전용 스타일 */
+
+            }
+
+            @media( orientation: landscape ){
+                .android-only {
+                    transform: rotate(90deg);
+                    transform-origin: top right;
+                    position: absolute;
+                    top: 100%;
+                    right: 0;
+                    width: 100vh;
+                    height: 100vw;
+                }
+                .ios-only {
+                    transform: rotate(90deg);
+                    transform-origin: top right;
+                    position: absolute;
+                    top: 100%;
+                    right: 0;
+                    width: 100vh;
+                    height: 100vw;
                 }
             }
             
         </style>
+
+        <script>
+            // user agent에서 운영 체제 정보 확인
+            var userAgent = navigator.userAgent.toLowerCase();
+            //alert(userAgent);
+
+            // 안드로이드인 경우 "android-only" 클래스 추가
+            if (userAgent.indexOf("android") > -1) {
+                document.documentElement.classList.add("android-only");
+            }
+            
+            // iOS인 경우 "ios-only" 클래스 추가
+            if (userAgent.indexOf("iphone") > -1 || userAgent.indexOf("ipad") > -1 || userAgent.indexOf("ipod") > -1) {
+                document.documentElement.classList.add("ios-only");
+            }
+
+            // windows인 경우 "windows-only" 클래스 추가
+            if (userAgent.indexOf("windows") > -1) {
+                document.documentElement.classList.add("windows-only");
+            }
+        </script>
     </head>
 
     <style>
@@ -97,7 +151,7 @@
     </style>
 
 <body>
-    -- 0.6
+    -- 0.8
     <div style="background-color: #53618e;">
         <h2 style="color:#eff1f5">전체화면</h2>
         </br>
