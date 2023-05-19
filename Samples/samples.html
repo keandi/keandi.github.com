@@ -7,10 +7,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <style>
-            body {
-                orientation: portrait; /* 스마트폰을 세로 방향으로 고정 */
-                transform: rotate(0deg); /* 회전을 0도로 설정 */
-                transform-origin: top left; /* 회전 축을 왼쪽 위로 설정 */
+            /* 세로 방향 스타일 */
+            @media screen and (orientation: portrait) {
+                body {
+                transform: rotate(0deg);
+                transform-origin: top left;
+                }
+            }
+
+            /* 가로 방향 스타일 */
+            @media screen and (orientation: landscape) {
+                body {
+                transform: rotate(90deg);
+                transform-origin: top left;
+                }
             }
         </style>
     </head>
@@ -70,7 +80,7 @@
     </style>
 
 <body>
-    -- 0.2
+    -- 0.3
     <div style="background-color: #53618e;">
         <h2 style="color:#eff1f5">전체화면</h2>
         </br>
