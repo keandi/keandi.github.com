@@ -24,17 +24,21 @@
                 }
             }*/
 
-            @media( orientation: landscape ){
-                html {
-                transform: rotate(90deg);
-                transform-origin: top right;
-                position: absolute;
-                top: 100%;
-                right: 0;
-                width: 100vh;
-                height: 100vw;
+            @media only screen and (orientation: landscape) and (max-aspect-ratio: 1/1) {
+                /* 세로 방향이면서 가로와 세로의 비율이 1 이하인 경우에 동작하는 스타일 */
+                @media( orientation: landscape ){
+                    html {
+                    transform: rotate(90deg);
+                    transform-origin: top right;
+                    position: absolute;
+                    top: 100%;
+                    right: 0;
+                    width: 100vh;
+                    height: 100vw;
+                    }
                 }
             }
+            
         </style>
     </head>
 
@@ -93,7 +97,7 @@
     </style>
 
 <body>
-    -- 0.5
+    -- 0.6
     <div style="background-color: #53618e;">
         <h2 style="color:#eff1f5">전체화면</h2>
         </br>
