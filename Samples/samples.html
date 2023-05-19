@@ -4,7 +4,8 @@
         <title>Utils</title>
         <meta charset="UTF-8">
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
 
         <style>
             /* 세로 방향 스타일 */
@@ -23,19 +24,15 @@
                 }
             }*/
 
-            body {
-                width: 100vw;
-                height: 100vh;
-                overflow: hidden;
-            }
-
-            @media (max-width: 768px) { /* 모바일 화면 크기에 따라 조정 */
-                body {
-                position: fixed;
-                top: 0;
+            @media( orientation: landscape ){
+                html {
+                transform: rotate(-90deg);
+                transform-origin: top left;
+                position: absolute;
+                top: 100%;
                 left: 0;
-                right: 0;
-                bottom: 0;
+                width: 100vh;
+                height: 100vw;
                 }
             }
         </style>
