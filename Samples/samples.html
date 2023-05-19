@@ -5,14 +5,17 @@
         <meta charset="UTF-8">
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <style>
+            body {
+                orientation: portrait; /* 스마트폰을 세로 방향으로 고정 */
+                transform: rotate(0deg); /* 회전을 0도로 설정 */
+                transform-origin: top left; /* 회전 축을 왼쪽 위로 설정 */
+            }
+        </style>
     </head>
 
     <style>
-        body {
-            orientation: portrait; /* 스마트폰을 세로 방향으로 고정 */
-            transform: rotate(0deg); /* 회전을 0도로 설정 */
-            transform-origin: top left; /* 회전 축을 왼쪽 위로 설정 */
-        }
         .backBorder {
             background-color: rgb(25, 25, 25);
             position: absolute;
@@ -67,7 +70,7 @@
     </style>
 
 <body>
-    -- 0.1
+    -- 0.2
     <div style="background-color: #53618e;">
         <h2 style="color:#eff1f5">전체화면</h2>
         </br>
