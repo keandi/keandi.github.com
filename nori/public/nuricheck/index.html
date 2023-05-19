@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>아무거나</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+        <!-- scale 이 고정되게 해준다 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+    
+        <!-- 화면이 너무 크게 보여질 경우 scale 값을 변경해주면 됨
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.1, maximum-scale=0.75, user-scalable=yes">
+        -->
+
+        <link rel="shortcut icon" href="#">
+
+
+        <script type="text/javascript" src="./js/enum/ostype.js"></script>
+        <script type="text/javascript" src="./js/enum/apptype.js"></script>
+        <script type="text/javascript" src="./js/enum/flasheffectoption.js"></script>
+        <script type="text/javascript" src="./js/enum/swipedirection.js"></script>
+        <script type="text/javascript" src="./js/enum/language.js"></script>
+        <script type="text/javascript" src="./js/enum/levelblocktype.js"></script>
+        <script type="text/javascript" src="./js/enum/gamekind.js"></script>
+        <script type="text/javascript" src="./js/enum/msgboxtype.js"></script>
+        <script type="text/javascript" src="./js/enum/timertype.js"></script>
+        <script type="text/javascript" src="./js/enum/gameobjecttype.js"></script>
+        <script type="text/javascript" src="./js/enum/dragprocess.js"></script>
+        <script type="text/javascript" src="./js/enum/animatestate.js"></script>
+        <script type="text/javascript" src="./js/enum/gameexittype.js"></script>
+        <script type="text/javascript" src="./js/enum/direction.js"></script>
+        <script type="text/javascript" src="./js/enum/reversaltype.js"></script>
+        <script type="text/javascript" src="./js/enum/comparetype.js"></script>
+
+        <script type="text/javascript" src="./js/core/clsObject.js"></script>
+        <script type="text/javascript" src="./js/core/queue.js"></script>
+        <script type="text/javascript" src="./js/core/size.js"></script>
+        <script type="text/javascript" src="./js/core/point.js"></script>
+        <script type="text/javascript" src="./js/core/rect.js"></script>
+        <script type="text/javascript" src="./js/core/settedvalue.js"></script>
+        <script type="text/javascript" src="./js/core/RINum.js"></script>
+        <script type="text/javascript" src="./js/core/countzero.js"></script>
+        <script type="text/javascript" src="./js/core/percenttable.js"></script>
+        <script type="text/javascript" src="./js/core/sleepcounter.js"></script>
+        <script type="text/javascript" src="./js/core/callbackMap.js"></script>
+        <script type="text/javascript" src="./js/core/cameraDrag.js"></script>
+        <script type="text/javascript" src="./js/core/cameraDragManager.js"></script>
+        <script type="text/javascript" src="./js/core/destroyCallBacks.js"></script>
+        <script type="text/javascript" src="./js/core/destroyMap.js"></script>
+        <script type="text/javascript" src="./js/core/elapsedTime.js"></script>
+        <script type="text/javascript" src="./js/core/pointerEventManager.js"></script>
+        <script type="text/javascript" src="./js/core/keyboardEventManager.js"></script>
+        <script type="text/javascript" src="./js/core/serialLoadHistory.js"></script>
+        <script type="text/javascript" src="./js/core/serialLoaderProgress.js"></script>
+        <script type="text/javascript" src="./js/core/destroyableobject.js"></script>
+        <script type="text/javascript" src="./js/core/GOImageButton.js"></script>
+        <script type="text/javascript" src="./js/core/GOSelectImageButton.js"></script>
+        <script type="text/javascript" src="./js/core/gameobject.js"></script>
+        <script type="text/javascript" src="./js/core/gamesprite.js"></script>
+        <script type="text/javascript" src="./js/core/collisiongamesprite.js"></script>
+        <script type="text/javascript" src="./js/core/collisionobject.js"></script>
+        <script type="text/javascript" src="./js/core/progressbar.js"></script>
+        <script type="text/javascript" src="./js/core/soundspooler.js"></script>
+        <script type="text/javascript" src="./js/core/gamesoundpool.js"></script>
+        <script type="text/javascript" src="./js/core/gameobjectpool.js"></script>
+        <script type="text/javascript" src="./js/core/updatesubscriber.js"></script>
+        <script type="text/javascript" src="./js/core/timeout.js"></script>
+        <script type="text/javascript" src="./js/core/gametime.js"></script>
+        <script type="text/javascript" src="./js/core/gameinterval.js"></script>
+        <script type="text/javascript" src="./js/core/gametimeout.js"></script>
+        <script type="text/javascript" src="./js/core/gametimerpool.js"></script>
+        <script type="text/javascript" src="./js/core/timeronpool.js"></script>
+        <script type="text/javascript" src="./js/core/objectdown.js"></script>
+        <script type="text/javascript" src="./js/core/statemachine.js"></script>
+        <script type="text/javascript" src="./js/core/animator.js"></script>
+        <script type="text/javascript" src="./js/core/animatormanager.js"></script>
+        <script type="text/javascript" src="./js/core/pointmanager.js"></script>
+        <script type="text/javascript" src="./js/core/spawnmanager.js"></script>
+        <script type="text/javascript" src="./js/core/collisiondata.js"></script>
+        <script type="text/javascript" src="./js/core/collisiongroup.js"></script>
+        <script type="text/javascript" src="./js/core/basescene.js"></script>
+        <script type="text/javascript" src="./js/core/commonscoretext.js"></script>
+
+        <script type="text/javascript" src="./js/global/global.js"></script>
+
+        <script type="text/javascript" src="./js/data/data.js"></script>
+
+        <script type="text/javascript" src="./js/common/common.js"></script>
+        <script type="text/javascript" src="./js/common/phaserfun.js"></script>
+        <script type="text/javascript" src="./js/common/optionapi.js"></script>
+        <script type="text/javascript" src="./js/common/gamecommon.js"></script>
+
+        <script type="text/javascript" src="../../../js/phaser.min.3.55.2.js"></script>
+
+        <script type="text/javascript" src="./js/define/define.js"></script>
+        <!--
+
+        
+
+
+
+        <script type="text/javascript" src="./js/browser/browser.js"></script>
+        <script type="text/javascript" src="./js/browser/webapi.js"></script>
+        <script type="text/javascript" src="./js/browser/waapi.js"></script>
+        <script type="text/javascript" src="./js/browser/browsercomm.js"></script>
+
+        <script type="text/javascript" src="./js/data/optiondata.js"></script>
+        <script type="text/javascript" src="./js/data/gameleveltable.js"></script>
+
+        <script type="text/javascript" src="./js/resource/resourcepool.js"></script>
+
+        <script type="text/javascript" src="./js/gameobject/optionmenu.js"></script>
+        <script type="text/javascript" src="./js/gameobject/horizontaloptionmenu.js"></script>
+        <script type="text/javascript" src="./js/gameobject/msgbox.js"></script>
+        <script type="text/javascript" src="./js/gameobject/goldnotifygameobject.js"></script>
+        <script type="text/javascript" src="./js/gameobject/explosionsprite.js"></script>
+        <script type="text/javascript" src="./js/gameobject/brancachar.js"></script>
+        <script type="text/javascript" src="./js/gameobject/flashsprite.js"></script>
+
+        <script type="text/javascript" src="./js/gameobject/level/representationimage.js"></script>
+        <script type="text/javascript" src="./js/gameobject/level/levelblock.js"></script>
+        <script type="text/javascript" src="./js/gameobject/level/levelarrow.js"></script>
+        <script type="text/javascript" src="./js/gameobject/level/levelentryblock.js"></script>
+
+        <script type="text/javascript" src="./js/gameobject/rolldice/diceselect.js"></script>
+        <script type="text/javascript" src="./js/gameobject/rolldice/diceselector.js"></script>
+        <script type="text/javascript" src="./js/gameobject/rolldice/dice.js"></script>
+        <script type="text/javascript" src="./js/gameobject/rolldice/dicecup.js"></script>
+        <script type="text/javascript" src="./js/gameobject/rolldice/cointextaction.js"></script>
+
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsbasebullet.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsbulletnormal.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/canonmenuicon.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsbasecanon.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stscanon1.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stscanon2.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stscanon3.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsbulletlaserv.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsbulletlaserv2.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsmissile.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsbulletexplosion.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stscontinouscanon.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stslaserv.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stslaserv2.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsrocket.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsbaseenemy.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsenemystar.js"></script>
+        <script type="text/javascript" src="./js/gameobject/shootthestars/stsenemyrock1.js"></script>
+
+        <script type="text/javascript" src="./js/gameobject/mole/molepointmanager.js"></script>
+        <script type="text/javascript" src="./js/gameobject/mole/molehammer.js"></script>
+        <script type="text/javascript" src="./js/gameobject/mole/moletarget.js"></script>
+
+        <script type="text/javascript" src="./js/gameobject/numbers/numberbox.js"></script>
+        <script type="text/javascript" src="./js/gameobject/numbers/numbergrid.js"></script>
+
+        <script type="text/javascript" src="./js/gameobject/test/testbullet.js"></script>
+
+        <script type="text/javascript" src="./js/scene/gamescene.js"></script>
+        <script type="text/javascript" src="./js/scene/option.js"></script>
+        <script type="text/javascript" src="./js/scene/level.js"></script>
+        <script type="text/javascript" src="./js/scene/test.js"></script>
+        <script type="text/javascript" src="./js/scene/intro.js"></script>
+        <script type="text/javascript" src="./js/scene/rolldice.js"></script>
+        <script type="text/javascript" src="./js/scene/shootthestars.js"></script>
+        <script type="text/javascript" src="./js/scene/mole.js"></script>
+        <script type="text/javascript" src="./js/scene/numbers.js"></script>
+
+        <script type="text/javascript" src="./js/gamehost/gamehost.js"></script>
+
+        <script type="text/javascript" src="./js/main/loader.js"></script>
+        <script type="text/javascript" src="./js/main/load.js"></script> -->
+
+    </head>
+
+    <style>
+        .backBorder {
+            background-color: rgb(25, 25, 25);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; height: 600px;
+            margin-left: -400px;
+            margin-top: -300px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .appBackBorder {
+            background-color: rgb(25, 25, 25);
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 800px; height: 600px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+        .outerBorder {
+            background-color: rgb(245, 53, 203);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%; height: 100%;
+            margin-left: 0px;
+            margin-top: 0px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: rgb(7, 1, 1);
+        }
+
+        @font-face {
+			font-family: "gameFont";
+			src: url('assets/font/NanumBarunGothic.ttf');
+		}
+    </style>
+
+<body>
+    <div id="scene" class="backBorder" style="display: block;">
+        
+    </div>
+</body>
+</html>
