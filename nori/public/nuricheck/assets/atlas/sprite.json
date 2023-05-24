@@ -1,1 +1,545 @@
-{"frames":[{"filename":"REFRESH_UP","frame":{"x":200,"y":0,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"REFRESH_DOWN","frame":{"x":300,"y":0,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"NURI_OFF","frame":{"x":0,"y":0,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"NURI_ON","frame":{"x":100,"y":0,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"MUNI_OFF","frame":{"x":0,"y":100,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"MUNI_ON","frame":{"x":100,"y":100,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"GGORI_OFF","frame":{"x":0,"y":200,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"GGORI_ON","frame":{"x":100,"y":200,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"DARI_OFF","frame":{"x":0,"y":300,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"DARI_ON","frame":{"x":100,"y":300,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"ZZOGGUMI_OFF","frame":{"x":400,"y":0,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"ZZOGGUMI_ON","frame":{"x":500,"y":0,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"JEUMNAMI_OFF","frame":{"x":400,"y":100,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"JEUMNAMI_ON","frame":{"x":500,"y":100,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"SOSIMI_OFF","frame":{"x":400,"y":200,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"SOSIMI_ON","frame":{"x":500,"y":200,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"GGACHILLI_OFF","frame":{"x":400,"y":300,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"GGACHILLI_ON","frame":{"x":500,"y":300,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"MAKNAE_OFF","frame":{"x":200,"y":300,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"MAKNAE_ON","frame":{"x":300,"y":300,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"NUMSSEUBI_OFF","frame":{"x":200,"y":200,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"NUMSSEUBI_ON","frame":{"x":300,"y":200,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"EEBBUEI_OFF","frame":{"x":200,"y":100,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null},{"filename":"EEBBUEI_ON","frame":{"x":300,"y":100,"w":100,"h":100},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":100,"h":100},"sourceSize":{"w":100,"h":100},"hitframes":null}],"animations":[],"meta":{"App":"SpriteJsonGenerator","AppVersion":"1.2.1.1","PNGPath":"F:\\Works\\miel\\Temp\\websample\\nori\\public\\nuricheck\\assets\\image\\full_sprite.png","PNGName":"full_sprite.png","PNGWidth":1000,"PNGHeight":1000,"PNGPathHistory":["F:\\Works\\miel\\Temp\\websample\\nori\\public\\nuricheck\\assets\\image\\full_sprite.png"]}}
+{
+    "frames": [
+        {
+            "filename": "REFRESH_UP",
+            "frame": {
+                "x": 200,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "REFRESH_DOWN",
+            "frame": {
+                "x": 300,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "NURI_OFF",
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "NURI_ON",
+            "frame": {
+                "x": 100,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "MUNI_OFF",
+            "frame": {
+                "x": 0,
+                "y": 100,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "MUNI_ON",
+            "frame": {
+                "x": 100,
+                "y": 100,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "GGORI_OFF",
+            "frame": {
+                "x": 0,
+                "y": 200,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "GGORI_ON",
+            "frame": {
+                "x": 100,
+                "y": 200,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "DARI_OFF",
+            "frame": {
+                "x": 0,
+                "y": 300,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "DARI_ON",
+            "frame": {
+                "x": 100,
+                "y": 300,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "ZZOGGUMI_OFF",
+            "frame": {
+                "x": 400,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "ZZOGGUMI_ON",
+            "frame": {
+                "x": 500,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "JEUMNAMI_OFF",
+            "frame": {
+                "x": 400,
+                "y": 100,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "JEUMNAMI_ON",
+            "frame": {
+                "x": 500,
+                "y": 100,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "SOSIMI_OFF",
+            "frame": {
+                "x": 400,
+                "y": 200,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "SOSIMI_ON",
+            "frame": {
+                "x": 500,
+                "y": 200,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "GGACHILLI_OFF",
+            "frame": {
+                "x": 400,
+                "y": 300,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "GGACHILLI_ON",
+            "frame": {
+                "x": 500,
+                "y": 300,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "MAKNAE_OFF",
+            "frame": {
+                "x": 200,
+                "y": 300,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "MAKNAE_ON",
+            "frame": {
+                "x": 300,
+                "y": 300,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "NUNSSEUBI_OFF",
+            "frame": {
+                "x": 200,
+                "y": 200,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "NUNSSEUBI_ON",
+            "frame": {
+                "x": 300,
+                "y": 200,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "EEBBUEI_OFF",
+            "frame": {
+                "x": 200,
+                "y": 100,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        },
+        {
+            "filename": "EEBBUEI_ON",
+            "frame": {
+                "x": 300,
+                "y": 100,
+                "w": 100,
+                "h": 100
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 100,
+                "h": 100
+            },
+            "sourceSize": {
+                "w": 100,
+                "h": 100
+            },
+            "hitframes": null
+        }
+    ],
+    "animations": [],
+    "meta": {
+        "App": "SpriteJsonGenerator",
+        "AppVersion": "1.2.1.1",
+        "PNGPath": "F:\\Works\\miel\\Temp\\websample\\nori\\public\\nuricheck\\assets\\image\\sprite.png",
+        "PNGName": "sprite.png",
+        "PNGWidth": 1000,
+        "PNGHeight": 1000,
+        "PNGPathHistory": [
+            "F:\\Works\\miel\\Temp\\websample\\nori\\public\\nuricheck\\assets\\image\\sprite.png",
+            "F:\\Works\\miel\\Temp\\websample\\nori\\public\\nuricheck\\assets\\image\\full_sprite.png"
+        ]
+    }
+}

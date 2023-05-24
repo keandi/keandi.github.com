@@ -14,23 +14,11 @@
 
         <link rel="shortcut icon" href="#">
 
+        <script type="text/javascript" src="../../../js/phaser.min.3.55.2.js"></script>
 
         <script type="text/javascript" src="./js/enum/ostype.js"></script>
         <script type="text/javascript" src="./js/enum/apptype.js"></script>
-        <script type="text/javascript" src="./js/enum/flasheffectoption.js"></script>
-        <script type="text/javascript" src="./js/enum/swipedirection.js"></script>
-        <script type="text/javascript" src="./js/enum/language.js"></script>
-        <script type="text/javascript" src="./js/enum/levelblocktype.js"></script>
-        <script type="text/javascript" src="./js/enum/gamekind.js"></script>
-        <script type="text/javascript" src="./js/enum/msgboxtype.js"></script>
-        <script type="text/javascript" src="./js/enum/timertype.js"></script>
-        <script type="text/javascript" src="./js/enum/gameobjecttype.js"></script>
-        <script type="text/javascript" src="./js/enum/dragprocess.js"></script>
-        <script type="text/javascript" src="./js/enum/animatestate.js"></script>
-        <script type="text/javascript" src="./js/enum/gameexittype.js"></script>
-        <script type="text/javascript" src="./js/enum/direction.js"></script>
-        <script type="text/javascript" src="./js/enum/reversaltype.js"></script>
-        <script type="text/javascript" src="./js/enum/comparetype.js"></script>
+        <script type="text/javascript" src="./js/enum/nuris.js"></script>
 
         <script type="text/javascript" src="./js/core/clsObject.js"></script>
         <script type="text/javascript" src="./js/core/queue.js"></script>
@@ -55,6 +43,7 @@
         <script type="text/javascript" src="./js/core/destroyableobject.js"></script>
         <script type="text/javascript" src="./js/core/GOImageButton.js"></script>
         <script type="text/javascript" src="./js/core/GOSelectImageButton.js"></script>
+        <script type="text/javascript" src="./js/core/GOImageSwitch.js"></script>
         <script type="text/javascript" src="./js/core/gameobject.js"></script>
         <script type="text/javascript" src="./js/core/gamesprite.js"></script>
         <script type="text/javascript" src="./js/core/collisiongamesprite.js"></script>
@@ -81,6 +70,11 @@
         <script type="text/javascript" src="./js/core/basescene.js"></script>
         <script type="text/javascript" src="./js/core/commonscoretext.js"></script>
 
+        <script type="text/javascript" src="./js/browser/browser.js"></script>
+        <script type="text/javascript" src="./js/browser/webapi.js"></script>
+        <script type="text/javascript" src="./js/browser/waapi.js"></script>
+        <script type="text/javascript" src="./js/browser/browsercomm.js"></script>
+
         <script type="text/javascript" src="./js/global/global.js"></script>
 
         <script type="text/javascript" src="./js/data/data.js"></script>
@@ -90,24 +84,19 @@
         <script type="text/javascript" src="./js/common/optionapi.js"></script>
         <script type="text/javascript" src="./js/common/gamecommon.js"></script>
 
-        <script type="text/javascript" src="../../../js/phaser.min.3.55.2.js"></script>
-
         <script type="text/javascript" src="./js/define/define.js"></script>
-        <!--
-
-        
-
-
-
-        <script type="text/javascript" src="./js/browser/browser.js"></script>
-        <script type="text/javascript" src="./js/browser/webapi.js"></script>
-        <script type="text/javascript" src="./js/browser/waapi.js"></script>
-        <script type="text/javascript" src="./js/browser/browsercomm.js"></script>
-
-        <script type="text/javascript" src="./js/data/optiondata.js"></script>
-        <script type="text/javascript" src="./js/data/gameleveltable.js"></script>
 
         <script type="text/javascript" src="./js/resource/resourcepool.js"></script>
+
+        <script type="text/javascript" src="./js/gamehost/gamehost.js"></script>
+
+        <script type="text/javascript" src="./js/scene/gamescene.js"></script>
+        <script type="text/javascript" src="./js/scene/main.js"></script>
+
+        <script type="text/javascript" src="./js/main/loader.js"></script>
+        <script type="text/javascript" src="./js/main/load.js"></script>
+        
+        <!--
 
         <script type="text/javascript" src="./js/gameobject/optionmenu.js"></script>
         <script type="text/javascript" src="./js/gameobject/horizontaloptionmenu.js"></script>
@@ -156,7 +145,6 @@
 
         <script type="text/javascript" src="./js/gameobject/test/testbullet.js"></script>
 
-        <script type="text/javascript" src="./js/scene/gamescene.js"></script>
         <script type="text/javascript" src="./js/scene/option.js"></script>
         <script type="text/javascript" src="./js/scene/level.js"></script>
         <script type="text/javascript" src="./js/scene/test.js"></script>
@@ -166,14 +154,47 @@
         <script type="text/javascript" src="./js/scene/mole.js"></script>
         <script type="text/javascript" src="./js/scene/numbers.js"></script>
 
-        <script type="text/javascript" src="./js/gamehost/gamehost.js"></script>
-
-        <script type="text/javascript" src="./js/main/loader.js"></script>
-        <script type="text/javascript" src="./js/main/load.js"></script> -->
+         -->
 
     </head>
 
     <style>
+        .android-only {
+        /* 안드로이드 전용 스타일 */
+
+        }
+        
+        .ios-only {
+        /* iOS 전용 스타일 */
+
+        }
+
+        .windows-only {
+        /* windows 전용 스타일 */
+
+        }
+
+        @media( orientation: landscape ){
+            .android-only {
+                transform: rotate(90deg);
+                transform-origin: top right;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 100vh;
+                height: 100vw;
+            }
+            .ios-only {
+                transform: rotate(90deg);
+                transform-origin: top right;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 100vh;
+                height: 100vw;
+            }
+        }
+        
         .backBorder {
             background-color: rgb(25, 25, 25);
             position: absolute;

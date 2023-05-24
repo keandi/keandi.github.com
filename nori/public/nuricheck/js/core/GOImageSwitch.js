@@ -1,8 +1,8 @@
-class GOImageButton extends DestroyableObject {
+class GOImageSwitch extends DestroyableObject {
     #_PV = {};
 
     // ctor
-    constructor(name, scene, x, y, normalTexture, normalFrame, pressTexture, pressFrame, fireCallback, isSuperControl) {
+    constructor(name, scene, x, y, offTexture, offFrame, offCallback, onTexture, onFrame, onCallback, isSuperControl) {
         super(name, scene);
 
         try {
@@ -12,16 +12,18 @@ class GOImageButton extends DestroyableObject {
                 y: y
             };
             this.#_PV.textureInfo = {
-                normalTexture: normalTexture,
-                normalFrame: normalFrame,
-                pressTexture: pressTexture,
-                pressFrame: pressFrame
+                offTexture: offTexture,
+                offFrame: offFrame,
+                onTexture: onTexture,
+                onFrame: onFrame
             };
-            this.#_PV.fireCallback = fireCallback;
+            this.#_PV.offCallback = offCallback;
+            this.#_PV.onCallback = onCallback;
             this.#_PV.image = undefined;
             this.#_PV.buttonRect = new Rect();
             this.#_PV.pointerEvents = {};
             this.#_PV.isSuperControl = (isSuperControl === true) ? true : false;
+            this.#_PV.isOn = false;
 
             // 
             if (this.#create() == false) {
@@ -47,18 +49,6 @@ class GOImageButton extends DestroyableObject {
                     this.#_PV.image.off('pointerdown');
                 }
             }
-
-            if (pointerEvents.up != undefined) {
-                pointerEvents.up = undefined;
-                if (this.#_PV.image != undefined) {
-                    this.#_PV.image.off('pointerup');
-                }
-            }
-
-            if (pointerEvents.move != undefined) {
-                this.#_PV.scene.removePointerEvent(pointerEvents.move);
-                pointerEvents.move = undefined;
-            }
         }
 
         this.#_PV.pointerEvents = undefined;
@@ -73,7 +63,7 @@ class GOImageButton extends DestroyableObject {
     // create image
     #create() {
         try {
-            this.#_PV.image = this.#_PV.scene.add.image(this.#_PV.position.x, this.#_PV.position.y, this.#_PV.textureInfo.normalTexture, this.#_PV.textureInfo.normalFrame);
+            this.#_PV.image = this.#_PV.scene.add.image(this.#_PV.position.x, this.#_PV.position.y, this.#_PV.textureInfo.offTexture, this.#_PV.textureInfo.offFrame);
             this.#_PV.image.setOrigin(0.5);
 
             return (this.#_PV.image == undefined || this.#_PV.image == null) ? false : true;
@@ -146,73 +136,14 @@ class GOImageButton extends DestroyableObject {
             let scene = this.#_PV.scene;
             let textureInfo = this.#_PV.textureInfo;
             let image = this.#_PV.image;
-            let fireCb = this.#_PV.fireCallback;
             let buttonRc = this.#_PV.buttonRect;
-
-            let isPressed = false;
-
-            // scene pause 처리
-            let ifPause = function() {
-                if (selfIt.#_PV.isSuperControl === true) { return false; }
-                if (scene.isPause() === true || scene.isUILocked() === true) {
-                    if (isPressed === false) {
-                        image.setTexture(textureInfo.normalTexture, textureInfo.normalFrame);
-                        isPressed = false;
-                    }
-                    return true;
-                }
-                return false;
-            }
-
-            // down image
-            let setDown = function() {
-                if (ifPause() === true) { return; }
-                if (isPressed == true) { return; }
-                isPressed = true;
-                image.setTexture(textureInfo.pressTexture, textureInfo.pressFrame);
-            }
-
-            // up image
-            let setUp = function(isCancel) {
-                if (ifPause === true) { return; }
-                if (isPressed == false) { return; }
-                isPressed = false;
-
-                image.setTexture(textureInfo.normalTexture, textureInfo.normalFrame);
-                
-                if (isCancel == false) {
-                    setTimeout(() => fireCb() , 1);
-                }
-            }
-
 
             //
             this.#_PV.image.setInteractive();
 
             // pointerdown
             this.#_PV.pointerEvents.down = image.on('pointerdown', (pointer, x, y, event) => {
-                setDown();
-            });
-
-            // pointerup
-            this.#_PV.pointerEvents.up = image.on('pointerup', (pointer, x, y, event) => {
-                setUp(false);
-            });
-
-            this.#_PV.pointerEvents.move = this.#_PV.scene.addPointerEvent('move', (pointer)=>{
-                //console.log( stringFormat( "move pointer - x: {0}, y: {1}", pointer.x, pointer.y) );
-                try {
-                    if (buttonRc.ptInRect(pointer.x, pointer.y) == false) {
-                        if (isPressed == true) {
-                            setUp(true);
-                        }
-                    }
-                } catch (e) {
-                    var errMsg = selfIt.getExpMsg("pointerEvents.move", e);
-                    console.log(errMsg);
-                    alert(errMsg);
-                }
-                
+                selfIt.switch();
             });
 
         } catch (e) {
@@ -230,5 +161,71 @@ class GOImageButton extends DestroyableObject {
     // set visible
     set visible(value) {
         this.#_PV.image.visible = value;
+    }
+
+    // get on
+    get IsOn() {
+        var ison = this.#_PV.isOn;
+        return (ison === true) ? true : false;
+    }
+
+    // get off
+    get IsOff() {
+        return (this.#_PV.isOn === true) ? false : true;
+    }
+
+    // set on off
+    setOnOff(isOn, isIgnoreCallback) {
+        try {
+            if (this.IsPause === true) { return; }
+
+            let v = this.#_PV;
+            v.isOn = isOn;
+            let cb = undefined;
+
+            if (isOn === true)
+            {
+                v.image.setTexture(v.textureInfo.onTexture, v.textureInfo.onFrame);
+                cb = this.#_PV.onCallback;
+            }
+            else
+            {
+                v.image.setTexture(v.textureInfo.offTexture, v.textureInfo.offFrame);
+                cb = this.#_PV.offCallback;
+            }
+
+            if (isIgnoreCallback === true || cb == undefined) {return;}
+            setTimeout(() => cb() , 100);
+
+        } catch (e) {
+            var errMsg = this.getExpMsg("setOnOff", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // switch
+    switch() {
+        try {
+            this.setOnOff( (this.#_PV.isOn === true) ? false : true );
+        } catch (e) {
+            var errMsg = this.getExpMsg("switch", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
+    }
+
+    // is pause scene
+    get IsPause() {
+        try {
+            let v = this.#_PV;
+
+            if (v.isSuperControl === true) { return false; }
+            return (v.scene.isPause() === true || v.scene.isUILocked() === true) ? true : false;
+        } catch (e) {
+            var errMsg = this.getExpMsg("IsPause", e);
+            console.log(errMsg);
+            alert(errMsg);
+        }
     }
 }

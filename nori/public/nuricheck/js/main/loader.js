@@ -32,11 +32,6 @@ class Loader extends ClsObject {
     // create global data
     #createGlobalData() {
         try {
-            
-            _browserComm = new BrowserComm("browser_comm");
-            _gameOption = new GameOption("option");
-            _gameData = new GameData("gameData");
-            _gameLevelTable = new GameLevelTable("gameLevelTable");
             _resourcePool = new ResourcePool("resourcePool");
             _serialLoadHistory = new SerialLoadHistory("global_serial_asset_load_history");
             _gameHost = new GameHost("gamehost", this.#_PV.sceneSize.w, this.#_PV.sceneSize.h, COLOR_BACKGROUND, 0);
@@ -107,75 +102,12 @@ class Loader extends ClsObject {
 
             _sceneData = [
                 {
-                    key: KEY_INTRO,
+                    key: KEY_MAIN,
                     getScene: function() {
-                        if (_scenes.intro == undefined) {
-                            _scenes.intro = new SceneIntro(GAME_FPS, _gameHost);
+                        if (_scenes.main == undefined) {
+                            _scenes.main = new SceneMain(GAME_FPS, _gameHost);
                         }
-                        return _scenes.intro;
-                    }
-                },
-                {
-                    key: KEY_LEVEL,
-                    getScene: function() {
-                        if (_scenes.level == undefined) {
-                            _scenes.level = new SceneLevel(GAME_FPS, _gameHost);
-                        }
-                        return _scenes.level;
-                    }
-                },
-                {
-                    key: KEY_OPTION,
-                    getScene: function() {
-                        if (_scenes.option == undefined) {
-                            _scenes.option = new SceneOption(GAME_FPS, _gameHost);
-                        }
-                        return _scenes.option;
-                    }
-                },
-                {
-                    key: KEY_SCENE_TEST,
-                    getScene: function() {
-                        if (_scenes.test == undefined) {
-                            _scenes.test = new SceneTest(GAME_FPS, _gameHost);
-                        }
-                        return _scenes.test;
-                    }
-                },
-                {
-                    key: KEY_GAME_SHOOTTHESTARS,
-                    getScene: function() {
-                        if (_scenes.shootthestars == undefined) {
-                            _scenes.shootthestars = new SceneShootTheStars(GAME_FPS, _gameHost);
-                        }
-                        return _scenes.shootthestars;
-                    }
-                },
-                {
-                    key: KEY_GAME_ROLLDICE,
-                    getScene: function() {
-                        if (_scenes.rolldice == undefined) {
-                            _scenes.rolldice = new SceneRollDice(GAME_FPS, _gameHost);
-                        }
-                        return _scenes.rolldice;
-                    }
-                },
-                {
-                    key: KEY_GAME_MOLE,
-                    getScene: function() {
-                        if (_scenes.mole == undefined) {
-                            _scenes.mole = new SceneMole(GAME_FPS, _gameHost);
-                        }
-                        return _scenes.mole;
-                    }
-                },
-                {
-                    key: KEY_GAME_NUMBERS,
-                    getScene: function() {
-                        if (_scenes.numbers == undefined) {
-                            _scenes.numbers = new SceneNumbers(GAME_FPS, _gameHost);
-                        }
-                        return _scenes.numbers;
+                        return _scenes.main;
                     }
                 }
             ];
