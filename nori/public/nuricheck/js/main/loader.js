@@ -131,37 +131,42 @@ class Loader extends ClsObject {
 
             if (_browser.isApp === true)
             {
-                sceneDiv.className = "appBackBorder";
-                w = window.innerWidth;
-                h = window.innerHeight;
-                sceneDiv.style.width = w + 'px';
-                sceneDiv.style.height = h + 'px';
-
-                _sceneDiv.width = w;
-                _sceneDiv.height = h;
-
+                alert("Invalid access!!!");
+                return;
             }
             else
             {
-                if (_browser.os !== OSType.WINDOWS)
+                switch (_browser.os.value)
                 {
-                    alert("Invalid access!!!");
-                    return;
+                    case OSType.WINDOWS.value:
+                        /*{
+                            h = window.innerHeight - 50;
+                            //w = parseInt(h * (2/3));
+                            w = parseInt((9 * h) / 16);
+            
+                            _sceneDiv.width = w;
+                            _sceneDiv.height = h;
+                            _sceneDiv.marginLeft = - parseInt(w / 2);
+                            _sceneDiv.marginTop = - parseInt(h / 2);
+            
+                            sceneDiv.style.width = w + 'px';
+                            sceneDiv.style.height = h + 'px';
+                            sceneDiv.style.marginLeft = _sceneDiv.marginLeft + 'px';
+                            sceneDiv.style.marginTop = _sceneDiv.marginTop + 'px';
+                        }
+                        break;*/
+
+                    case OSType.ANDROID.value:
+                    case OSType.IOS.value:
+                        {
+                            document.documentElement.classList.add("mobile-only");
+                            document.documentElement.requestFullscreen();
+                        }
+                        break;
+                    default:
+                        alert("Invalid access!!!");
+                        return;
                 }
-
-                h = window.innerHeight - 50;
-                //w = parseInt(h * (2/3));
-                w = parseInt((9 * h) / 16);
-
-                _sceneDiv.width = w;
-                _sceneDiv.height = h;
-                _sceneDiv.marginLeft = - parseInt(w / 2);
-                _sceneDiv.marginTop = - parseInt(h / 2);
-
-                sceneDiv.style.width = w + 'px';
-                sceneDiv.style.height = h + 'px';
-                sceneDiv.style.marginLeft = _sceneDiv.marginLeft + 'px';
-                sceneDiv.style.marginTop = _sceneDiv.marginTop + 'px';
 
                 console.log( stringFormat("canvas size w: {0} px, h: {1} px", w, h));
             }

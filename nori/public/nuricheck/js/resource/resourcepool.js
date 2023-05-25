@@ -134,8 +134,8 @@ class ResourcePool extends ClsObject {
         try {
             switch (key) {
                 case 'sprite':
-                    this.#addAtlas(key, 2);
-                    this.#addJson(key, 2); // atlas json 도 같이 load
+                    this.#addAtlas(key, 3);
+                    this.#addJson(key, 3); // atlas json 도 같이 load
                     break;
 
                 case 'NURI':
@@ -149,6 +149,8 @@ class ResourcePool extends ClsObject {
                 case 'EEBBUEI':
                 case 'NUNSSEUBI':
                 case 'ZZOGGUMI':
+                case 'BEGIN':
+                case 'ALLPRESENT':
                     this.#addWav(key);
                     break;
             }

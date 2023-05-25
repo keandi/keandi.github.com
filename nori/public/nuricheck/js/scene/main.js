@@ -51,7 +51,10 @@ class SceneMain extends GameScene {
         super.onSerialLoadAssets();
 
         _resourcePool.setScene(this)
-            .addArgs('sprite', 'NURI', 'MUNI', 'GGORI', 'DARI', 'MAKNAE', 'GGACHILLI', 'SOSIMI', 'JEUMNAMI', 'EEBBUEI', 'NUNSSEUBI', 'ZZOGGUMI' );
+            .addArgs('sprite', 'NURI', 'MUNI', 'GGORI', 'DARI', 'MAKNAE', 
+                'GGACHILLI', 'SOSIMI', 'JEUMNAMI', 'EEBBUEI', 'NUNSSEUBI', 'ZZOGGUMI',
+                'ALLPRESENT', 'BEGIN'
+                );
     };    
 
     // game object pool 이용시 생성 과정을 여기에서 구현
@@ -122,7 +125,7 @@ class SceneMain extends GameScene {
 
             // 
             let posX = (btnSize / 2) + 1;
-            let posY = btnSize + 1 + (btnSize / 2);
+            let posY = 1 + (btnSize / 2);
             const limitX = btnSize * 3;
             const movePos = function() {
                 posX += btnSize;
@@ -140,8 +143,16 @@ class SceneMain extends GameScene {
                 });
             };
 
+            // back button
+            movePos();
+            movePos();
+            makeButton('BACK', posX, posY, btnSize, btnSize, ()=>{
+                window.close();
+                history.back();
+            });
+
             // NURI
-            makeNurisSwitch(Nuris.NURI, true);
+            makeNurisSwitch(Nuris.NURI);
 
             // refresh button
             movePos();
@@ -160,6 +171,9 @@ class SceneMain extends GameScene {
             makeNurisSwitch(Nuris.DARI);
             makeNurisSwitch(Nuris.MAKNAE);
             makeNurisSwitch(Nuris.GGACHILLI);
+
+            //
+            this.playSound('BEGIN');
 
         } catch(e) {
             var errMsg = this.getKey() + ".onGameStart.catched: " + e;
@@ -189,6 +203,7 @@ class SceneMain extends GameScene {
             }
 
             alert('All present.');
+            this.playSound('ALLPRESENT');
         } catch(e) {
             var errMsg = this.getKey() + ".checkNuris.catched: " + e;
             console.log(errMsg);
