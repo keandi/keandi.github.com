@@ -96,6 +96,7 @@ class Browser extends ClsObject {
     // get os 
     #getOSType() {
         try {
+            return OSType.ANDROID;
             var userAgent = navigator.userAgent.toUpperCase();
             
             if (userAgent.indexOf(OSType.WINDOWS.name) >= 0) return OSType.WINDOWS;

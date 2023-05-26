@@ -162,6 +162,12 @@
 
             color: rgb(7, 1, 1);
         }
+        .centered {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
         @font-face {
 			font-family: "gameFont";
@@ -172,6 +178,9 @@
 <body>
     <div id="scene" class="backBorder" style="display: block;">
         
+    </div>
+    <div id="entryDiv" class="centered">
+        <input type="button" style="width: 120px; height: 65px;" value="Start checking!" onclick="javascirpt:play();" />
     </div>
 </body>
 </html>

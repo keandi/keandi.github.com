@@ -122,8 +122,6 @@ class Loader extends ClsObject {
     // set game scene area
     #setCanas() {
         try {
-
-            _browser = new Browser("browser"); // 가장 먼저 생성되어져야 함.
             
             let w, h;
             let sceneDiv = document.getElementById('scene');
@@ -139,7 +137,7 @@ class Loader extends ClsObject {
                 switch (_browser.os.value)
                 {
                     case OSType.WINDOWS.value:
-                        /*{
+                        {
                             h = window.innerHeight - 50;
                             //w = parseInt(h * (2/3));
                             w = parseInt((9 * h) / 16);
@@ -154,13 +152,27 @@ class Loader extends ClsObject {
                             sceneDiv.style.marginLeft = _sceneDiv.marginLeft + 'px';
                             sceneDiv.style.marginTop = _sceneDiv.marginTop + 'px';
                         }
-                        break;*/
+                        break;
 
                     case OSType.ANDROID.value:
                     case OSType.IOS.value:
                         {
                             document.documentElement.classList.add("mobile-only");
                             document.documentElement.requestFullscreen();
+
+                            h = window.innerHeight - 50;
+                            //w = parseInt(h * (2/3));
+                            w = parseInt((9 * h) / 16);
+            
+                            _sceneDiv.width = w;
+                            _sceneDiv.height = h;
+                            _sceneDiv.marginLeft = - parseInt(w / 2);
+                            _sceneDiv.marginTop = - parseInt(h / 2);
+            
+                            sceneDiv.style.width = w + 'px';
+                            sceneDiv.style.height = h + 'px';
+                            sceneDiv.style.marginLeft = _sceneDiv.marginLeft + 'px';
+                            sceneDiv.style.marginTop = _sceneDiv.marginTop + 'px';
                         }
                         break;
                     default:
