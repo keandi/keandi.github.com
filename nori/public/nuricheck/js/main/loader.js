@@ -138,9 +138,29 @@ class Loader extends ClsObject {
                 {
                     case OSType.WINDOWS.value:
                         {
-                            h = window.innerHeight - 50;
-                            //w = parseInt(h * (2/3));
-                            w = parseInt((9 * h) / 16);
+                            document.documentElement.requestFullscreen();
+
+                            const ROWMAX = 6;
+                            const COLMAX = 3;
+                            const HORIZONTALRATE = 16;
+                            const VERTICALRATE = 9;
+
+                            const screenX = window.screen.width;
+                            const screenY = window.screen.height;
+
+                            const minSize = Math.min(screenX, screenY);
+                            const maxSize = Math.max(screenX, screenY);
+
+                            const maxUnitSize = parseInt( maxSize / ROWMAX );
+                            const minUnitSize = parseInt( minSize / COLMAX );
+                            const minValue = Math.min( minUnitSize, maxUnitSize );
+
+                            w = minValue * COLMAX;
+                            h = parseInt( w * HORIZONTALRATE / VERTICALRATE );
+                            if (h > minUnitSize * ROWMAX) {
+                                 h = minValue * ROWMAX;
+                                 w = parseInt( h * VERTICALRATE / HORIZONTALRATE );
+                            }
             
                             _sceneDiv.width = w;
                             _sceneDiv.height = h;
@@ -160,15 +180,27 @@ class Loader extends ClsObject {
                             //document.documentElement.classList.add("mobile-only");
                             document.documentElement.requestFullscreen();
 
+                            const ROWMAX = 6;
+                            const COLMAX = 3;
+                            const HORIZONTALRATE = 16;
+                            const VERTICALRATE = 9;
+
                             const screenX = window.screen.width;
                             const screenY = window.screen.height;
 
                             const minSize = Math.min(screenX, screenY);
                             const maxSize = Math.max(screenX, screenY);
 
-                            h = maxSize;
-                            //w = parseInt(h * (2/3));
-                            w = parseInt((9 * h) / 16);
+                            const maxUnitSize = parseInt( maxSize / ROWMAX );
+                            const minUnitSize = parseInt( minSize / COLMAX );
+                            const minValue = Math.min( minUnitSize, maxUnitSize );
+
+                            w = minValue * COLMAX;
+                            h = parseInt( w * HORIZONTALRATE / VERTICALRATE );
+                            if (h > minUnitSize * ROWMAX) {
+                                 h = minValue * ROWMAX;
+                                 w = parseInt( h * VERTICALRATE / HORIZONTALRATE );
+                            }
             
                             _sceneDiv.width = w;
                             _sceneDiv.height = h;

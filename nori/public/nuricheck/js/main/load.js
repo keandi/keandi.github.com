@@ -13,8 +13,8 @@ window.onload = function() {
             switch (_browser.os.value)
             {
                 case OSType.WINDOWS.value:
-                    play();
-                    break;
+                    /*play();
+                    break; */
 
                 case OSType.ANDROID.value:
                 case OSType.IOS.value:
