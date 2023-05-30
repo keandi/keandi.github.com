@@ -57,3 +57,32 @@ function removePlayButton() {
         alert(errMsg);
     }
 }
+
+/*function handleClick(event) {
+    const rotatedX = event.clientY;
+    const rotatedY = window.innerHeight - event.clientX;
+    // 회전된 좌표 사용
+    console.log("클릭 위치 (회전된 좌표):", rotatedX, rotatedY);
+  } */
+
+  /*
+function handleClick(event) {
+    event.preventDefault(); // 기본 동작 막기
+
+    const newX = event.clientY;
+    const newY = window.innerHeight - event.clientX;
+
+    // 변경된 좌표값 사용
+    console.log("변경된 클릭 위치:", newX, newY);
+
+    // 새로운 클릭 이벤트 생성 및 발생시키기
+    const newClickEvent = new MouseEvent('click', {
+        clientX: newX,
+        clientY: newY
+    });
+    event.target.dispatchEvent(newClickEvent);
+}
+
+document.addEventListener('click', handleClick);
+*/
+

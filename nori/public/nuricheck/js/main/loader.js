@@ -157,10 +157,16 @@ class Loader extends ClsObject {
                     case OSType.ANDROID.value:
                     case OSType.IOS.value:
                         {
-                            document.documentElement.classList.add("mobile-only");
+                            //document.documentElement.classList.add("mobile-only");
                             document.documentElement.requestFullscreen();
 
-                            h = window.innerHeight - 50;
+                            const screenX = window.screen.width;
+                            const screenY = window.screen.height;
+
+                            const minSize = Math.min(screenX, screenY);
+                            const maxSize = Math.max(screenX, screenY);
+
+                            h = maxSize;
                             //w = parseInt(h * (2/3));
                             w = parseInt((9 * h) / 16);
             
