@@ -145,8 +145,8 @@ class Loader extends ClsObject {
                             const HORIZONTALRATE = 16;
                             const VERTICALRATE = 9;
 
-                            const screenX = window.screen.width;
-                            const screenY = window.screen.height;
+                            const screenX = window.screen.width / 2;
+                            const screenY = window.screen.height / 2;
 
                             const minSize = Math.min(screenX, screenY);
                             const maxSize = Math.max(screenX, screenY);
@@ -185,8 +185,8 @@ class Loader extends ClsObject {
                             const HORIZONTALRATE = 16;
                             const VERTICALRATE = 9;
 
-                            const screenX = window.screen.width;
-                            const screenY = window.screen.height;
+                            const screenX = window.screen.width / 2;
+                            const screenY = window.screen.height / 2;
 
                             const minSize = Math.min(screenX, screenY);
                             const maxSize = Math.max(screenX, screenY);
