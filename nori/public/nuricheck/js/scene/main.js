@@ -229,7 +229,7 @@ class SceneMain extends GameScene {
                 if (v.allPresentText == undefined) {
                     const x = this.getSceneCenterX();
                     const y = this.getSceneCenterY();
-                    v.allPresentText = this.add.text(x, y, "ALL PRESENT !!", {
+                    v.allPresentText = this.add.text(x, y, "O.K", {
                         fontFamily: 'gameFont',
                         fontSize: 48
                     }).setOrigin(0.5);
