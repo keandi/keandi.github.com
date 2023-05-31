@@ -9,10 +9,10 @@ class Loader extends ClsObject {
             this.#setCanas();
 
             // canvas 확인
-            if (this.#_PV.sceneSize.w < 400 || this.#_PV.sceneSize.h < 600) {
+            /*if (this.#_PV.sceneSize.w < 400 || this.#_PV.sceneSize.h < 600) {
                 alert("Too small game screen!!!!");
                 return;
-            }
+            } */
 
             this.#createGlobalData();
             if (this.#createGame() !== true) {
