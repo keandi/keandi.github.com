@@ -6,6 +6,9 @@ class SceneMain extends GameScene {
         try {
             super(fps, gameHost);
 
+            let v = this.#_SPV;
+            v.allPresentText = undefined;
+
         } catch (e) {
             var errMsg = this.getKey() + ".ctor.catched: " + e;
             console.log(errMsg);
@@ -37,8 +40,9 @@ class SceneMain extends GameScene {
             this._isStopped = true;
 
             let v = this.#_SPV;
-            destroyObjects( v.goalProgress );
+            destroyObjects( v.goalProgress, v.allPresentText );
             v.goalProgress = undefined;
+            v.allPresentText = undefined;
             
         } catch(e) {
             var errMsg = this.getKey() + ".onStop.catched: " + e;
@@ -140,6 +144,8 @@ class SceneMain extends GameScene {
                     selfIt.playSound(who.name);
                     //alert(who.name);
                     selfIt.checkNuris();
+                }, ()=>{
+                    selfIt.checkNuris();
                 });
             };
 
@@ -199,13 +205,44 @@ class SceneMain extends GameScene {
         try {
             let v = this.#_SPV;
             for (var i = 0; i < v.buttons.length; i++) {
-                if (v.buttons[i].IsOn !== true) { return; }
+                if (v.buttons[i].IsOn !== true) { 
+                    this.allPresentTextVisible(false);
+                    return; 
+                }
             }
-
-            alert('All present.');
+            
+            this.allPresentTextVisible(true);
             this.playSound('ALLPRESENT');
         } catch(e) {
             var errMsg = this.getKey() + ".checkNuris.catched: " + e;
+            console.log(errMsg);
+            alert(errMsg);
+        } 
+    }
+
+    // all present text switch
+    allPresentTextVisible(isAllPresent) {
+        try {
+            let v = this.#_SPV;
+
+            if (isAllPresent === true) {
+                if (v.allPresentText == undefined) {
+                    const x = this.getSceneCenterX();
+                    const y = this.getSceneCenterY();
+                    v.allPresentText = this.add.text(x, y, "ALL PRESENT !!", {
+                        fontFamily: 'gameFont',
+                        fontSize: 48
+                    }).setOrigin(0.5);
+                    v.allPresentText.setDepth(DEPTH_ALLPRESENT_TEXT);
+                }
+                v.allPresentText.visible = true;
+            } else {
+                if (v.allPresentText != undefined) {
+                    v.allPresentText.visible = false;
+                }
+            }
+        } catch(e) {
+            var errMsg = this.getKey() + ".allPresentTextVisible.catched: " + e;
             console.log(errMsg);
             alert(errMsg);
         } 

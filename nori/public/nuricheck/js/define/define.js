@@ -13,3 +13,6 @@ const SOUNDPOOL_MAX = 5;
 
 // time
 const TIMEOUT_ASSET_DOWNLOAD = 10000;
+
+// depth
+const DEPTH_ALLPRESENT_TEXT = 50;
