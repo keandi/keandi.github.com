@@ -138,15 +138,15 @@ class Loader extends ClsObject {
                 {
                     case OSType.WINDOWS.value:
                         {
-                            document.documentElement.requestFullscreen();
+                            //document.documentElement.requestFullscreen();
 
                             const ROWMAX = 6;
                             const COLMAX = 3;
                             const HORIZONTALRATE = 16;
                             const VERTICALRATE = 9;
 
-                            const screenX = window.screen.width / 2;
-                            const screenY = window.screen.height / 2;
+                            const screenX = window.innerWidth / 2; //window.screen.width / 2;
+                            const screenY = window.innerHeight; //window.screen.height / 2;
 
                             const minSize = Math.min(screenX, screenY);
                             const maxSize = Math.max(screenX, screenY);
@@ -178,7 +178,7 @@ class Loader extends ClsObject {
                     case OSType.IOS.value:
                         {
                             //document.documentElement.classList.add("mobile-only");
-                            document.documentElement.requestFullscreen();
+                            //document.documentElement.requestFullscreen();
 
                             const ROWMAX = 6;
                             const COLMAX = 3;
@@ -186,7 +186,7 @@ class Loader extends ClsObject {
                             const VERTICALRATE = 9;
 
                             const screenX = window.screen.width / 2;
-                            const screenY = window.screen.height / 2;
+                            const screenY = window.screen.height;// / 2;
 
                             const minSize = Math.min(screenX, screenY);
                             const maxSize = Math.max(screenX, screenY);

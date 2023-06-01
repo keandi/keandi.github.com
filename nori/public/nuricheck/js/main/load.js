@@ -19,6 +19,7 @@ window.onload = function() {
                 case OSType.ANDROID.value:
                 case OSType.IOS.value:
                     //...
+                    play();
                     break;
                 default:
                     alert("Invalid access!!!");
@@ -37,7 +38,7 @@ window.onload = function() {
 // go play
 function play() {
     try {
-        removePlayButton();
+        //removePlayButton();
         let loader = new Loader("loader");
     } catch (e) {
         var errMsg = "play: " + e;
