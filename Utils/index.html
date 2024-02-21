@@ -74,9 +74,21 @@
         결과(완성형)
         <div id="resIdNFC">???</div>
     </div>
+    <br>
+    <div style="background-color: #AEB3B1;">
+        <strong>문자열 치환</strong>
+        </br>
+        원본: <textarea id="usr_source" style="width: 600px; height: 100px;"></textarea>
+        </br>
+        치환: <textarea id="usr_repstrings" style="width: 600px; height: 100px;"></textarea>
+        <input type="button" value="변환" onclick="javascript:onTextReplace();" />
+        </br>
+        결과: <textarea id="usr_result" style="width: 600px; height: 100px;"></textarea>
+    </div>
 </body>
 </html>
 
+<!-- --------------------------------------------------------------------------------------------------------------- -->
 <script type="text/javascript">
 function onTextConvert() {
     try {
@@ -93,5 +105,37 @@ function onTextConvert() {
 function onInputKeyDown(e) {
     if (e.keyCode != 13) { return; }
     onTextConvert();
+}
+
+// 문자열 치환
+function onTextReplace() {
+    try {
+        var src = document.getElementById('usr_source').value;
+        if (src.length <= 0) {
+            alert('원본을 입력하세요.');
+            return;
+        }
+        var repAll = document.getElementById('usr_repstrings').value;
+        var repLines = repAll.split('\n');
+        if (repLines.length < 2) {
+            alert('치환 문자열은 2줄이상입니다.');
+            return;
+        }
+
+        var result = '';
+        for (var i = 0; i < repLines.length; i += 2) {
+            var o = repLines[i];
+            var r = repLines[i + 1];
+
+            var regexPattern = new RegExp(o, 'g');
+
+            src = src.replace(regexPattern, r);
+        }
+        document.getElementById('usr_result').value = src;
+        setTimeout(()=>{ alert('치환 종료'); }, 200);
+
+    } catch(e) {
+        alert(e);
+    }
 }
 </script>
