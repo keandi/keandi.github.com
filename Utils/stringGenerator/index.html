@@ -1,0 +1,55 @@
+<html>
+    <body>
+        <p><b>=== 생성문 ===</b></p>
+        <textarea id="createText" style="width: 400px; height: 200px;"></textarea>
+        </br></br>
+        <input type="button" value="생성" style="width: 100px; height: 80px;" onclick="generate()" />
+        <p><b>=== 소스 ===</b></p>
+        <textarea id="sourceText" style="width: 400px; height: 200px;"></textarea>
+    </body>
+
+    <script>
+        function loaded()
+        {
+            try {
+                alert ('loaded');
+            } catch (e) {
+                alert('loaded-ex: ' + e);
+            }
+        }
+
+        function generate()
+        {
+            try {
+                const ct = document.getElementById('createText');
+                if (ct == undefined) { throw 'no createText'; }
+
+                const st = document.getElementById('sourceText');
+                if (st == undefined) { throw 'no sourceText'; }
+
+                st.value = convertAsInsertQryGeneratorAppend(ct.value);
+
+
+            } catch (e) {
+                alert('generate-ex: ' + e);
+            }
+        }
+
+        function convertAsInsertQryGeneratorAppend(src)
+        {
+            try {
+                let lines = src.split('\n');
+                let result = '';
+                for (var i = 0; i < lines.length; i++) {
+                    let found = lines[i].match(/\[(.*?)\]/)[0];
+                    found = found.replace(/\[|\]/g, '');
+                    result += '.Append("' + found + '", master.' + found + ')\r\n';
+                }
+                return result;
+            } catch (e) {
+                alert('convertAsInsertQryGeneratorAppend-ex: ' + e);
+            }
+            return 'no data';
+        }
+    </script>
+</html>
