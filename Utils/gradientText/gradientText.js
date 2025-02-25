@@ -148,13 +148,11 @@ function convert() {
         _localData.endColorIdx = colorEndIdx;
         saveLocalData();
 
-        const lines = content.replace(/\r/g, '').split('\n');
-
         const type = document.querySelector('#_type');
         let text = '';
         let result = undefined;
-        if (type.value == TYPE_LETTER) {
-            
+        if (type.value == TYPE_LINE_LETTER) {
+            const lines = content.replace(/\r/g, '').split('\n');
             lines.forEach(element => {
                 //var colors = getColors(_localData.beginColor, _localData.endColor, element.length);
                 //var colors = getGradientColor(colorStep, element.length);
@@ -164,13 +162,45 @@ function convert() {
                 }
                 text += '</br>';
             });
-    
-            result = document.querySelector('#_result');
-            result.innerHTML = text;
 
-        } else if (type === TYPE_LINE) {
+        } else if (type.value == TYPE_FULL_LETTER) {
+            var colors = getGradientColor(colorStep, content.length);
+            for (var i = 0; i < content.length; i++) {
+                if (content[i] == '\r') { continue; }
+                else if (content[i] == '\n') {
+                    text += '</br>';
+                } else {
+                    text += `<span style="color: ${colors[i]}">${content[i]}</span>`;
+                }
+            }
+            text += '</br>';
+        } else if (type.value == TYPE_LINE) {
+            const lines = content.replace(/\r/g, '').split('\n');
+            var colors = getGradientColor(colorStep, lines.length);
+            for (var i = 0; i < lines.length; i++) {
+                if (lines[i] == '\n') {
+                    text += '</br>';
+                    continue;
+                }
+                text += `<span style="color: ${colors[i]}">${lines[i]}</span></br>`;
+            }
+        } else if (type.value == TYPE_PARAGRAPHS) {
+            const paragraphs = content.replace(/\r/g, '').split('\n\n');
+            var colors = getGradientColor(colorStep, paragraphs.length);
+            for (var i = 0; i < paragraphs.length; i++) {
+                if (paragraphs[i] == '\n') {
+                    text += '</br>';
+                    continue;
+                }
 
+                var par = paragraphs[i].replace(/\n/g, '</br>');
+
+                text += `<span style="color: ${colors[i]}">${par}</span></br></br>`;
+            }
         }
+
+        result = document.querySelector('#_result');
+        result.innerHTML = text;
 
         const range = document.createRange();
         range.selectNode(result);
@@ -300,21 +330,19 @@ function getGradientColor(colorRange, range) {
 
     // 그라데이션 색상 계산
     let gradientColors = [];
-    let colorCount = colorRange.length - 1;
-    let colorsPerRange = range / colorCount;
+    let colorSegments = colorRange.length - 1;
+    let totalSteps = range - 1; // 총 단계 수는 range - 1이어야 함
+    let stepsPerSegment = totalSteps / colorSegments;
 
-    for (let i = 0; i < colorCount; i++) {
-        let color1 = hexToRgb(colorRange[i]);
-        let color2 = hexToRgb(colorRange[i + 1]);
-        
-        for (let j = 0; j < colorsPerRange; j++) {
-            let factor = j / colorsPerRange;
-            let interpolatedColor = interpolateColor(color1, color2, factor);
-            gradientColors.push(rgbToHex(interpolatedColor[0], interpolatedColor[1], interpolatedColor[2]));
-        }
+    for (let i = 0; i < totalSteps; i++) {
+        let segmentIndex = Math.floor(i / stepsPerSegment);
+        let factor = (i % stepsPerSegment) / stepsPerSegment;
+        let color1 = hexToRgb(colorRange[segmentIndex]);
+        let color2 = hexToRgb(colorRange[segmentIndex + 1]);
+        let interpolatedColor = interpolateColor(color1, color2, factor);
+        gradientColors.push(rgbToHex(interpolatedColor[0], interpolatedColor[1], interpolatedColor[2]));
     }
 
-    // 마지막 색상을 추가
     gradientColors.push(colorRange[colorRange.length - 1]);
     
     return gradientColors;
