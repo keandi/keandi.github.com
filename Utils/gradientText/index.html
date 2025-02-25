@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <title>Gradient text</title>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <script src="data.js"></script>
+        <script src="gradientText.js"></script>
+    </head>
+    <body>
+        <div>
+            <div class="div-line"></div>
+            <div class="title">Option</div>
+            <div class="div-line"></div>
+            <div>
+                <div id="_color0" class="box-color-button" style="background-color: #ff0000;" onclick="onColorClicked(this)"></div>
+                <div class="box-inline"> &nbsp;&nbsp;<input type="radio" name="_colorIdx" value="1" checked /></div>
+                <div id="_color1" class="box-color-button" style="background-color: #0000ff;" onclick="onColorClicked(this)"></div>
+                <div class="box-inline"> &nbsp;&nbsp;<input type="radio" name="_colorIdx" value="2" /></div>
+                <div id="_color2" class="box-color-button" style="background-color: #00ff00;" onclick="onColorClicked(this)"></div>
+                <div class="box-inline"> &nbsp;&nbsp;<input type="radio" name="_colorIdx" value="3" /></div>
+                <div id="_color3" class="box-color-button" style="background-color: #0e6800;" onclick="onColorClicked(this)"></div>
+                <div class="box-inline"> &nbsp;&nbsp;<input type="radio" name="_colorIdx" value="4" /></div>
+                <div id="_color4" class="box-color-button" style="background-color: #c08532;" onclick="onColorClicked(this)"></div>
+                <div class="box-inline" style="width: 10px;"></div>
+                <div class="box-inline">
+                    <select id="_type">
+                        <option value="1">letter</option>
+                        <option value="2">line</option>
+                    </select>
+                </div>
+                <div class="box-inline"><button onclick="convert()">변환</button></div>
+            </div>
+            <div>
+                <textarea id="_content" style="width: 99%; height: 130px;"></textarea>
+            </div>
+            <div class="bottom-gap"></div>
+        </div>
+
+        <div>
+            <div class="div-line"></div>
+            <div class="title">result</div>
+            <div class="div-line"></div>
+            <div id="_result" class="content-text">
+            </div>
+            <div class="bottom-gap"></div>
+        </div>
+
+        <div id="_colorPickerWindow" class="fullscreen" style="display: none;">
+            <label for="colorPicker">색상 선택:</label>
+            <input type="color" id="_colorPicker" name="colorPicker">
+            <button onclick="selectedColor()">선택</button>
+            <button onclick="cancelSelectColor()">취소</button>
+        </div>
+    </body>
+</html>
