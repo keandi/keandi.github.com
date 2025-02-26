@@ -148,17 +148,47 @@ function convert() {
         _localData.endColorIdx = colorEndIdx;
         saveLocalData();
 
+        let curColorIdx = -1;
+        function getCurColor() {
+            curColorIdx++;
+            if (curColorIdx < 0 || curColorIdx >= colorStep.length) {
+                curColorIdx = 0;
+            }
+            return colorStep[curColorIdx];
+        }
+
         const type = document.querySelector('#_type');
         let text = '';
         let result = undefined;
-        if (type.value == TYPE_LINE_LETTER) {
+        if (type.value == TYPE_ONE_LETTER) {
+            for (var i = 0; i < content.length; i++) {
+                switch (content[i])
+                {
+                    case '\r':
+                        continue;
+                    case ' ':
+                        text += '&nbsp;';
+                        break;
+                    case '\n':
+                            text += '</br>';
+                            break;
+                    default:
+                        text += `<span style="color: ${getCurColor()}">${content[i]}</span>`;
+                        break;
+                }
+            }
+        } else if (type.value == TYPE_LINE_LETTER) {
             const lines = content.replace(/\r/g, '').split('\n');
             lines.forEach(element => {
                 //var colors = getColors(_localData.beginColor, _localData.endColor, element.length);
                 //var colors = getGradientColor(colorStep, element.length);
                 var colors = getGradientColor(colorStep, element.length);
                 for (var i = 0; i < element.length; i++) {
-                    text += `<span style="color: ${colors[i]}">${element[i]}</span>`;
+                    if (element[i] == ' ') {
+                        text += '&nbsp;';
+                    } else {
+                        text += `<span style="color: ${colors[i]}">${element[i]}</span>`;
+                    }
                 }
                 text += '</br>';
             });
@@ -167,7 +197,9 @@ function convert() {
             var colors = getGradientColor(colorStep, content.length);
             for (var i = 0; i < content.length; i++) {
                 if (content[i] == '\r') { continue; }
-                else if (content[i] == '\n') {
+                else if (content[i] == ' ') {
+                    text += '&nbsp;';
+                } else if (content[i] == '\n') {
                     text += '</br>';
                 } else {
                     text += `<span style="color: ${colors[i]}">${content[i]}</span>`;
@@ -178,11 +210,11 @@ function convert() {
             const lines = content.replace(/\r/g, '').split('\n');
             var colors = getGradientColor(colorStep, lines.length);
             for (var i = 0; i < lines.length; i++) {
-                if (lines[i] == '\n') {
-                    text += '</br>';
-                    continue;
-                }
-                text += `<span style="color: ${colors[i]}">${lines[i]}</span></br>`;
+                const line = lines[i].replace(/\s/g, '&nbsp;').replace(/\n/g, '</br>');
+                //const leadingSpace = (line.match(/^\s+/) || [''])[0].replace(/\s/g, '&nbsp;');
+                //const data = line.trim();
+                //const trailingSpzce = (line.match(/\s+$/) || [''])[0].replace(/\s/g, '&nbsp;');
+                text += `<span style="color: ${colors[i]}">${line}</span></br>`;
             }
         } else if (type.value == TYPE_PARAGRAPHS) {
             const paragraphs = content.replace(/\r/g, '').split('\n\n');
@@ -193,7 +225,7 @@ function convert() {
                     continue;
                 }
 
-                var par = paragraphs[i].replace(/\n/g, '</br>');
+                var par = paragraphs[i].replace(/\n/g, '</br>').replace(/\s/g, '&nbsp;');
 
                 text += `<span style="color: ${colors[i]}">${par}</span></br></br>`;
             }
@@ -212,7 +244,8 @@ function convert() {
             const successful = document.execCommand('copy');
             const msg = successful ? '성공적으로 복사되었습니다.' : '복사에 실패했습니다.';
             //console.log(msg);
-            alert(msg);
+            setTimeout(() => alert(msg), 1);
+            ;
         } catch (err) {
             console.error('텍스트를 클립보드에 복사하는 중 오류가 발생했습니다:', err);
             alert(err);

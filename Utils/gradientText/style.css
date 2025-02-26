@@ -1,6 +1,7 @@
 body {
     background-color: #252525;
     color: #eaeaea;
+    font-size: 12px;
 }
 
 .div-line {
@@ -15,6 +16,10 @@ body {
 
 .bottom-gap {
     height: 25px;
+}
+
+.gap-2px {
+    height: 2px;
 }
 
 .box-inline {
